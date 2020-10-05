@@ -78,8 +78,6 @@ async def giverole(ctx, member : discord.Member, * role: discord.Role):
     await ctx.send(f'{role} has been added to {member}')
 #this doesn't work yet ^
 
-
-key = input("Key?: ") # original key is NzI2MzgxMDQ3MTg4NTUzNzQ5.Xveivw.WTCALcqru0iwpfDZnCWcXXQTWRQ
-# new is NzYyNzY4MTE4MjEyMDY3MzI4.X3t9Kg.pLG6YLPVdbNqL9FI1iijx3YJ4T4
-
+f = open('key.txt')
+key = f.read()
 client.run(key)
