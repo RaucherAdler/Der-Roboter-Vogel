@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import discord.utils
+from translate import Translator
 
 client = commands.Bot(command_prefix = '/')
 
@@ -8,7 +9,7 @@ client = commands.Bot(command_prefix = '/')
 @client.event
 async def on_ready():
    await client.change_presence(status=discord.Status.online, activity=None)
-   print('Bot ready')
+   print('Bot ist fertig.\n')
 
 
 
@@ -25,13 +26,13 @@ async def clear(ctx, amount=0):
 #@commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason=None):
     await user.kick(reason=reason)
-    await ctx.send(f"{user} have been kicked sucessfully.")
+    await ctx.send(f"{user.mention} wurde getretten!")
 
 @client.command()
 #@commands.has_permissions(ban_members=True)
 async def ban(ctx, user: discord.Member, *, reason=None):
     await user.ban(reason=reason)
-    await ctx.send(f"{user} have been banned sucessfully.")
+    await ctx.send(f"{user.mention} wurde verboten!")
 
 
 @client.command()
@@ -44,7 +45,7 @@ async def unban(ctx, *, member):
 
         if (user.name, user.discriminator) == (member_name, member_discriminator):
             await ctx.guild.unban(user)
-            await ctx.send(f'Unbanned {user.mention}.')
+            await ctx.send(f'{user.mention} wurde nicht verboten!')
             return
 
 @client.command()
@@ -54,21 +55,23 @@ async def unbanall(ctx):
     for ban_entry in banned_users:
         user = ban_entry.user
         await ctx.guild.unban(user)
-        await ctx.send(f'Unbanned {user.mention}.')
+        await ctx.send(f'{user.mention} wurde nicht verboten.')
 
 @client.event
 async def on_user_join(user, *, ctx):
     print(f'{user} has joined the server')
     ctx.send(f"{user} has joined the server.")
-    await user.send(f'Welcome to the server, {user}')
+    await user.send(f'Welcome to the server, {user.mention}')
 
 @client.command()
 async def test(ctx):
-    await ctx.send(f'It never misses.')
+    await ctx.send(f'Es vermisst nie.')
 
-@client.command()
+@client.command(aliases=['translate', 'echo'])
 async def echo(ctx, message):
-    await ctx.send(message)
+    translator = Translator(to_lang="German")
+    translation = translator.translate(message)
+    await ctx.send(translation)
 
 @client.command()
 async def giverole(ctx, member : discord.Member, * role: discord.Role):
