@@ -5,8 +5,6 @@ from translate import Translator
 
 client = commands.Bot(command_prefix = '/')
 
-client.remove_command("help")
-
 @client.event
 async def on_ready():
    await client.change_presence(status=discord.Status.online, activity=None)
@@ -73,7 +71,7 @@ async def echo(ctx, message):
     translation = translator.translate(message)
     await ctx.send(translation)
 
-@client.command()
+@client.command(name="giverole", description="Gives role to a given user")
 async def giverole(ctx, member : discord.Member, * role: discord.Role):
     role = discord.utils.get(member.guild.roles, name=role)
     print(role)
