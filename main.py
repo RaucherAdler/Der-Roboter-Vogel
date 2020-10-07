@@ -56,7 +56,7 @@ async def unbanall(ctx):
         await ctx.send(f'{user.mention} wurde nicht verboten.')
 
 @client.event
-async def on_user_join(member, *, ctx):
+async def on_user_join(member, ctx):
     print(f'{member} has joined the server')
     ctx.send(f"{member.mention} has joined the server.")
     await client.send(f'Welcome to the server, {member.mention}')
