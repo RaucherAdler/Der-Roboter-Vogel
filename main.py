@@ -5,7 +5,7 @@ from translate import Translator
 
 client = commands.Bot(command_prefix = '/')
 
-client.remove_command('help')
+client.remove_command("help")
 
 @client.event
 async def on_ready():
