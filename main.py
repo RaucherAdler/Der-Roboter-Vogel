@@ -67,7 +67,7 @@ async def on_user_join(user, *, ctx):
 async def test(ctx):
     await ctx.send(f'Es vermisst nie.')
 
-@client.command(aliases=['translate', 'echo'])
+@client.command(aliases=['translate'])
 async def echo(ctx, message):
     translator = Translator(to_lang="German")
     translation = translator.translate(message)
