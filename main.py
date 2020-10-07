@@ -81,7 +81,7 @@ async def giverole(ctx, member : discord.Member, * role: discord.Role):
     await ctx.send(f'{role} has been added to {member}')
 #this doesn't work yet ^
 
-@client.command(name="help", description="Returns all commands available", aliases=['help', 'commands'])
+@client.command(name="help", description="Returns all commands available", aliases=['commands'])
 async def _help(self, ctx):
     helptext = "```"
     for command in self.bot.commands:
