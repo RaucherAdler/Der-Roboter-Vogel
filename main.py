@@ -81,5 +81,9 @@ async def giverole(ctx, member : discord.Member, * role: discord.Role):
     await ctx.send(f'{role} has been added to {member}')
 #this doesn't work yet ^
 
+@client.command(aliases=['help', 'commands'])
+async def _help(ctx):
+    await ctx.send_help()
+
 key = 'NzYyNzY4MTE4MjEyMDY3MzI4.X3t9Kg.pLG6YLPVdbNqL9FI1iijx3YJ4T4'
 client.run(key)
