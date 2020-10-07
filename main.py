@@ -5,12 +5,12 @@ from translate import Translator
 
 client = commands.Bot(command_prefix = '/')
 
+client.remove_function('help')
 
 @client.event
 async def on_ready():
    await client.change_presence(status=discord.Status.online, activity=None)
    print('Bot ist fertig.\n')
-
 
 
 @client.command()
@@ -81,9 +81,13 @@ async def giverole(ctx, member : discord.Member, * role: discord.Role):
     await ctx.send(f'{role} has been added to {member}')
 #this doesn't work yet ^
 
-@client.command(aliases=['help', 'commands'])
-async def _help(ctx):
-    await ctx.send_help()
+@client.command(name="help", description="Returns all commands available", aliases=['help', 'commands'])
+async def _help(self, ctx):
+    helptext = "```"
+    for command in self.bot.commands:
+        helptext+=f"{command}\n"
+    helptext+="```"
+    await ctx.send(helptext)
 
 key = 'NzYyNzY4MTE4MjEyMDY3MzI4.X3t9Kg.pLG6YLPVdbNqL9FI1iijx3YJ4T4'
 client.run(key)
