@@ -8,7 +8,7 @@ client = commands.Bot(command_prefix = '/')
 @client.event
 async def on_ready():
    await client.change_presence(status=discord.Status.online, activity=None)
-   print('Bot ist fertig.\n')
+   print('Bot ist fertig.')
 
 
 @client.command()
@@ -56,10 +56,10 @@ async def unbanall(ctx):
         await ctx.send(f'{user.mention} wurde nicht verboten.')
 
 @client.event
-async def on_user_join(user, *, ctx):
-    print(f'{user} has joined the server')
-    ctx.send(f"{user} has joined the server.")
-    await user.send(f'Welcome to the server, {user.mention}')
+async def on_user_join(member, *, ctx):
+    print(f'{member} has joined the server')
+    ctx.send(f"{member.mention} has joined the server.")
+    await client.send(f'Welcome to the server, {member.mention}')
 
 @client.command()
 async def test(ctx):
