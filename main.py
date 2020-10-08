@@ -76,7 +76,7 @@ async def giverole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
     print(role)
     await member.add_roles(role)
-    await ctx.send(f'{member} wurde die Rolle gegeben: {role}.')
+    await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}.')
 
 @client.command(aliases=['commands'])
 async def _help(self, ctx):
