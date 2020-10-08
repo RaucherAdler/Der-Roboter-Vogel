@@ -66,7 +66,7 @@ async def test(ctx):
     await ctx.send(f'Es vermisst nie.')
 
 @client.command(aliases=['translate'])
-async def echo(ctx, message):
+async def _translate(ctx, message):
     translator = Translator(to_lang="German")
     translation = translator.translate(message)
     await ctx.send(translation)
