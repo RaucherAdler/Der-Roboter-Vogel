@@ -8,7 +8,7 @@ client = commands.Bot(command_prefix = '/')
 @client.event
 async def on_ready():
    await client.change_presence(status=discord.Status.online, activity=None)
-   print('Bot ist fertig.')
+   print('Bot ist bereit.')
 
 
 @client.command()
@@ -73,7 +73,7 @@ async def echo(ctx, message):
 
 @client.command(name="giverole", description="Gives role to a given user")
 async def giverole(ctx, member : discord.Member, * role: discord.Role):
-    role = discord.utils.get(member.guild.roles, name=role)
+    role = discord.utils.get(client.guild.roles, name=role)
     print(role)
     await member.add_roles(role)
     await ctx.send(f'{role} has been added to {member}')
