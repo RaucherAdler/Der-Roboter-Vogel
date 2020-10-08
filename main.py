@@ -72,7 +72,7 @@ async def echo(ctx, message):
     await ctx.send(translation)
 
 @client.command(name="giverole", description="Gives role to a given user")
-async def giverole(ctx, member : discord.Member, * role):
+async def giverole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
     print(role)
     await member.add_roles(role)
