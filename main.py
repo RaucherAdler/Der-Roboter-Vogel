@@ -8,7 +8,7 @@ client = commands.Bot(command_prefix = '/')
 @client.event
 async def on_ready():
    await client.change_presence(status=discord.Status.online, activity=None)
-   print('Bot ist bereit.')
+   print('Bot ist bereit!')
 
 
 @client.command()
@@ -53,7 +53,7 @@ async def unbanall(ctx):
     for ban_entry in banned_users:
         user = ban_entry.user
         await ctx.guild.unban(user)
-        await ctx.send(f'{user.mention} wurde nicht verboten.')
+        await ctx.send(f'{user.mention} wurde nicht verboten!')
 
 @client.event
 async def on_user_join(member, ctx):
@@ -74,9 +74,14 @@ async def _translate(ctx, message):
 @client.command(name="giverole", description="Gives role to a given user")
 async def giverole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
-    print(role)
     await member.add_roles(role)
-    await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}.')
+    await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
+
+@client.command()
+async def removerole(ctx, member : discord.Member, role):
+    role = discord.utils.get(ctx.guild.roles, name=role)
+    await member.remove_roles(role)
+    await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
 @client.command(aliases=['commands'])
 async def _help(self, ctx):
