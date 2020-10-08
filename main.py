@@ -4,6 +4,7 @@ import discord.utils
 from translate import Translator
 
 client = commands.Bot(command_prefix = '/')
+client.command_remove('help')
 
 @client.event
 async def on_ready():
