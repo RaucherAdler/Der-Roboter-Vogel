@@ -74,14 +74,20 @@ async def _translate(ctx, message):
 @client.command(name="giverole", description="Gives role to a given user")
 async def giverole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
-    await member.add_roles(role)
-    await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
+    if role == None:
+        ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
+    else:
+        await member.add_roles(role)
+        await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 @client.command()
 async def removerole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
-    await member.remove_roles(role)
-    await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
+    if role == None:
+        ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
+    else:        
+        await member.remove_roles(role)
+        await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
 @client.command(aliases=['commands'])
 async def _help(self, ctx):
