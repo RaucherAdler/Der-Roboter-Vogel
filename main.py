@@ -13,7 +13,7 @@ async def on_ready():
 
 @client.command()
 async def ping(ctx):
-    await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
+    await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
 @client.command()
 #@commands.has_permissions(administrator=True)
@@ -73,7 +73,7 @@ async def echo(ctx, message):
 
 @client.command(name="giverole", description="Gives role to a given user")
 async def giverole(ctx, member : discord.Member, * role: discord.Role):
-    role = discord.utils.get(client.guild.roles, name=role)
+    role = discord.utils.get(ctx.guild.roles, name=role)
     print(role)
     await member.add_roles(role)
     await ctx.send(f'{role} has been added to {member}')
