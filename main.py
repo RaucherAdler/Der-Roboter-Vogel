@@ -19,15 +19,9 @@ async def on_ready():
 @client.event
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.channels, name='def-role')
-    counter = 0
-    for message in channel.history(limit=2):
-        while counter < 2:
-            if counter == 0:
-                role_name = message
-            elif counter == 1:
-                channel_name = message
-        counter=+1
-        continue
+    async for message in channel.history(limit=2):
+        role_name = message[1]
+        channel_name = message[2]
     print(f'{member} ist {member.guild.name} beigetretten')
     await client.send_message(channel_name, f'{member.mention} ist {member.guild.name} beigetretten!')
     await member.send(member, f'Willkommen bei {member.guild.name}, {member.mention}')
