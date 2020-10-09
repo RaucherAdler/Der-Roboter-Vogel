@@ -114,7 +114,7 @@ async def autorole(ctx, role, channel):
     if sendchannel == None:
             await ctx.send('Diese Kanal existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:
-            await newchannel.send(role+':'+sendchannel)
+            await newchannel.send(f'{role}:{sendchannel}')
             await ctx.send(f'Neue Standardrolle ist {role}!')
 
 #temp disabled
