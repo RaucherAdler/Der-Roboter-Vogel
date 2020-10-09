@@ -20,29 +20,29 @@ async def on_user_join(member, ctx):
     await client.send(f'Welcome to the server, {member.mention}')
 
 
-@client.command(hname='ping', description='Check latency in ms.')
+@client.command(command.hname='ping', command.description='Check latency in ms.')
 async def ping(ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
-@client.command(hname='clear', description='Deletes a given number of posts.')
+@client.command(command.hname='clear', command.description='Deletes a given number of posts.')
 #@commands.has_permissions(administrator=True)
 async def clear(ctx, amount=0):
     await ctx.channel.purge(limit=amount+1)
 
-@client.command(hname='kick', description='Kicks user from server.')
+@client.command(command.hname='kick', command.description='Kicks user from server.')
 #@commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason=None):
     await user.kick(reason=reason)
     await ctx.send(f"{user.mention} wurde getretten!")
 
-@client.command(hname='ban', description='Bans user from server.')
+@client.command(command.hname='ban', command.description='Bans user from server.')
 #@commands.has_permissions(ban_members=True)
 async def ban(ctx, user: discord.Member, *, reason=None):
     await user.ban(reason=reason)
     await ctx.send(f"{user.mention} wurde verboten!")
 
 
-@client.command(hname='unban', description='Unbans user from server.')
+@client.command(command.hname='unban', command.description='Unbans user from server.')
 async def unban(ctx, *, member):
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
@@ -50,12 +50,12 @@ async def unban(ctx, *, member):
     for ban_entry in banned_users:
         user = ban_entry.user
 
-        if (user.hname, user.discriminator) == (member_name, member_discriminator):
+        if (user.command.hname, user.discriminator) == (member_name, member_discriminator):
             await ctx.guild.unban(user)
             await ctx.send(f'{user.mention} wurde nicht verboten!')
             return
 
-@client.command(hname='unban', description='Unbans all banned users in server.')
+@client.command(command.hname='unban', command.description='Unbans all banned users in server.')
 async def unbanall(ctx):
     banned_users = await ctx.guild.bans()
 
@@ -64,28 +64,28 @@ async def unbanall(ctx):
         await ctx.guild.unban(user)
         await ctx.send(f'{user.mention} wurde nicht verboten!')
 
-@client.command(hname='test', description='A temporary test command.')
+@client.command(command.hname='test', command.description='A temporary test command.')
 async def test(ctx):
     await ctx.send(f'Es vermisst nie.')
 
-@client.command(aliases=['translate'], hname='translate', description='Translate text into a given laguage (currently only supports German).')
+@client.command(aliases=['translate'], command.hname='translate', command.description='Translate text into a given laguage (currently only supports German).')
 async def _translate(ctx, message):
     translator = Translator(to_lang="German")
     translation = translator.translate(message)
     await ctx.send(translation)
 
-@client.command(hname='giverole', description='Gives role to a given user.')
+@client.command(command.hname='giverole', command.description='Gives role to a given user.')
 async def giverole(ctx, member : discord.Member, role):
-    role = discord.utils.get(ctx.guild.roles, hname=role)
+    role = discord.utils.get(ctx.guild.roles, command.hname=role)
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:
         await member.add_roles(role)
         await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
-@client.command(hname='removerole', description='Removes role fron a given user.')
+@client.command(command.hname='removerole', command.description='Removes role fron a given user.')
 async def removerole(ctx, member : discord.Member, role):
-    role = discord.utils.get(ctx.guild.roles, hname=role)
+    role = discord.utils.get(ctx.guild.roles, command.hname=role)
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:        
