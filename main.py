@@ -8,14 +8,12 @@ PATH_OF_GIT_REPO = 'Der-Roboter-Vogel/.git'
 COMMIT_MESSAGE = 'New Push'
 
 def git_push():
-    try:
-        repo = Repo(PATH_OF_GIT_REPO)
-        repo.git.add(update=True)
-        repo.index.commit(COMMIT_MESSAGE)
-        origin = repo.remote(name='origin')
-        origin.push()
-    except:
-        print('Some Error occured while pushing code.')
+    repo = Repo(PATH_OF_GIT_REPO)
+    repo.git.add(update=True)
+    repo.index.commit(COMMIT_MESSAGE)
+    origin = repo.remote(name='origin')
+    origin.push()
+
 
 client = commands.Bot(command_prefix = '/')
 client.remove_command('help')
