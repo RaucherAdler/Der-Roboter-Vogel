@@ -138,12 +138,13 @@ async def fcp(ctx, amount):
     fcp = float(usdtofcp) * float(amount)
     await ctx.send(f'`{amount} USD` ≈ `{fcp} FCP`')
 
+
 @client.command(aliases=['USD'])
 async def usd(ctx, amount):
     amount = amount.replace('FCPfcp', '')
     fcptousd = 30
     usd = float(fcptousd) * float(amount)
-    await ctx.send(f'`{amount} USD` ≈ `{usd} USD`')
+    await ctx.send(f'`{amount} FCP` ≈ `{usd} USD`')
 
 
 #temp disabled
