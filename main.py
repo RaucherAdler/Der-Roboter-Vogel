@@ -5,7 +5,7 @@ from translate import Translator
 
 intents = discord.Intents.default()
 intents.members = True
-discord.Activity(name='Adler über Alles!', type='custom')
+discord.Activity(name='Your Mom', type='playing')
 
 client = commands.Bot(command_prefix = '/', intents=intents)
 client.remove_command('help')
