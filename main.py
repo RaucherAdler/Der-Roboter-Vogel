@@ -21,7 +21,7 @@ async def on_member_join(member):
     channel = discord.utils.get(member.guild.channels, name='def-role')
     role_name, channel_name = channel.last_message.split(':')
     print(f'{member} ist {member.guild.name} beigetretten')
-    await client.send_messgae(channel_name, f'{member.mention} ist {member.guild.name} beigetretten!')
+    await client.send_message(channel_name, f'{member.mention} ist {member.guild.name} beigetretten!')
     await member.send(member, f'Willkommen bei {member.guild.name}, {member.mention}')
     if channel == None:
         pass
