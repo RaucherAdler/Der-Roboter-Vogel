@@ -10,7 +10,7 @@ intents.members = True
 client = commands.Bot(command_prefix = '/', intents=intents)
 client.remove_command('help')
 
-client.change_presence(activity=discord.Activity(type=discord.ActivityType.custom, name="Doin' Your Mom"))
+await client.change_presence(activity=discord.Activity(type=discord.ActivityType.custom, name="Doin' Your Mom"))
 
 
 @client.event
