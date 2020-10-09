@@ -2,7 +2,20 @@ import discord
 from discord.ext import commands
 import discord.utils
 from translate import Translator
+from git import Repo
 
+PATH_OF_GIT_REPO = 'Der-Roboter-Vogel/.git'
+COMMIT_MESSAGE = 'New Push'
+
+def git_push():
+    try:
+        repo = Repo(PATH_OF_GIT_REPO)
+        repo.git.add(update=True)
+        repo.index.commit(COMMIT_MESSAGE)
+        origin = repo.remote(name='origin')
+        origin.push()
+    except:
+        print('Some Error occured while pushing code.')
 
 client = commands.Bot(command_prefix = '/')
 client.remove_command('help')
@@ -101,6 +114,13 @@ async def set_def_role(ctx, role):
         server_id = ctx.guild.server_id
         defrolefile = open('defrole.txt', 'a+')
         defrolefile.write(f'{server_id}:{role}\n')
+        await ctx.send(f'Neue Standardrolle ist {role}!')
+        COMMIT_MESSAGE = 'New defrole'
+        git_push()
+
+        
+
+
 
 #temp disabled
 #@client.command(aliases=['help'])
