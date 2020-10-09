@@ -93,6 +93,12 @@ async def removerole(ctx, member : discord.Member, role):
         await member.remove_roles(role)
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
+@client.command()
+async def roles(ctx):
+    for role in ctx.guild.roles:
+        await ctx.send(role)
+
+
 #temp disabled
 #@client.command(aliases=['help'])
 #async def _help(ctx):
