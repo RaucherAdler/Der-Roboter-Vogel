@@ -133,7 +133,8 @@ async def autorole(ctx, role, channel):
 @client.command(aliases=['FCP'])
 async def fcp(ctx, *, amount):
     amount = amount.replace('$', '')
-    usd = (1/30) * amount
+    usdtofcp = 1 / 30
+    usd = usdtofcp * amount
     await ctx.send(f'`{amount} USD` ≈ `{usd} FCP`')
 
 
