@@ -106,15 +106,15 @@ async def removerole(ctx, member : discord.Member, role):
 async def autorole(ctx, role, channel):
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
-        ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
+        await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:    
         overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),ctx.guild.me: discord.PermissionOverwrite(read_messages=True)}
-        channel = await ctx.guild.create_text_channel('def-role', overwrites=overwrites)   
+        newchannel = await ctx.guild.create_text_channel('def-role', overwrites=overwrites)   
     sendchannel = discord.utils.get(ctx.guild.channels, name=channel)
     if sendchannel == None:
             await ctx.send('Diese Kanal existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:
-            await channel.send(role+':'+sendchannel)
+            await newchannel.send(role+':'+sendchannel)
             await ctx.send(f'Neue Standardrolle ist {role}!')
 
 #temp disabled
