@@ -2,8 +2,8 @@ import discord
 from discord.ext import commands
 import discord.utils
 from translate import Translator
-
-
+intents = discord.Intents.default()
+intents.members = True
 client = commands.Bot(command_prefix = '/')
 client.remove_command('help')
         
