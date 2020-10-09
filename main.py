@@ -78,6 +78,7 @@ async def unbanall(ctx):
         await ctx.guild.unban(user)
         await ctx.send(f'{user.mention} wurde nicht verboten!')
 
+
 @client.command()
 async def test(ctx):
     await ctx.send(f'Es vermisst nie.')
@@ -87,6 +88,7 @@ async def _translate(ctx, message):
     translator = Translator(to_lang="German")
     translation = translator.translate(message)
     await ctx.send(translation)
+
 
 @client.command()
 async def giverole(ctx, member : discord.Member, role):
