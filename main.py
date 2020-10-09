@@ -4,7 +4,7 @@ import discord.utils
 from translate import Translator
 from git import Repo
 
-PATH_OF_GIT_REPO = '/home/runner/Der-Roboter-Vogel/.git/'
+PATH_OF_GIT_REPO = 'https://github.com/RaucherAdler/Der-Roboter-Vogel/'
 COMMIT_MESSAGE = 'New Push'
 
 def git_push():
@@ -110,7 +110,7 @@ async def defrole(ctx, role):
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:    
         server_id = ctx.guild.id
-        defrolefile = open('defrole.txt', 'a+')
+        defrolefile = open('defrole.txt', 'w+')
         defrolefile.write(f'{server_id}:{role}\n')
         await ctx.send(f'Neue Standardrolle ist {role}!')
         COMMIT_MESSAGE = 'New defrole'
