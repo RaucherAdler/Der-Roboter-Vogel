@@ -6,13 +6,7 @@ from translate import Translator
 
 client = commands.Bot(command_prefix = '/')
 client.remove_command('help')
-
-@client.event
-async def on_message(message):
-    channel_name = message.channel.name
-    if channel_name == 'def-role':
-        return message
-
+        
 
 @client.event
 async def on_ready():
@@ -24,10 +18,14 @@ async def on_user_join(member, ctx):
     print(f'{member} has joined the server')
     await ctx.send(f'{member.mention} has joined the server.')
     await member.send(f'Welcome to the server, {member.mention}')
-    autorole = on_message()
-    role = discord.utils.get(ctx.guild.roles, name=autorole)
-    await member.add_roles(role)
-    await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
+    channel = discord.utils.get(ctx.guild.channels, name='def-role')
+    if channel == None:
+        pass
+    else:    
+        role_name = channel.last_message
+        role = discord.utils.get(ctx.guild.roles, name=role_name)
+        await member.add_roles(role)
+        await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 @client.command()
 async def ping(ctx):
@@ -107,10 +105,8 @@ async def defrole(ctx, role):
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:    
-        botrole = discord.utlis.get(ctx.guild.roles, name='Der Roboter Vogel')
-        perms = client.overwrites_for(botrole)
-        perms.send_messages = False
-        await ctx.guild.create_text_channel('def-role', overwrites=perms)
+        overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),ctx.guild.me: discord.PermissionOverwrite(read_messages=True)}
+        await ctx.guild.create_text_channel('def-role', overwrites=overwrites)
         await ctx.send(role)
         await ctx.send(f'Neue Standardrolle ist {role}!')
 
