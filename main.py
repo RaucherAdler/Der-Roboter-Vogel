@@ -32,7 +32,7 @@ async def on_member_join(member):
     else:
         role = discord.utils.get(member.guild.roles, name=role_name)
         await member.add_roles(role)
-        await channel.send(channel_name, f'{member.mention} wurde die Rolle gegeben: {role}!')
+        await channel.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 
 @client.command()
