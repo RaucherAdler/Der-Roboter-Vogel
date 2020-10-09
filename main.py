@@ -40,7 +40,7 @@ async def ping(ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
 @client.command()
-@commands.has_permissions(manage_channels=True)
+@commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount=0):
     await ctx.channel.purge(limit=amount+1)
 
