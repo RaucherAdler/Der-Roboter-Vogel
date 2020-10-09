@@ -130,12 +130,20 @@ async def autorole(ctx, role, channel):
             await newchannel.send(f'{channel}')
             await ctx.send(f'Neue Standardrolle ist {role}!')
 
+
 @client.command(aliases=['FCP'])
-async def fcp(ctx, *, amount):
+async def fcp(ctx, amount):
     amount = amount.replace('$', '')
     usdtofcp = 1 / 30
-    usd = float(usdtofcp) * float(amount)
-    await ctx.send(f'`{amount} USD` ≈ `{usd} FCP`')
+    fcp = float(usdtofcp) * float(amount)
+    await ctx.send(f'`{amount} USD` ≈ `{fcp} FCP`')
+
+@client.command(aliases=['USD'])
+async def usd(ctx, amount):
+    amount = amount.replace('FCPfcp', '')
+    fcptousd = 30
+    usd = float(fcptousd) * float(amount)
+    await ctx.send(f'`{amount} USD` ≈ `{usd} USD`')
 
 
 #temp disabled
