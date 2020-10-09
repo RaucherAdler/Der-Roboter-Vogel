@@ -19,18 +19,19 @@ async def on_ready():
 @client.event
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.channels, name='def-role')
-    async for message in channel.history(limit=2):
-        role_name = message[1]
-        channel_name = message[2]
+    async for message in channel.history(limit=1, oldest_first=True):
+        role_name = message
+    async for message in channel.history(limit=1):
+        channel_name = message
     print(f'{member} ist {member.guild.name} beigetretten')
-    await client.send_message(channel_name, f'{member.mention} ist {member.guild.name} beigetretten!')
+    await channel_name.send_message(f'{member.mention} ist {member.guild.name} beigetretten!')
     await member.send(member, f'Willkommen bei {member.guild.name}, {member.mention}')
     if channel == None:
         pass
     else:    
         role = discord.utils.get(member.guild.roles, name=role_name)
         await member.add_roles(role)
-        await client.send(channel_name, f'{member.mention} wurde die Rolle gegeben: {role}!')
+        await channel.send(channel_name, f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 @client.command()
 async def ping(ctx):
@@ -112,11 +113,12 @@ async def autorole(ctx, role, channel):
     else:    
         overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),ctx.guild.me: discord.PermissionOverwrite(read_messages=True)}
         newchannel = await ctx.guild.create_text_channel('def-role', overwrites=overwrites)   
+        await newchannel.send(f'{role}')
     sendchannel = discord.utils.get(ctx.guild.channels, name=channel)
     if sendchannel == None:
             await ctx.send('Diese Kanal existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:
-            await newchannel.send(f'{role}:{channel}')
+            await newchannel.send(f'{channel}')
             await ctx.send(f'Neue Standardrolle ist {role}!')
 
 #temp disabled
