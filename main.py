@@ -106,8 +106,9 @@ async def defrole(ctx, role):
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:    
         overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),ctx.guild.me: discord.PermissionOverwrite(read_messages=True)}
-        await ctx.guild.create_text_channel('def-role', overwrites=overwrites)
-        await ctx.send(role)
+        channel = await ctx.guild.create_text_channel('def-role', overwrites=overwrites)
+        
+        await channel.send(role)
         await ctx.send(f'Neue Standardrolle ist {role}!')
 
 
