@@ -24,7 +24,7 @@ async def on_member_join(member):
     async for message in channel.history(limit=1):
         channel_name = message
     print(f'{member} ist {member.guild.name} beigetretten')
-    await channel_name.send_message(f'{member.mention} ist {member.guild.name} beigetretten!')
+    await channel_name.send(f'{member.mention} ist {member.guild.name} beigetretten!')
     await member.send(member, f'Willkommen bei {member.guild.name}, {member.mention}')
     if channel == None:
         pass
