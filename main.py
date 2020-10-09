@@ -40,24 +40,25 @@ async def ping(ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
 @client.command()
-#@commands.has_permissions(administrator=True)
+@commands.has_permissions(administrator=True)
 async def clear(ctx, amount=0):
     await ctx.channel.purge(limit=amount+1)
 
 @client.command()
-#@commands.has_permissions(kick_members=True)
+@commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason=None):
     await user.kick(reason=reason)
     await ctx.send(f"{user.mention} wurde getretten!")
 
 @client.command()
-#@commands.has_permissions(ban_members=True)
+@commands.has_permissions(ban_members=True)
 async def ban(ctx, user: discord.Member, *, reason=None):
     await user.ban(reason=reason)
     await ctx.send(f"{user.mention} wurde verboten!")
 
 
 @client.command()
+@commands.has_permissions(ban_members=True)
 async def unban(ctx, *, member):
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
@@ -70,6 +71,7 @@ async def unban(ctx, *, member):
             await ctx.send(f'{user.mention} wurde nicht verboten!')
 
 @client.command()
+@commands.has_permissions(ban_members=True)
 async def unbanall(ctx):
     banned_users = await ctx.guild.bans()
 
@@ -91,6 +93,7 @@ async def _translate(ctx, message):
 
 
 @client.command()
+@commands.has_permissions(manage_roles=True)
 async def giverole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
@@ -100,6 +103,7 @@ async def giverole(ctx, member : discord.Member, role):
         await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 @client.command()
+@commands.has_permissions(manage_roles=True)
 async def removerole(ctx, member : discord.Member, role):
     
     role = discord.utils.get(ctx.guild.roles, name=role)
@@ -110,6 +114,7 @@ async def removerole(ctx, member : discord.Member, role):
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
 @client.command()
+@commands.has_permissions(manage_roles=True)
 async def autorole(ctx, role, channel):
     drole = discord.utils.get(ctx.guild.roles, name=role)
     if drole == None:
