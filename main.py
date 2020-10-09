@@ -23,7 +23,7 @@ async def on_member_join(member):
         role_name = message.content
     async for message in channel.history(limit=1):
         channel_name = message.content
-    print(f'{member} ist {member.guild.name} beigetretten')
+    print(f'{member} ist {member.guild.name} beigetretten!')
     channelname = discord.utils.get(member.guild.channels, name=channel_name)
     await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
     await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
