@@ -20,7 +20,7 @@ async def on_ready():
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.channels, name='def-role')
     counter = 0
-    for message in member.channel.history(limit=2):
+    for message in channel.history(limit=2):
         while counter < 2:
             if counter == 0:
                 role_name = message
