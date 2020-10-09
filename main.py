@@ -17,18 +17,18 @@ async def on_ready():
    print('Bot ist bereit!')
 
 @client.event
-async def on_member_join(member, ctx):
-    print(f'{member} ist {ctx.guild.name} beigetretten')
-    await ctx.send(f'{member.mention} ist {ctx.guild.name} beigetretten')
-    await client.send_message(member ,f'Willkommen bei {ctx.guild.name}, {member.mention}')
-    channel = discord.utils.get(ctx.guild.channels, name='def-role')
+async def on_member_join(member):
+    channel = discord.utils.get(member.guild.channels, name='def-role')
+    role_name, channel_name = channel.last_message.split(':')
+    print(f'{member} ist {member.guild.name} beigetretten')
+    await client.send_messgae(channel_name, f'{member.mention} ist {member.guild.name} beigetretten!')
+    await member.send(member, f'Willkommen bei {member.guild.name}, {member.mention}')
     if channel == None:
         pass
     else:    
-        role_name = channel.last_message
-        role = discord.utils.get(ctx.guild.roles, name=role_name)
+        role = discord.utils.get(member.guild.roles, name=role_name)
         await member.add_roles(role)
-        await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
+        await client.send(channel_name, f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 @client.command()
 async def ping(ctx):
@@ -103,17 +103,19 @@ async def removerole(ctx, member : discord.Member, role):
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
 @client.command()
-async def defrole(ctx, role):
+async def defrole(ctx, role, channel):
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:    
         overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),ctx.guild.me: discord.PermissionOverwrite(read_messages=True)}
-        channel = await ctx.guild.create_text_channel('def-role', overwrites=overwrites)
-        
-        await channel.send(role)
-        await ctx.send(f'Neue Standardrolle ist {role}!')
-
+        channel = await ctx.guild.create_text_channel('def-role', overwrites=overwrites)   
+    sendchannel = discord.utils.get(ctx.guild.channels, name=channel)
+    if sendchannel == None:
+            ctx.send('Diese Kanal existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
+    else:
+            await channel.send(role+':'+sendchannel)
+            await ctx.send(f'Neue Standardrolle ist {role}!')
 
 #temp disabled
 #@client.command(aliases=['help'])
