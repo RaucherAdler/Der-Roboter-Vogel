@@ -90,8 +90,8 @@ async def removerole(ctx, member : discord.Member, role):
         await member.remove_roles(role)
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
-@client.command(aliases=['commands'])
-async def _help(self, ctx):
+@client.command(aliases=['help'])
+async def _help(self, * ctx):
     helptext = "```"
     for command in self.bot.commands:
         helptext+=f"{command}\n"
