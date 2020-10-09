@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import discord.utils
 from translate import Translator
-import redis
+
 
 client = commands.Bot(command_prefix = '/')
 client.remove_command('help')
