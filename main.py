@@ -13,7 +13,7 @@ client.remove_command('help')
 
 @client.event
 async def on_ready():
-   await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.Playing, name='Your Mom'))
+   await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name='Your Mom'))
    print('Bot ist bereit!')
 
 @client.event
