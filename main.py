@@ -20,9 +20,9 @@ async def on_ready():
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.channels, name='def-role')
     async for message in channel.history(limit=1, oldest_first=True):
-        role_name = message
+        role_name = str(message)
     async for message in channel.history(limit=1):
-        channel_name = message
+        channel_name = str(message)
     print(f'{member} ist {member.guild.name} beigetretten')
     channelname = discord.utils.get(member.guild.channels, name=channel_name)
     await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
@@ -33,6 +33,7 @@ async def on_member_join(member):
         role = discord.utils.get(member.guild.roles, name=role_name)
         await member.add_roles(role)
         await channel.send(channel_name, f'{member.mention} wurde die Rolle gegeben: {role}!')
+
 
 @client.command()
 async def ping(ctx):
