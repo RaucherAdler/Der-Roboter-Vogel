@@ -53,7 +53,6 @@ async def unban(ctx, *, member):
         if (user.name, user.discriminator) == (member_name, member_discriminator):
             await ctx.guild.unban(user)
             await ctx.send(f'{user.mention} wurde nicht verboten!')
-            return
 
 @client.command()
 async def unbanall(ctx):
@@ -94,10 +93,14 @@ async def removerole(ctx, member : discord.Member, role):
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
 @client.command()
-async def roles(ctx):
-    for role in ctx.guild.roles:
-        await ctx.send(role)
-
+async def set_def_role(ctx, role):
+    role = discord.utils.get(ctx.guild.roles, name=role)
+    if role == None:
+        ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
+    else:    
+        server_id = ctx.guild.server_id
+        defrolefile = open('defrole.txt', 'a+')
+        defrolefile.write(f'{server_id}:{role}\n')
 
 #temp disabled
 #@client.command(aliases=['help'])
