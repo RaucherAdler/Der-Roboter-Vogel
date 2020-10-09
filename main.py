@@ -15,9 +15,9 @@ async def on_ready():
 
 @client.event
 async def on_user_join(member, ctx):
-    await print(f'{member} has joined the server')
-    await ctx.send(f'{member.mention} has joined the server.')
-    await member.send(f'Welcome to the server, {member.mention}')
+    print(f'{member} has joined the server')
+    ctx.send(f'{member.mention} has joined the server.')
+    member.send(f'Welcome to the server, {member.mention}')
 
 
 @client.command()
