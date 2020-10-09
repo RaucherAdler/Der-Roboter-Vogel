@@ -10,12 +10,10 @@ intents.members = True
 client = commands.Bot(command_prefix = '/', intents=intents)
 client.remove_command('help')
 
-await client.change_presence(activity=discord.Activity(type=discord.ActivityType.custom, name="Doin' Your Mom"))
-
 
 @client.event
 async def on_ready():
-   await client.change_presence(status=discord.Status.online, activity=None)
+   await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.custom, name="Doin' Your Mom"))
    print('Bot ist bereit!')
 
 @client.event
