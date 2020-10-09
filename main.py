@@ -15,34 +15,34 @@ async def on_ready():
 
 @client.event
 async def on_user_join(member, ctx):
-    print(f'{member} has joined the server')
-    ctx.send(f"{member.mention} has joined the server.")
-    await client.send(f'Welcome to the server, {member.mention}')
+    await print(f'{member} has joined the server')
+    await ctx.send(f'{member.mention} has joined the server.')
+    await member.send(f'Welcome to the server, {member.mention}')
 
 
-@client.command(name='ping', description='Check latency in ms.')
+@client.command()
 async def ping(ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
-@client.command(name='clear', description='Deletes a given number of posts.')
+@client.command()
 #@commands.has_permissions(administrator=True)
 async def clear(ctx, amount=0):
     await ctx.channel.purge(limit=amount+1)
 
-@client.command(name='kick', description='Kicks user from server.')
+@client.command()
 #@commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason=None):
     await user.kick(reason=reason)
     await ctx.send(f"{user.mention} wurde getretten!")
 
-@client.command(name='ban', description='Bans user from server.')
+@client.command()
 #@commands.has_permissions(ban_members=True)
 async def ban(ctx, user: discord.Member, *, reason=None):
     await user.ban(reason=reason)
     await ctx.send(f"{user.mention} wurde verboten!")
 
 
-@client.command(name='unban', description='Unbans user from server.')
+@client.command()
 async def unban(ctx, *, member):
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
@@ -55,7 +55,7 @@ async def unban(ctx, *, member):
             await ctx.send(f'{user.mention} wurde nicht verboten!')
             return
 
-@client.command(name='unban', description='Unbans all banned users in server.')
+@client.command()
 async def unbanall(ctx):
     banned_users = await ctx.guild.bans()
 
@@ -64,17 +64,17 @@ async def unbanall(ctx):
         await ctx.guild.unban(user)
         await ctx.send(f'{user.mention} wurde nicht verboten!')
 
-@client.command(name='test', description='A temporary test command.')
+@client.command()
 async def test(ctx):
     await ctx.send(f'Es vermisst nie.')
 
-@client.command(aliases=['translate'], name='translate', description='Translate text into a given laguage (currently only supports German).')
+@client.command(aliases=['translate'])
 async def _translate(ctx, message):
     translator = Translator(to_lang="German")
     translation = translator.translate(message)
     await ctx.send(translation)
 
-@client.command(name='giverole', description='Gives role to a given user.')
+@client.command()
 async def giverole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
@@ -83,7 +83,7 @@ async def giverole(ctx, member : discord.Member, role):
         await member.add_roles(role)
         await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
-@client.command(name='removerole', description='Removes role fron a given user.')
+@client.command()
 async def removerole(ctx, member : discord.Member, role):
     
     role = discord.utils.get(ctx.guild.roles, name=role)
@@ -93,13 +93,15 @@ async def removerole(ctx, member : discord.Member, role):
         await member.remove_roles(role)
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
-@client.command(aliases=['help'])
-async def _help(ctx):
-    helptext = "```"
-    for command in client.commands:
-        commandtext = name + ': ' + description + '\n'
-        helptext += commandtext
-    await ctx.send(helptext)
+#temp disabled
+#@client.command(aliases=['help'])
+#async def _help(ctx):
+#    helptext = "```"
+#    for command in client.commands:
+#        commandtext = name + ': ' + description + '\n'
+#        helptext += commandtext
+#    await ctx.send(helptext)
+
 
 key = 'NzYyNzY4MTE4MjEyMDY3MzI4.X3t9Kg.pLG6YLPVdbNqL9FI1iijx3YJ4T4'
 client.run(key)
