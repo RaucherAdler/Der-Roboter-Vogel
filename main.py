@@ -130,6 +130,14 @@ async def autorole(ctx, role, channel):
             await newchannel.send(f'{channel}')
             await ctx.send(f'Neue Standardrolle ist {role}!')
 
+@client.command(aliases=['FCP'])
+async def fcp(ctx, amount):
+    amount = amount.replace(None, '$')
+    amount = int(amount)
+    usdproduct = (1/30) * amount
+    await ctx.send(f'`{amount} USD` ≈ `{usdproduct} FCP`')
+
+
 #temp disabled
 #@client.command(aliases=['help'])
 #async def _help(ctx):
