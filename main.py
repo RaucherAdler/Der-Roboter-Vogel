@@ -2,21 +2,16 @@ import discord
 from discord.ext import commands
 import discord.utils
 from translate import Translator
-from git import Repo
-
-PATH_OF_GIT_REPO = 'https://github.com/RaucherAdler/Der-Roboter-Vogel/'
-COMMIT_MESSAGE = 'New Push'
-
-def git_push():
-    repo = Repo(PATH_OF_GIT_REPO)
-    repo.git.add(update=True)
-    repo.index.commit(COMMIT_MESSAGE)
-    origin = repo.remote(name='origin')
-    origin.push()
-
+import redis
 
 client = commands.Bot(command_prefix = '/')
 client.remove_command('help')
+
+@client.event
+async def on_message(message):
+    channel_name = message.channel.name
+    if channel_name == 'def-role':
+        return message
 
 
 @client.event
@@ -29,7 +24,10 @@ async def on_user_join(member, ctx):
     print(f'{member} has joined the server')
     await ctx.send(f'{member.mention} has joined the server.')
     await member.send(f'Welcome to the server, {member.mention}')
-
+    autorole = on_message()
+    role = discord.utils.get(ctx.guild.roles, name=autorole)
+    await member.add_roles(role)
+    await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 @client.command()
 async def ping(ctx):
@@ -109,15 +107,12 @@ async def defrole(ctx, role):
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:    
-        server_id = ctx.guild.id
-        defrolefile = open('defrole.txt', 'w+')
-        defrolefile.write(f'{server_id}:{role}\n')
+        botrole = discord.utlis.get(ctx.guild.roles, name='Der Roboter Vogel')
+        perms = client.overwrites_for(botrole)
+        perms.send_messages = False
+        await ctx.guild.create_text_channel('def-role', overwrites=perms)
+        await ctx.send(role)
         await ctx.send(f'Neue Standardrolle ist {role}!')
-        COMMIT_MESSAGE = 'New defrole'
-        git_push()
-
-        
-
 
 
 #temp disabled
