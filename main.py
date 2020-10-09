@@ -15,9 +15,9 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member, ctx):
-    print(f'{member} has joined the server')
-    await ctx.send(f'{member.mention} has joined the server.')
-    await member.send(f'Welcome to the server, {member.mention}')
+    print(f'{member} ist {ctx.guild.name} beigetretten')
+    await ctx.send(f'{member} ist {ctx.guild.name} beigetretten')
+    await member.send(f'Willkommen bei {ctx.guild.name}, {member.mention}')
     channel = discord.utils.get(ctx.guild.channels, name='def-role')
     if channel == None:
         pass
