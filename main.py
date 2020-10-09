@@ -4,7 +4,7 @@ import discord.utils
 from translate import Translator
 from git import Repo
 
-PATH_OF_GIT_REPO = 'Der-Roboter-Vogel/.git'
+PATH_OF_GIT_REPO = '.git'
 COMMIT_MESSAGE = 'New Push'
 
 def git_push():
