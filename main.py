@@ -106,12 +106,12 @@ async def removerole(ctx, member : discord.Member, role):
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
 @client.command()
-async def set_def_role(ctx, role):
+async def defrole(ctx, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:    
-        server_id = ctx.guild.server_id
+        server_id = ctx.guild.id
         defrolefile = open('defrole.txt', 'a+')
         defrolefile.write(f'{server_id}:{role}\n')
         await ctx.send(f'Neue Standardrolle ist {role}!')
