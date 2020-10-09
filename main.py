@@ -26,7 +26,7 @@ async def on_member_join(member):
     print(f'{member} ist {member.guild.name} beigetretten')
     channelname = discord.utils.get(member.guild.channels, name=channel_name)
     await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
-    await member.send(member, f'Willkommen bei {member.guild.name}, {member.mention}')
+    await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
     if channel == None:
         pass
     else:    
