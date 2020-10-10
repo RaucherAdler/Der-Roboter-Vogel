@@ -159,7 +159,7 @@ async def usd(ctx, amount):
 async def greet(ctx):
     tz_CDT = pytz.timezone('America/Chicago')
     now_CDT = datetime.now(tz_CDT)
-    hour_CDT = now_CDT.hour_CDT
+    hour_CDT = now_CDT.hour
     if hour_CDT in range(5, 10):
         time_of_day = 'Morgen'
         word_ending = 'en'
