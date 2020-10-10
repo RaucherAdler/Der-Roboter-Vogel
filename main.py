@@ -183,7 +183,10 @@ async def greet(ctx, member : discord.Member=None):
         if member == 'all':
             await ctx.send(f'{good} {time_of_day}, @everyone!')
         else:
-            await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
+            if client.id == member.id:
+                await ctx.send(f'Hallo {ctx.message.author.mention}, wie gehts?')
+            else:
+                await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
 
 #temp disabled
 #@client.command(aliases=['help'])
