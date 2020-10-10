@@ -134,12 +134,13 @@ async def autorole(ctx, role, channel):
 @client.command(aliases=['FCP'])
 async def fcp(ctx, amount):
     if amount == 'this server' or 'This Server' or 'server' or 'Server':
-        fcp = 1.0
+        fcp = 1
+        await ctx.send(f'`{amount} USD` ≈ `{fcp} FCP`')
     else:    
         amount = amount.replace('$', '')
         usdtofcp = 1 / 30
         fcp = float(usdtofcp) * float(amount)
-    await ctx.send(f'`{amount} USD` ≈ `{fcp} FCP`')
+        await ctx.send(f'`{amount} USD` ≈ `{fcp} FCP`')
 
 
 @client.command(aliases=['USD'])
@@ -150,7 +151,7 @@ async def usd(ctx, amount):
     if amount == 1:
         await ctx.send(f'`{amount} FCP` ≈ `{usd} USD` or `1 Server`')
     else:
-        await ctx.send(f'`{amount} FCP   ≈ `{usd} USD`')
+        await ctx.send(f'`{amount} FCP` ≈ `{usd} USD`')
 
 
 #temp disabled
