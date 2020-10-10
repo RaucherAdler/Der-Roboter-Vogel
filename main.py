@@ -177,14 +177,13 @@ async def greet(ctx, member : discord.Member=None):
     author_id = ctx.message.author.id
     if author_id == 755875742595678290 and member == None:
         await ctx.send(f'{good} {time_of_day}, Vater!')
-    else:
+    elif author_id != 755875742595678290 and member == None:
         await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}!')
     if member != None:
         if member == 'all':
             await ctx.send(f'{good} {time_of_day}, @everyone!')
         else:
-            print(f'{ctx.message.author} greeted {member}')
-            await ctx.send(f'{ctx.message.author.mention} greeted {member.mention}')
+            await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
 
 #temp disabled
 #@client.command(aliases=['help'])
