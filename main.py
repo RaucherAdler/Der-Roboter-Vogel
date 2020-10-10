@@ -155,7 +155,7 @@ async def usd(ctx, amount):
     else:
         await ctx.send(f'`{amount} FCP` ≈ `{usd} USD`')
 
-@client.command(aliases=['hello', 'hallo','begruessung', 'begrüßung', 'greet'])
+@client.command(aliases=['hello', 'hallo','begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'])
 async def greet(ctx):
     tz_CDT = pytz.timezone('America/Chicago')
     now_CDT = datetime.now(tz_CDT)
