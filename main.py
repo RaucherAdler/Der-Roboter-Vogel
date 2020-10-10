@@ -177,7 +177,7 @@ async def greet(ctx):
     if author_id == 755875742595678290:
         await ctx.send(f'{good} {time_of_day}, Vater!')
     else:
-        await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}')
+        await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}!')
 
 
 #temp disabled
