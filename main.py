@@ -183,7 +183,7 @@ async def greet(ctx, member : discord.Member=None):
         if member == 'all':
             await ctx.send(f'{good} {time_of_day}, @everyone!')
         else:
-            if client.id == member.id:
+            if member.id == 762768118212067328:
                 await ctx.send(f'Hallo {ctx.message.author.mention}, wie gehts?')
             else:
                 await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
