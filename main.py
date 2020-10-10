@@ -156,7 +156,7 @@ async def usd(ctx, amount):
         await ctx.send(f'`{amount} FCP ≈ {usd} USD`')
 
 @client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'])
-async def greet(ctx, all=None):
+async def greet(ctx, member=None):
     tz_CDT = pytz.timezone('America/Chicago')
     now_CDT = datetime.now(tz_CDT)
     hour_CDT = now_CDT.hour
@@ -172,15 +172,19 @@ async def greet(ctx, all=None):
     elif hour_CDT in range(22, 23) or range(0, 4):
         time_of_day = 'Nacht'
         word_ending = 'e'
-        
+
     good = 'Gut' + word_ending
     author_id = ctx.message.author.id
-    if author_id == 755875742595678290 and all == None:
+    if author_id == 755875742595678290 and member == None:
         await ctx.send(f'{good} {time_of_day}, Vater!')
-    elif all == 'all':
+    elif member == 'all':
         await ctx.send(f'{good} {time_of_day}, @everyone!')
     else:
         await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}!')
+    if member != None:
+        member = discord.utils.get(ctx.guild.members, name=member)
+        print(f'{ctx.message.author} greeted {member}')
+        await ctx.send(f'{ctx.message.author.mention} greeted {member.mention}')
 
 #temp disabled
 #@client.command(aliases=['help'])
