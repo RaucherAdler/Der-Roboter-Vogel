@@ -137,12 +137,12 @@ async def autorole(ctx, role, channel):
 async def fcp(ctx, amount):
     if amount == 'this server' or 'This Server' or 'server' or 'Server':
         fcp = 1
-        await ctx.send(f'`{amount} USD` ≈ `{fcp} FCP`')
+        await ctx.send(f'`{amount} USD` ≈ {fcp} FCP`')
     else:    
         amount = amount.replace('$', '')
         usdtofcp = 1 / 30
         fcp = float(usdtofcp) * float(amount)
-        await ctx.send(f'`{amount} USD` ≈ `{fcp} FCP`')
+        await ctx.send(f'`{amount} USD ≈ {fcp} FCP`')
 
 
 @client.command(aliases=['USD'])
@@ -151,9 +151,9 @@ async def usd(ctx, amount):
     fcptousd = 30
     usd = float(fcptousd) * float(amount)
     if amount == 1:
-        await ctx.send(f'`{amount} FCP` ≈ `{usd} USD` or `1 Server`')
+        await ctx.send(f'`{amount} FCP ≈ {usd} USD or 1 Server`')
     else:
-        await ctx.send(f'`{amount} FCP` ≈ `{usd} USD`')
+        await ctx.send(f'`{amount} FCP ≈ {usd} USD`')
 
 @client.command(aliases=['hello', 'hallo','begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'])
 async def greet(ctx):
@@ -175,9 +175,9 @@ async def greet(ctx):
     good = 'Gut' + word_ending
     author_id = ctx.message.author.id
     if author_id == 755875742595678290:
-        ctx.send(f'{good} {time_of_day}, Vater!')
+        await ctx.send(f'{good} {time_of_day}, Vater!')
     else:
-        ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}')
+        await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}')
 
 
 #temp disabled
