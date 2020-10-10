@@ -174,14 +174,12 @@ async def greet(ctx, all=None):
         word_ending = 'e'
     good = 'Gut' + word_ending
     author_id = ctx.message.author.id
-    if author_id == 755875742595678290:
+    if author_id == 755875742595678290 and all == None:
         await ctx.send(f'{good} {time_of_day}, Vater!')
+    elif all == 'all':
+        await ctx.send(f'{good} {time_of_day}, {ctx.message.mention_everyone}!')
     else:
         await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}!')
-    if all == 'all':
-        everyone = discord.utils.get(ctx.guild.roles, name='@everyone')
-        await ctx.send(f'{good} {time_of_day}, {everyone.mention}!')
-
 
 #temp disabled
 #@client.command(aliases=['help'])
