@@ -177,9 +177,9 @@ async def greet(ctx, all=None):
     if author_id == 755875742595678290 and all == None:
         await ctx.send(f'{good} {time_of_day}, Vater!')
     elif all == 'all':
-        await ctx.send(f'{good} {time_of_day}, {ctx.message.mention_everyone}!')
-    else:
         await ctx.send(f'{good} {time_of_day}, @everyone!')
+    else:
+        await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}!')
 
 #temp disabled
 #@client.command(aliases=['help'])
