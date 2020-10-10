@@ -179,7 +179,7 @@ async def greet(ctx, all=None):
     elif all == 'all':
         await ctx.send(f'{good} {time_of_day}, {ctx.message.mention_everyone}!')
     else:
-        await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}!')
+        await ctx.send(f'{good} {time_of_day}, @everyone!')
 
 #temp disabled
 #@client.command(aliases=['help'])
