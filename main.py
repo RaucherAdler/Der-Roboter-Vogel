@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import discord.utils
 from translate import Translator
+from datetime import datetime
+import pytz
 
 intents = discord.Intents.default()
 intents.members = True
@@ -152,6 +154,30 @@ async def usd(ctx, amount):
         await ctx.send(f'`{amount} FCP` ≈ `{usd} USD` or `1 Server`')
     else:
         await ctx.send(f'`{amount} FCP` ≈ `{usd} USD`')
+
+@client.command(aliases=['hello', 'hallo','begruessung', 'begrüßung'])
+async def greet(ctx, member):
+    tz_CDT = pytz.timezone('America/Chicago')
+    now_CDT = datetime.now(tz_CDT)
+    hour_CDT = now_CDT.hour_CDT
+    if hour_CDT in range(5, 10):
+        time_of_day = 'Morgen'
+        word_ending = 'en'
+    elif hour_CDT in range(11, 17):
+        time_of_day = 'Tag'
+        word_ending = 'en'
+    elif hour_CDT in range(18, 21):
+        time_of_day = 'Abend'
+        word_ending = 'en'
+    elif hour_CDT in range(22, 23) or range(0, 4):
+        time_of_day = 'Nacht'
+        word_ending = 'e'
+    good = 'Gut' + word_ending
+    author_id = ctx.message.author.id
+    if author_id == 755875742595678290:
+        ctx.send(f'{good} {time_of_day}, Vater!')
+    else:
+        ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}')
 
 
 #temp disabled
