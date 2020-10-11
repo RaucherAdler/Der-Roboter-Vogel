@@ -209,7 +209,8 @@ async def _help(ctx):
         if command.name[0] == '_':
             commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
         else:
-            commandtext = 'Name:' + command.name + 'Aliases: (' + command.aliases + ') ' + 'Description: ' + command.description + '\n'
+            for alias in command.aliases:
+                commandtext = 'Name:' + command.name + 'Aliases: (' + alias + ') ' + 'Description: ' + command.description + '\n'
         helptext += commandtext
         help_embed.add_field(name='Help', value=helptext)
     await ctx.send(embed=help_embed)
