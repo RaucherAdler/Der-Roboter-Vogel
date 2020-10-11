@@ -196,17 +196,22 @@ async def birthday(ctx, member : discord.Member):
     embed_name = 'Geburtstagslied :birthday:'
     embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}!\nZum Geburtstag viel Glück!'.format(name=member.mention)
     lyric_embed = discord.Embed(name=embed_name)
-    lyric_embed.add_field(name=embed_name, value=embed_text, inline=False)
+    lyric_embed.add_field(name=embed_name, value=embed_text)
     await ctx.send(embed=lyric_embed)
     
 
 
 @client.command(aliases=['help'])
 async def _help(ctx):
-    helptext = "```"
+    help_embed = discord.Embed(name='help')
+    helptext = ''
     for command in client.commands:
-        commandtext = command.name + ': ' + command.description + '\n'
+        if command.name[0] == '_':
+            commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
+        else:
+            commandtext = 'Name:' + command.name + 'Aliases: (' + command.aliases + ') ' + 'Description: ' + command.description + '\n'
         helptext += commandtext
+        help_embed.add_field(name='Help', value=helptext)
     await ctx.send(helptext)
 
 
