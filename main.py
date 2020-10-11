@@ -37,12 +37,6 @@ async def on_member_join(member):
         await member.add_roles(role)
         await channel.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
-for command in client.commands:
-    groups = []
-    group = command.group
-    groups.append(group)
-    groups = list(set(groups))
-    groupslen = len(groups)
 
 
 @client.command(description='Pings bots latency')
@@ -226,6 +220,11 @@ async def _help(ctx):
     _help.group = 'Misc.'
     help_embed = discord.Embed(name='help')
     for command in client.commands:
+        groups = []
+        group = command.group
+        groups.append(group)
+        groups = list(set(groups))
+        groupslen = len(groups)
         for group in range(0,groupslen-1):
             if command.group == group:
                 helptext = ''
