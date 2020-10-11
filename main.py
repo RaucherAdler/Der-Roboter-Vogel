@@ -212,7 +212,7 @@ async def _help(ctx):
             commandtext = 'Name:' + command.name + 'Aliases: (' + command.aliases + ') ' + 'Description: ' + command.description + '\n'
         helptext += commandtext
         help_embed.add_field(name='Help', value=helptext)
-    await ctx.send(helptext)
+    await ctx.send(embed=help_embed)
 
 
 key = 'NzYyNzY4MTE4MjEyMDY3MzI4.X3t9Kg.pLG6YLPVdbNqL9FI1iijx3YJ4T4'
