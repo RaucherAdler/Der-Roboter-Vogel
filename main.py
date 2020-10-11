@@ -198,7 +198,7 @@ async def birthday(ctx, member : discord.Member):
     embed_name = 'Geburtstagslied ' + cake
     embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}\nZum Geburtstag viel Glück!'.format(member.mention)
     lyric_embed = discord.Embed(name=embed_name)
-    lyric_embed.add_field(value=embed_text)
+    lyric_embed.add_field(name='text', value=embed_text)
     ctx.send(lyric_embed)
     
 #temp disabled
