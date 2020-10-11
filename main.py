@@ -23,9 +23,9 @@ async def on_ready():
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.channels, name='def-role')
     async for message in channel.history(limit=1, oldest_first=True):
-        role_name = message.content
+        role_id =  message.content
     async for message in channel.history(limit=1):
-        channel_name = message.content
+        channel_name= message.content
     print(f'{member} ist {member.guild.name} beigetretten!')
     channelname = discord.utils.get(member.guild.channels, name=channel_name)
     await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
@@ -33,7 +33,7 @@ async def on_member_join(member):
     if channel == None:
         pass
     else:
-        role = discord.utils.get(member.guild.roles, name=role_name)
+        role = discord.utils.get(ctx.guild.roles, id=role_id)
         await member.add_roles(role)
         await channel.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
