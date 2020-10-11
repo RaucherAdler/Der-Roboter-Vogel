@@ -5,6 +5,7 @@ from translate import Translator
 from datetime import datetime
 import pytz
 
+
 intents = discord.Intents.default()
 intents.members = True
 
@@ -188,6 +189,18 @@ async def greet(ctx, member : discord.Member=None):
             else:
                 await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
 
+@client.command(aliases=['geburtstag'])
+async def birthday(ctx, member : discord.Member):
+    tada = u'1F389'
+    ctx.send(f'Alles gute zum geburtstag, {member.mention}! {tada}')
+    ctx.send('Jetzt singen wir alle das Geburtstagslied:')
+    cake = u'1F382'
+    embed_name = 'Geburtstagslied ' + cake
+    embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}\nZum Geburtstag viel Glück!'.format(member.mention)
+    lyric_embed = discord.Embed(name=embed_name)
+    lyric_embed.add_field(value=embed_text)
+    ctx.send(lyric_embed)
+    
 #temp disabled
 #@client.command(aliases=['help'])
 #async def _help(ctx):
