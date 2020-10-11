@@ -23,7 +23,7 @@ async def on_ready():
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.channels, name='def-role')
     async for message in channel.history(limit=1, oldest_first=True):
-        role_id =  message.content
+        role_id =  int(message.content)
     async for message in channel.history(limit=1):
         channel_name = message.content
     print(f'{member} ist {member.guild.name} beigetretten!')
