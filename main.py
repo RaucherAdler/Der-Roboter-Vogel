@@ -191,10 +191,10 @@ async def greet(ctx, member : discord.Member=None):
 
 @client.command(aliases=['geburtstag'])
 async def birthday(ctx, member : discord.Member):
-    tada = r'\U1F389'
+    tada = r'\u1F389'
     await ctx.send(f'Alles gute zum geburtstag, {member.mention}! {tada}')
     await ctx.send('Jetzt singen wir alle das Geburtstagslied:')
-    cake = r'\U1F382'
+    cake = r'\u1F382'
     embed_name = 'Geburtstagslied ' + cake
     embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}\nZum Geburtstag viel Glück!'.format(member.mention)
     lyric_embed = discord.Embed(name=embed_name)
