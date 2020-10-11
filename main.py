@@ -38,29 +38,29 @@ async def on_member_join(member):
         await channel.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 
-@client.command()
+@client.command(description='Pings bots latency')
 async def ping(ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
-@client.command()
+@client.command(description='Clears a given number of messages')
 @commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount=0):
     await ctx.channel.purge(limit=amount+1)
 
-@client.command()
+@client.command(description='Kicks a given user')
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason=None):
     await user.kick(reason=reason)
     await ctx.send(f"{user.mention} wurde getretten!")
 
-@client.command()
+@client.command(description='Bans a given user')
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, user: discord.Member, *, reason=None):
     await user.ban(reason=reason)
     await ctx.send(f"{user.mention} wurde verboten!")
 
 
-@client.command()
+@client.command(description='Unbans a given user')
 @commands.has_permissions(ban_members=True)
 async def unban(ctx, *, member):
     banned_users = await ctx.guild.bans()
@@ -73,7 +73,7 @@ async def unban(ctx, *, member):
             await ctx.guild.unban(user)
             await ctx.send(f'{user.mention} wurde nicht verboten!')
 
-@client.command()
+@client.command(description='Unbans all banned users')
 @commands.has_permissions(ban_members=True)
 async def unbanall(ctx):
     banned_users = await ctx.guild.bans()
@@ -84,18 +84,18 @@ async def unbanall(ctx):
         await ctx.send(f'{user.mention} wurde nicht verboten!')
 
 
-@client.command()
+@client.command(description='test')
 async def test(ctx):
     await ctx.send(f'Es vermisst nie.')
 
-@client.command(aliases=['translate'])
+@client.command(aliases=['translate'], description='Translate text (currently only supports German')
 async def _translate(ctx, message):
     translator = Translator(to_lang="German")
     translation = translator.translate(message)
     await ctx.send(translation)
 
 
-@client.command()
+@client.command(description='Gives role to a given user')
 @commands.has_permissions(manage_roles=True)
 async def giverole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
@@ -105,7 +105,7 @@ async def giverole(ctx, member : discord.Member, role):
         await member.add_roles(role)
         await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
-@client.command()
+@client.command(description='Remvoes role from a given user')
 @commands.has_permissions(manage_roles=True)
 async def removerole(ctx, member : discord.Member, role):
     
@@ -116,7 +116,7 @@ async def removerole(ctx, member : discord.Member, role):
         await member.remove_roles(role)
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
-@client.command()
+@client.command(description='Setup Command for automatic role assignment')
 @commands.has_permissions(manage_roles=True)
 async def autorole(ctx, role, channel):
     drole = discord.utils.get(ctx.guild.roles, name=role)
@@ -134,11 +134,11 @@ async def autorole(ctx, role, channel):
             await ctx.send(f'Neue Standardrolle ist {role}!')
 
 
-@client.command(aliases=['FCP'])
+@client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)')
 async def fcp(ctx, amount):
     if amount == 'this server' or 'This Server' or 'server' or 'Server':
         fcp = 1
-        await ctx.send(f'`{amount} USD` ≈ {fcp} FCP`')
+        await ctx.send(f'`{amount} USD` ≈ `{fcp} FCP`')
     else:    
         amount = amount.replace('$', '')
         usdtofcp = 1 / 30
@@ -146,17 +146,17 @@ async def fcp(ctx, amount):
         await ctx.send(f'`{amount} USD ≈ {fcp} FCP`')
 
 
-@client.command(aliases=['USD'])
+@client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD')
 async def usd(ctx, amount):
     amount = amount.replace('FCPfcp', '')
     fcptousd = 30
     usd = float(fcptousd) * float(amount)
     if amount == 1:
-        await ctx.send(f'`{amount} FCP ≈ {usd} USD or 1 Server`')
+        await ctx.send(f'`{amount} FCP` ≈ `{usd} USD` or `1 Server`')
     else:
-        await ctx.send(f'`{amount} FCP ≈ {usd} USD`')
+        await ctx.send(f'`{amount} FCP` ≈ `{usd} USD`')
 
-@client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'])
+@client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user')
 async def greet(ctx, member : discord.Member=None):
     tz_CDT = pytz.timezone('America/Chicago')
     now_CDT = datetime.now(tz_CDT)
@@ -199,14 +199,15 @@ async def birthday(ctx, member : discord.Member):
     lyric_embed.add_field(name=embed_name, value=embed_text, inline=False)
     await ctx.send(embed=lyric_embed)
     
-#temp disabled
-#@client.command(aliases=['help'])
-#async def _help(ctx):
-#    helptext = "```"
-#    for command in client.commands:
-#        commandtext = name + ': ' + description + '\n'
-#        helptext += commandtext
-#    await ctx.send(helptext)
+
+
+@client.command(aliases=['help'])
+async def _help(ctx):
+    helptext = "```"
+    for command in client.commands:
+        commandtext = command.name + ': ' + command.description + '\n'
+        helptext += commandtext
+    await ctx.send(helptext)
 
 
 key = 'NzYyNzY4MTE4MjEyMDY3MzI4.X3t9Kg.pLG6YLPVdbNqL9FI1iijx3YJ4T4'
