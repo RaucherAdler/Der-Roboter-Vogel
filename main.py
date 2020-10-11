@@ -33,7 +33,7 @@ async def on_member_join(member):
     if channel == None:
         pass
     else:
-        role = discord.utils.get(ctx.guild.roles, id=role_id)
+        role = discord.utils.get(member.guild.roles, id=role_id)
         await member.add_roles(role)
         await channel.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
