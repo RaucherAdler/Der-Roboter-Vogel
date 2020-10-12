@@ -220,7 +220,7 @@ async def birthday( ctx, member : discord.Member):
 async def _help( ctx):
     _help.group = 'Misc.'
     help_embed = discord.Embed(name='help')
-    async for command in client.commands:
+    for command in client.commands:
         group = getattr(command, 'group')
         if group == 'Moderation':
             helptextmod = ''
