@@ -201,7 +201,7 @@ async def greet( ctx, member : discord.Member=None):
             else:
                 await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
 
-@client.command(aliases=['geburtstag'])
+@client.command(aliases=['geburtstag'], description='Sends birthday message for a user.')
 async def birthday( ctx, member : discord.Member):
     birthday.help = 'Misc.'
     await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:')
@@ -214,7 +214,7 @@ async def birthday( ctx, member : discord.Member):
     
 
 
-@client.command(aliases=['help'])
+@client.command(aliases=['help'], description='Sends this message.')
 async def _help( ctx):
     _help.help = 'Misc.'
     help_embed = discord.Embed(name='help')
@@ -223,25 +223,27 @@ async def _help( ctx):
         if help == 'Moderation':
             helptext = ''
             if command.name[0] == '_':
-                commandtext = 'Name: ' + command.aliases[0] + '\nDescription: ' + command.description + '\n'
+                commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'
             else:
-                commandtext = 'Name:' + command.name + '\nDescription: ' + command.description + '\n'
+                commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
             helptext += commandtext
+            help_embed.add_field(name=help, value=helptext)
         elif help == 'Misc.':
             helptext = ''
             if command.name[0] == '_':
-                commandtext = 'Name: ' + command.aliases[0] + '\nDescription: ' + command.description + '\n'
+                commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'
             else:
-                commandtext = 'Name: ' + command.name + '\nDescription: ' + command.description + '\n'
+                commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
             helptext += commandtext
+            help_embed.add_field(name=help, value=helptext)
         else:
             helptext = ''
             if command.name[0] == '_':
-                commandtext = 'Name: ' + command.aliases[0] + '\nDescription: ' + command.description + '\n'
+                commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'
             else:
-                commandtext = 'Name: ' + command.name + '\nDescription: ' + command.description + '\n'
+                commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
             helptext += commandtext
-        help_embed.add_field(name='Other', value=helptext)
+            help_embed.add_field(name='Other', value=helptext)
     await ctx.send(embed=help_embed)
 
 
