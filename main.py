@@ -19,7 +19,7 @@ async def on_ready():
    await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name='Your Mom'))
    print('Bot ist bereit!')
 
-async for command in client.commands:
+for command in client.commands:
     setattr(command, 'group', None)
 
 @client.event
