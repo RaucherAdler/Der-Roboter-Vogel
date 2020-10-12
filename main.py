@@ -42,26 +42,22 @@ async def on_member_join(member):
 
 @client.command(description='Pings bots latency')
 async def ping( ctx):
-    ping.help = 'Misc.'
     await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
 @client.command(description='Clears a given number of messages')
 @commands.has_permissions(manage_messages=True)
 async def clear( ctx, amount=0):
-    clear.help = 'Moderation'
     await ctx.channel.purge(limit=amount+1)
 
 @client.command(description='Kicks a given user')
 @commands.has_permissions(kick_members=True)
 async def kick( ctx, user: discord.Member, *, reason=None):
-    kick.help = 'Moderation'
     await user.kick(reason=reason)
     await ctx.send(f"{user.mention} wurde getretten!")
 
 @client.command(description='Bans a given user')
 @commands.has_permissions(ban_members=True)
 async def ban( ctx, user: discord.Member, *, reason=None):
-    ban.help = 'Moderation'
     await user.ban(reason=reason)
     await ctx.send(f"{user.mention} wurde verboten!")
 
@@ -69,7 +65,6 @@ async def ban( ctx, user: discord.Member, *, reason=None):
 @client.command(description='Unbans a given user')
 @commands.has_permissions(ban_members=True)
 async def unban( ctx, *, member):
-    unban.help = 'Moderation'
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
 
@@ -83,7 +78,6 @@ async def unban( ctx, *, member):
 @client.command(description='Unbans all banned users')
 @commands.has_permissions(ban_members=True)
 async def unbanall( ctx):
-    unbanall.help = 'Moderation'
     banned_users = await ctx.guild.bans()
 
     for ban_entry in banned_users:
@@ -94,12 +88,12 @@ async def unbanall( ctx):
 
 @client.command(description='a simple test command')
 async def test( ctx):
-    test.help = 'Misc.'
+    test
     await ctx.send(f'Es vermisst nie.')
 
 @client.command(aliases=['translate'], description='Translate text (currently only supports German')
 async def _translate( ctx, message):
-    _translate.help = 'Misc.'
+    _translate
     translator = Translator(to_lang="German")
     translation = translator.translate(message)
     await ctx.send(translation)
@@ -108,7 +102,6 @@ async def _translate( ctx, message):
 @client.command(description='Gives role to a given user')
 @commands.has_permissions(manage_roles=True)
 async def giverole( ctx, member : discord.Member, role):
-    giverole.help = 'Moderation'
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -119,7 +112,6 @@ async def giverole( ctx, member : discord.Member, role):
 @client.command(description='Remvoes role from a given user')
 @commands.has_permissions(manage_roles=True)
 async def removerole( ctx, member : discord.Member, role):
-    removerole.help = 'Moderation'
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -130,7 +122,6 @@ async def removerole( ctx, member : discord.Member, role):
 @client.command(description='Setup Command for automatic role assignment')
 @commands.has_permissions(manage_roles=True)
 async def autorole( ctx, role, channel):
-    autorole.help = 'Moderation'
     drole = discord.utils.get(ctx.guild.roles, name=role)
     if drole == None:
         await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -148,7 +139,6 @@ async def autorole( ctx, role, channel):
 
 @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)')
 async def fcp( ctx, amount):
-    fcp.help = 'Misc.'
     if amount == 'this server' or 'This Server' or 'server' or 'Server':
         FCP = 1
         await ctx.send(f'`{amount} ≈ `{FCP} FCP`')
@@ -161,7 +151,6 @@ async def fcp( ctx, amount):
 
 @client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD')
 async def usd( ctx, amount):
-    usd.help = 'Misc.'
     amount = amount.replace('FCPfcp', '')
     fcptousd = 30
     USD = float(fcptousd) * float(amount)
@@ -169,7 +158,6 @@ async def usd( ctx, amount):
 
 @client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user')
 async def greet( ctx, member : discord.Member=None):
-    greet.help = 'Misc.'
     tz_CDT = pytz.timezone('America/Chicago')
     now_CDT = datetime.now(tz_CDT)
     hour_CDT = now_CDT.hour
@@ -203,7 +191,6 @@ async def greet( ctx, member : discord.Member=None):
 
 @client.command(aliases=['geburtstag'], description='Sends birthday message for a user')
 async def birthday( ctx, member : discord.Member):
-    birthday.help = 'Misc.'
     await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:')
     await ctx.send('Jetzt singen wir alle das Geburtstagslied:')
     embed_name = 'Geburtstagslied :birthday:'
@@ -216,40 +203,17 @@ async def birthday( ctx, member : discord.Member):
 
 @client.command(aliases=['help'], description='Sends this message')
 async def _help( ctx):
-    _help.help = 'Misc.'
     help_embed = discord.Embed(name='help')
     for command in client.commands:
-        help = getattr(command, 'help')
-        if help == 'Moderation':
-            helptext = ''
-            if command.name[0] == '_':
-                commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'
-                commandname = command.aliases[0]
-            else:
-                commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
-                commandname = command.name
-            helptext += commandtext
-            help_embed.add_field(name=commandname, value=helptext)
-        elif help == 'Misc.':
-            helptext = ''
-            if command.name[0] == '_':
-                commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'
-                commandname = command.aliases[0]
-            else:
-                commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
-                commandname = command.name
-            helptext += commandtext
-            help_embed.add_field(name=help, value=helptext)
+        helptext = ''
+        if command.name[0] == '_':
+            commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'                
+            commandname = command.aliases[0]
         else:
-            helptext = ''
-            if command.name[0] == '_':
-                commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'
-                commandname = command.aliases[0]
-            else:
-                commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
-                commandname = command.name
-            helptext += commandtext
-            help_embed.add_field(name=commandname, value=helptext)
+            commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
+            commandname = command.name
+        helptext += commandtext
+        help_embed.add_field(name=commandname, value=helptext)
     await ctx.send(embed=help_embed)
 
 
