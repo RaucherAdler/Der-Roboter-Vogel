@@ -224,26 +224,32 @@ async def _help( ctx):
             helptext = ''
             if command.name[0] == '_':
                 commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'
+                commandname = command.aliases[0]
             else:
                 commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
+                commandname = command.name
             helptext += commandtext
-            help_embed.add_field(name=help, value=helptext)
+            help_embed.add_field(name=commandname, value=helptext)
         elif help == 'Misc.':
             helptext = ''
             if command.name[0] == '_':
                 commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'
+                commandname = command.aliases[0]
             else:
                 commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
+                commandname = command.name
             helptext += commandtext
             help_embed.add_field(name=help, value=helptext)
         else:
             helptext = ''
             if command.name[0] == '_':
                 commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'
+                commandname = command.aliases[0]
             else:
                 commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
+                commandname = command.name
             helptext += commandtext
-            help_embed.add_field(name='Other', value=helptext)
+            help_embed.add_field(name=commandname, value=helptext)
     await ctx.send(embed=help_embed)
 
 
