@@ -40,29 +40,29 @@ async def on_member_join(member):
 
 
 
-@client.command(description='Pings bots latency')
+@client.command(description='Pings bots latency', usage='`/ping`')
 async def ping( ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
-@client.command(description='Clears a given number of messages')
+@client.command(description='Clears a given number of messages', usage='`/clear <Number of posts>`')
 @commands.has_permissions(manage_messages=True)
 async def clear( ctx, amount=0):
     await ctx.channel.purge(limit=amount+1)
 
-@client.command(description='Kicks a given user')
+@client.command(description='Kicks a given user', usage='`/kick <Mention User>`')
 @commands.has_permissions(kick_members=True)
 async def kick( ctx, user: discord.Member, *, reason=None):
     await user.kick(reason=reason)
     await ctx.send(f"{user.mention} wurde getretten!")
 
-@client.command(description='Bans a given user')
+@client.command(description='Bans a given user', usage='`/ban <Mention User>`')
 @commands.has_permissions(ban_members=True)
 async def ban( ctx, user: discord.Member, *, reason=None):
     await user.ban(reason=reason)
     await ctx.send(f"{user.mention} wurde verboten!")
 
 
-@client.command(description='Unbans a given user')
+@client.command(description='Unbans a given user', usage='`/unban <User Name (i.e. Raucher Adler#1220)>`')
 @commands.has_permissions(ban_members=True)
 async def unban( ctx, *, member):
     banned_users = await ctx.guild.bans()
@@ -75,7 +75,7 @@ async def unban( ctx, *, member):
             await ctx.guild.unban(user)
             await ctx.send(f'{user.mention} wurde nicht verboten!')
 
-@client.command(description='Unbans all banned users')
+@client.command(description='Unbans all banned users', usage='`/unbanall`')
 @commands.has_permissions(ban_members=True)
 async def unbanall( ctx):
     banned_users = await ctx.guild.bans()
@@ -86,12 +86,12 @@ async def unbanall( ctx):
         await ctx.send(f'{user.mention} wurde nicht verboten!')
 
 
-@client.command(description='a simple test command')
+@client.command(description='a simple test command', usage='`/test`')
 async def test( ctx):
     test
     await ctx.send(f'Es vermisst nie.')
 
-@client.command(aliases=['translate'], description='Translate text (currently only supports German')
+@client.command(aliases=['translate'], description='Translate text (currently only supports German', usage='`/translate <Message>`')
 async def _translate( ctx, message):
     _translate
     translator = Translator(to_lang="German")
@@ -99,7 +99,7 @@ async def _translate( ctx, message):
     await ctx.send(translation)
 
 
-@client.command(description='Gives role to a given user')
+@client.command(description='Gives role to a given user', usage='`/giverole <Mention User> <Role Name>`')
 @commands.has_permissions(manage_roles=True)
 async def giverole( ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
@@ -109,7 +109,7 @@ async def giverole( ctx, member : discord.Member, role):
         await member.add_roles(role)
         await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
-@client.command(description='Remvoes role from a given user')
+@client.command(description='Remvoes role from a given user', usage='`/removerole <Mention User> <Role Name>`')
 @commands.has_permissions(manage_roles=True)
 async def removerole( ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
@@ -119,7 +119,7 @@ async def removerole( ctx, member : discord.Member, role):
         await member.remove_roles(role)
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
-@client.command(description='Setup Command for automatic role assignment')
+@client.command(description='Setup Command for automatic role assignment', usage='`/autorole <Default Role Name> <Main Channel Name>`')
 @commands.has_permissions(manage_roles=True)
 async def autorole( ctx, role, channel):
     drole = discord.utils.get(ctx.guild.roles, name=role)
@@ -137,7 +137,7 @@ async def autorole( ctx, role, channel):
             await ctx.send(f'Neue Standardrolle ist {role}!')
 
 
-@client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)')
+@client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)', usage='`/fcp <Amount of USD>`')
 async def fcp( ctx, amount):
     if amount == 'this server' or 'This Server' or 'server' or 'Server':
         FCP = 1
@@ -149,14 +149,14 @@ async def fcp( ctx, amount):
         await ctx.send(f'`{amount} USD ≈ {FCP} FCP`')
 
 
-@client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD')
+@client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD', usage='`/usd <Amount of FCP>`')
 async def usd( ctx, amount):
     amount = amount.replace('FCPfcp', '')
     fcptousd = 30
     USD = float(fcptousd) * float(amount)
     await ctx.send(f'`{amount} FCP` ≈ `{USD} USD`')
 
-@client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user')
+@client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user', usage='`/greet < Mention User or "all" (optional)>`')
 async def greet( ctx, member : discord.Member=None):
     tz_CDT = pytz.timezone('America/Chicago')
     now_CDT = datetime.now(tz_CDT)
@@ -189,7 +189,7 @@ async def greet( ctx, member : discord.Member=None):
             else:
                 await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
 
-@client.command(aliases=['geburtstag'], description='Sends birthday message for a user')
+@client.command(aliases=['geburtstag'], description='Sends birthday message for a user', usage='`/birthday <Mention User>`')
 async def birthday( ctx, member : discord.Member):
     await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:')
     await ctx.send('Jetzt singen wir alle das Geburtstagslied:')
@@ -201,7 +201,7 @@ async def birthday( ctx, member : discord.Member):
     
 
 
-@client.command(aliases=['help'], description='Sends this message')
+@client.command(aliases=['help'], description='Sends this message', usage='`/help`')
 async def _help( ctx):
     help_embed = discord.Embed(name='help')
     for command in client.commands:
