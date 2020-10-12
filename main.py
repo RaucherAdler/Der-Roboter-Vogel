@@ -207,10 +207,10 @@ async def _help( ctx):
     for command in client.commands:
         helptext = ''
         if command.name[0] == '_':
-            commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\n'                
+            commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\nUsage: `' + command.usage + '`\n'                
             commandname = command.aliases[0]
         else:
-            commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\n'
+            commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\nUsage: `' + command.usage + '`\n'
             commandname = command.name
         helptext += commandtext
         help_embed.add_field(name=commandname, value=helptext)
