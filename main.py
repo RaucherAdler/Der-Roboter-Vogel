@@ -19,8 +19,6 @@ async def on_ready():
    await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name='Your Mom'))
    print('Bot ist bereit!')
 
-for command in client.commands:
-    setattr(command, 'group', 'grouptemp')
 
 @client.event
 async def on_member_join(member):
@@ -44,26 +42,26 @@ async def on_member_join(member):
 
 @client.command(description='Pings bots latency')
 async def ping( ctx):
-    ping.group = 'Misc.'
+    ping.help = 'Misc.'
     await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
 @client.command(description='Clears a given number of messages')
 @commands.has_permissions(manage_messages=True)
 async def clear( ctx, amount=0):
-    clear.group = 'Moderation'
+    clear.help = 'Moderation'
     await ctx.channel.purge(limit=amount+1)
 
 @client.command(description='Kicks a given user')
 @commands.has_permissions(kick_members=True)
 async def kick( ctx, user: discord.Member, *, reason=None):
-    kick.group = 'Moderation'
+    kick.help = 'Moderation'
     await user.kick(reason=reason)
     await ctx.send(f"{user.mention} wurde getretten!")
 
 @client.command(description='Bans a given user')
 @commands.has_permissions(ban_members=True)
 async def ban( ctx, user: discord.Member, *, reason=None):
-    ban.group = 'Moderation'
+    ban.help = 'Moderation'
     await user.ban(reason=reason)
     await ctx.send(f"{user.mention} wurde verboten!")
 
@@ -71,7 +69,7 @@ async def ban( ctx, user: discord.Member, *, reason=None):
 @client.command(description='Unbans a given user')
 @commands.has_permissions(ban_members=True)
 async def unban( ctx, *, member):
-    unban.group = 'Moderation'
+    unban.help = 'Moderation'
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
 
@@ -85,7 +83,7 @@ async def unban( ctx, *, member):
 @client.command(description='Unbans all banned users')
 @commands.has_permissions(ban_members=True)
 async def unbanall( ctx):
-    unbanall.group = 'Moderation'
+    unbanall.help = 'Moderation'
     banned_users = await ctx.guild.bans()
 
     for ban_entry in banned_users:
@@ -96,12 +94,12 @@ async def unbanall( ctx):
 
 @client.command(description='test')
 async def test( ctx):
-    test.group = 'Misc.'
+    test.help = 'Misc.'
     await ctx.send(f'Es vermisst nie.')
 
 @client.command(aliases=['translate'], description='Translate text (currently only supports German')
 async def _translate( ctx, message):
-    _translate.group = 'Misc.'
+    _translate.help = 'Misc.'
     translator = Translator(to_lang="German")
     translation = translator.translate(message)
     await ctx.send(translation)
@@ -110,7 +108,7 @@ async def _translate( ctx, message):
 @client.command(description='Gives role to a given user')
 @commands.has_permissions(manage_roles=True)
 async def giverole( ctx, member : discord.Member, role):
-    giverole.group = 'Moderation'
+    giverole.help = 'Moderation'
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -121,7 +119,7 @@ async def giverole( ctx, member : discord.Member, role):
 @client.command(description='Remvoes role from a given user')
 @commands.has_permissions(manage_roles=True)
 async def removerole( ctx, member : discord.Member, role):
-    removerole.group = 'Moderation'
+    removerole.help = 'Moderation'
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
         ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -132,7 +130,7 @@ async def removerole( ctx, member : discord.Member, role):
 @client.command(description='Setup Command for automatic role assignment')
 @commands.has_permissions(manage_roles=True)
 async def autorole( ctx, role, channel):
-    autorole.group = 'Moderation'
+    autorole.help = 'Moderation'
     drole = discord.utils.get(ctx.guild.roles, name=role)
     if drole == None:
         await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -150,7 +148,7 @@ async def autorole( ctx, role, channel):
 
 @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)')
 async def fcp( ctx, amount):
-    fcp.group = 'Misc.'
+    fcp.help = 'Misc.'
     if amount == 'this server' or 'This Server' or 'server' or 'Server':
         FCP = 1
         await ctx.send(f'`{amount} ≈ `{FCP} FCP`')
@@ -163,7 +161,7 @@ async def fcp( ctx, amount):
 
 @client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD')
 async def usd( ctx, amount):
-    usd.group = 'Misc.'
+    usd.help = 'Misc.'
     amount = amount.replace('FCPfcp', '')
     fcptousd = 30
     USD = float(fcptousd) * float(amount)
@@ -171,7 +169,7 @@ async def usd( ctx, amount):
 
 @client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user')
 async def greet( ctx, member : discord.Member=None):
-    greet.group = 'Misc.'
+    greet.help = 'Misc.'
     tz_CDT = pytz.timezone('America/Chicago')
     now_CDT = datetime.now(tz_CDT)
     hour_CDT = now_CDT.hour
@@ -205,7 +203,7 @@ async def greet( ctx, member : discord.Member=None):
 
 @client.command(aliases=['geburtstag'])
 async def birthday( ctx, member : discord.Member):
-    birthday.group = 'Misc.'
+    birthday.help = 'Misc.'
     await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:')
     await ctx.send('Jetzt singen wir alle das Geburtstagslied:')
     embed_name = 'Geburtstagslied :birthday:'
@@ -218,26 +216,26 @@ async def birthday( ctx, member : discord.Member):
 
 @client.command(aliases=['help'])
 async def _help( ctx):
-    _help.group = 'Misc.'
+    _help.help = 'Misc.'
     help_embed = discord.Embed(name='help')
     for command in client.commands:
-        group = getattr(command, 'group')
-        if group == 'Moderation':
+        help = getattr(command, 'help')
+        if help == 'Moderation':
             helptextmod = ''
             if command.name[0] == '_':
                 commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
             else:
                 commandtext = 'Name:' + command.name + 'Description: ' + command.description + '\n'
             helptextmod += commandtext
-            help_embed.add(name=group, value=helptextmod)
-        elif group == 'Misc.':
+            help_embed.add(name=help, value=helptextmod)
+        elif help == 'Misc.':
             helptextmisc = ''
             if command.name[0] == '_':
                 commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
             else:
                 commandtext = 'Name: ' + command.name + 'Description: ' + command.description + '\n'
             helptextmisc += commandtext
-            help_embed.add(name=group, value=helptextmisc)
+            help_embed.add(name=help, value=helptextmisc)
         else:
             helptext = ''
             if command.name[0] == '_':
