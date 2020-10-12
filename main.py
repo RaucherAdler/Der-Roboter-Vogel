@@ -92,7 +92,7 @@ async def unbanall( ctx):
         await ctx.send(f'{user.mention} wurde nicht verboten!')
 
 
-@client.command(description='test')
+@client.command(description='a simple test command')
 async def test( ctx):
     test.help = 'Misc.'
     await ctx.send(f'Es vermisst nie.')
@@ -201,7 +201,7 @@ async def greet( ctx, member : discord.Member=None):
             else:
                 await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
 
-@client.command(aliases=['geburtstag'], description='Sends birthday message for a user.')
+@client.command(aliases=['geburtstag'], description='Sends birthday message for a user')
 async def birthday( ctx, member : discord.Member):
     birthday.help = 'Misc.'
     await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:')
@@ -214,7 +214,7 @@ async def birthday( ctx, member : discord.Member):
     
 
 
-@client.command(aliases=['help'], description='Sends this message.')
+@client.command(aliases=['help'], description='Sends this message')
 async def _help( ctx):
     _help.help = 'Misc.'
     help_embed = discord.Embed(name='help')
