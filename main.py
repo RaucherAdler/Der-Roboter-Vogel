@@ -221,29 +221,27 @@ async def _help( ctx):
     for command in client.commands:
         help = getattr(command, 'help')
         if help == 'Moderation':
-            helptextmod = ''
+            helptext = ''
             if command.name[0] == '_':
-                commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
+                commandtext = 'Name: ' + command.aliases[0] + '\nDescription: ' + command.description + '\n'
             else:
-                commandtext = 'Name:' + command.name + 'Description: ' + command.description + '\n'
-            helptextmod += commandtext
-            help_embed.add_field(name=help, value=helptextmod)
+                commandtext = 'Name:' + command.name + '\nDescription: ' + command.description + '\n'
+            helptext += commandtext
         elif help == 'Misc.':
-            helptextmisc = ''
+            helptext = ''
             if command.name[0] == '_':
-                commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
+                commandtext = 'Name: ' + command.aliases[0] + '\nDescription: ' + command.description + '\n'
             else:
-                commandtext = 'Name: ' + command.name + 'Description: ' + command.description + '\n'
-            helptextmisc += commandtext
-            help_embed.add_field(name=help, value=helptextmisc)
+                commandtext = 'Name: ' + command.name + '\nDescription: ' + command.description + '\n'
+            helptext += commandtext
         else:
             helptext = ''
             if command.name[0] == '_':
-                commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description + '\n'
+                commandtext = 'Name: ' + command.aliases[0] + '\nDescription: ' + command.description + '\n'
             else:
-                commandtext = 'Name: ' + command.name + 'Description: ' + command.description + '\n'
+                commandtext = 'Name: ' + command.name + '\nDescription: ' + command.description + '\n'
             helptext += commandtext
-            help_embed.add_field(name='Other', value=helptext)
+        help_embed.add_field(name='Other', value=helptext)
     await ctx.send(embed=help_embed)
 
 
