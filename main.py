@@ -20,7 +20,7 @@ async def on_ready():
    print('Bot ist bereit!')
 
 for command in client.commands:
-    setattr(command, 'group', None)
+    setattr(command, 'group', 'grouptemp')
 
 @client.event
 async def on_member_join(member):
