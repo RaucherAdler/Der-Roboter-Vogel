@@ -19,6 +19,9 @@ async def on_ready():
    await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name='Your Mom'))
    print('Bot ist bereit!')
 
+async for command in client.commands:
+    setattr(command, 'group', None)
+
 @client.event
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.channels, name='def-role')
@@ -217,32 +220,32 @@ async def birthday( ctx, member : discord.Member):
 async def _help( ctx):
     _help.group = 'Misc.'
     help_embed = discord.Embed(name='help')
-    for command in list(client.commands):
-            group = getattr(command, 'group')
-            if group == 'Moderation':
-                helptextmod = ''
-                if command.name[0] == '_':
-                    commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
-                else:
-                    commandtext = 'Name:' + command.name + 'Description: ' + command.description + '\n'
-                helptextmod += commandtext
-                help_embed.add(name=group, value=helptextmod)
-            elif group == 'Misc.':
-                helptextmisc = ''
-                if command.name[0] == '_':
-                    commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
-                else:
-                    commandtext = 'Name: ' + command.name + 'Description: ' + command.description + '\n'
-                helptextmisc += commandtext
-                help_embed.add(name=group, value=helptextmisc)
+    async for command in client.commands:
+        group = getattr(command, 'group')
+        if group == 'Moderation':
+            helptextmod = ''
+            if command.name[0] == '_':
+                commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
             else:
-                helptext = ''
-                if command.name[0] == '_':
-                    commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description + '\n'
-                else:
-                    commandtext = 'Name: ' + command.name + 'Description: ' + command.description + '\n'
-                helptext += commandtext
-                help_embed.add(name='Other', value=helptext)
+                commandtext = 'Name:' + command.name + 'Description: ' + command.description + '\n'
+            helptextmod += commandtext
+            help_embed.add(name=group, value=helptextmod)
+        elif group == 'Misc.':
+            helptextmisc = ''
+            if command.name[0] == '_':
+                commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description
+            else:
+                commandtext = 'Name: ' + command.name + 'Description: ' + command.description + '\n'
+            helptextmisc += commandtext
+            help_embed.add(name=group, value=helptextmisc)
+        else:
+            helptext = ''
+            if command.name[0] == '_':
+                commandtext = 'Name: ' + command.aliases[0] + 'Description: ' + command.description + '\n'
+            else:
+                commandtext = 'Name: ' + command.name + 'Description: ' + command.description + '\n'
+            helptext += commandtext
+            help_embed.add(name='Other', value=helptext)
     await ctx.send(embed=help_embed)
 
 
