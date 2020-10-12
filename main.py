@@ -227,7 +227,7 @@ async def _help( ctx):
             else:
                 commandtext = 'Name:' + command.name + 'Description: ' + command.description + '\n'
             helptextmod += commandtext
-            help_embed.add(name=help, value=helptextmod)
+            help_embed.addfield(name=help, value=helptextmod)
         elif help == 'Misc.':
             helptextmisc = ''
             if command.name[0] == '_':
@@ -235,7 +235,7 @@ async def _help( ctx):
             else:
                 commandtext = 'Name: ' + command.name + 'Description: ' + command.description + '\n'
             helptextmisc += commandtext
-            help_embed.add(name=help, value=helptextmisc)
+            help_embed.addfield(name=help, value=helptextmisc)
         else:
             helptext = ''
             if command.name[0] == '_':
@@ -243,7 +243,7 @@ async def _help( ctx):
             else:
                 commandtext = 'Name: ' + command.name + 'Description: ' + command.description + '\n'
             helptext += commandtext
-            help_embed.add(name='Other', value=helptext)
+            help_embed.addfield(name='Other', value=helptext)
     await ctx.send(embed=help_embed)
 
 
