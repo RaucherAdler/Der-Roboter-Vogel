@@ -125,10 +125,14 @@ async def autorole( ctx, role, channel):
     drole = discord.utils.get(ctx.guild.roles, name=role)
     if drole == None:
         await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
-    else:    
-        overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),ctx.guild.me: discord.PermissionOverwrite(read_messages=True)}
-        newchannel = await ctx.guild.create_text_channel('def-role', overwrites=overwrites, topic='Auto generated channel by RoboterVogel, DO NOT delete or make any messages here.')   
-        await newchannel.send(f'{int(drole.id)}')
+    else:  
+        defchannel = discord.utils.get(ctx.guild.channels, name='def-role')
+        if defchannel != None:
+            defchannel.delete()
+        else:      
+            overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),ctx.guild.me: discord.PermissionOverwrite(read_messages=True)}
+            newchannel = await ctx.guild.create_text_channel('def-role', overwrites=overwrites, topic='Auto generated channel by RoboterVogel, DO NOT delete or make any messages here.')   
+            await newchannel.send(f'{int(drole.id)}')
     sendchannel = discord.utils.get(ctx.guild.channels, name=channel)
     if sendchannel == None:
             await ctx.send('Diese Kanal existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
