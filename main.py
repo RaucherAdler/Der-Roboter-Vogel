@@ -248,7 +248,7 @@ async def TTS(ctx, message):
             vc = membervc
         tts = gTTS(message)
         tts.save('tts.mp3')
-        vc.play(discord.FFmpegPCMAudio(executable='tts.mp3'))
+        vc.play(discord.FFmpegPCMAudio(source='tts.mp3'))
 
 @client.command(aliases=['help'], description='Sends this message', usage='`/help`')
 async def _help(ctx):
