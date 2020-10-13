@@ -213,7 +213,7 @@ async def birthday(ctx, member : discord.Member):
 @client.command(description='Join Voice Channel', usage='`/join`')
 async def join(ctx):
     member = ctx.message.author
-    voice_channel = member.voice.voice_channel
+    voice_channel = member.voice.channel
     channel = None
     if voice_channel != None:
         channel = voice_channel.Name
@@ -226,7 +226,7 @@ async def join(ctx):
 @client.command(description='Leave Voice Channel', usage='`/leave`')
 async def leave(ctx):
     member = ctx.message.author
-    voice_channel = member.voice.voice_channel
+    voice_channel = member.voice.channel
     if voice_channel and client.voice_client != None:
         await client.voice_client.disconnect()
         ctx.send(f'Auf Wiedersehen!')
