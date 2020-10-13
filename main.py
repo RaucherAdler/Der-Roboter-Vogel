@@ -219,7 +219,7 @@ async def join(ctx):
         await ctx.send(f'Jetzt `{voice_channel}` eingeben!')
         await voice_channel.connect()
     else:
-        ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+        await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
 @client.command(description='Leave Voice Channel', usage='`/leave`')
@@ -229,9 +229,9 @@ async def leave(ctx):
     vc = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
     if voice_channel and vc != None:
         await vc.disconnect()
-        ctx.send(f'Auf Wiedersehen!')
+        await ctx.send(f'Auf Wiedersehen!')
     else:
-        ctx.send(f'Derzeit nicht in Sprachkanal!')
+        await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
 #impliment gTTS & FFmpeg
 
