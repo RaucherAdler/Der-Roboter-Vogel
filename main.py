@@ -217,7 +217,7 @@ async def join(ctx):
     voice_channel = member.voice.channel
     if voice_channel != None:
         await ctx.send(f'Jetzt `{voice_channel}` eingeben!')
-        await client.join_voice_channel(voice_channel)
+        await voice_channel.connect()
     else:
         ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
