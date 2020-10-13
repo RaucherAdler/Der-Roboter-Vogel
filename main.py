@@ -226,7 +226,7 @@ async def join(ctx):
 async def leave(ctx):
     member = ctx.message.author
     voice_channel = member.voice.channel
-    if voice_channel and client.voice.channel != None:
+    if voice_channel and client.voice_clients.channel != None:
         await client.voice_client.disconnect()
         ctx.send(f'Auf Wiedersehen!')
     else:
