@@ -44,16 +44,19 @@ async def on_member_join(member):
 async def ping( ctx):
     await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
+
 @client.command(description='Clears a given number of messages', usage='`/clear <Number of posts>`')
 @commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount=0):
     await ctx.channel.purge(limit=amount+1)
+
 
 @client.command(description='Kicks a given user', usage='`/kick <Mention User>`')
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason=None):
     await user.kick(reason=reason)
     await ctx.send(f"{user.mention} wurde getretten!")
+
 
 @client.command(description='Bans a given user', usage='`/ban <Mention User>`')
 @commands.has_permissions(ban_members=True)
@@ -75,6 +78,7 @@ async def unban(ctx, *, member):
             await ctx.guild.unban(user)
             await ctx.send(f'{user.mention} wurde nicht verboten!')
 
+
 @client.command(description='Unbans all banned users', usage='`/unbanall`')
 @commands.has_permissions(ban_members=True)
 async def unbanall(ctx):
@@ -90,6 +94,7 @@ async def unbanall(ctx):
 async def test(ctx):
     test
     await ctx.send(f'Es vermisst nie.')
+
 
 @client.command(aliases=['translate'], description='Translate text (currently only supports German', usage='`/translate <Message>`')
 async def _translate(ctx, message):
@@ -109,6 +114,7 @@ async def giverole(ctx, member : discord.Member, role):
         await member.add_roles(role)
         await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
+
 @client.command(description='Remvoes role from a given user', usage='`/removerole <Mention User> <Role Name>`')
 @commands.has_permissions(manage_roles=True)
 async def removerole(ctx, member : discord.Member, role):
@@ -118,6 +124,7 @@ async def removerole(ctx, member : discord.Member, role):
     else:        
         await member.remove_roles(role)
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
+
 
 @client.command(description='Setup Command for automatic role assignment', usage='`/autorole <Default Role Name> <Main Channel Name>`')
 @commands.has_permissions(manage_roles=True)
@@ -192,6 +199,7 @@ async def greet(ctx, member : discord.Member=None):
             else:
                 await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
 
+
 @client.command(aliases=['geburtstag'], description='Sends birthday message for a user', usage='`/birthday <Mention User>`')
 async def birthday(ctx, member : discord.Member):
     await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:')
@@ -202,7 +210,28 @@ async def birthday(ctx, member : discord.Member):
     lyric_embed.add_field(name=embed_name, value=embed_text)
     await ctx.send(embed=lyric_embed)
     
+@client.command(description='Join Voice Channel', usage='`/join`')
+async def join(ctx):
+    member = ctx.message.author
+    voice_channel = member.voice.voice_channel
+    channel = None
+    if voice_channel != None:
+        channel = voice_channel.Name
+        await ctx.send(f'Jetzt `{channel}` eingeben!')
+        await client.join_voice_channel(voice_channel)
+    else:
+        ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
+
+@client.command(description='Leave Voice Channel', usage='`/leave`')
+async def leave(ctx):
+    member = ctx.message.author
+    voice_channel = member.voice.voice_channel
+    if voice_channel and client.voice_client != None:
+        await client.voice_client.disconnect()
+        ctx.send(f'Auf Wiedersehen!')
+    else:
+        ctx.send(f'Derzeit nicht in Sprachkanal!')
 
 @client.command(aliases=['help'], description='Sends this message', usage='`/help`')
 async def _help(ctx):
