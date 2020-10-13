@@ -30,14 +30,14 @@ async def on_member_join(member):
         channel_name = message.content
     print(f'{member} ist {member.guild.name} beigetretten!')
     channelname = discord.utils.get(member.guild.channels, name=channel_name)
-    await channel_name.send(f'{member.mention} ist {member.guild.name} beigetretten!')
+    await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
     await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
     if channel == None:
         pass
     else:
         role = member.guild.get_role(role_id)
         await member.add_roles(role)
-        await channel.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
+        await channelname.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 
 
