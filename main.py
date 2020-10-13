@@ -1,10 +1,10 @@
 import discord
 from discord.ext import commands
 import discord.utils
-from discord.voice_client import VoiceClient
 from translate import Translator
 from datetime import datetime
 import pytz
+from gtts import gTTS
 
 
 intents = discord.Intents.default()
@@ -233,7 +233,22 @@ async def leave(ctx):
     else:
         await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
-#impliment gTTS & FFmpeg
+
+@client.command(description='Sends TTS message into VC', usage='`/TTS`')
+async def TTS(ctx, message):
+    clientvc = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
+    member = ctx.message.author
+    membervc = member.voice.channel
+    if membervc == None:
+        await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+    else:
+        if clientvc != membervc:
+            vc = await membervc.connect()
+        else:
+            vc = membervc
+        tts = gTTS(message)
+        tts.save('tts.mp3')
+        vc.play(discord.FFmpegPCMAudio(executable='tts.mp3'))
 
 @client.command(aliases=['help'], description='Sends this message', usage='`/help`')
 async def _help(ctx):
