@@ -214,10 +214,8 @@ async def birthday(ctx, member : discord.Member):
 async def join(ctx):
     member = ctx.message.author
     voice_channel = member.voice.channel
-    channel = None
     if voice_channel != None:
-        channel = voice_channel.Name
-        await ctx.send(f'Jetzt `{channel}` eingeben!')
+        await ctx.send(f'Jetzt `{voice_channel}` eingeben!')
         await client.join_voice_channel(voice_channel)
     else:
         ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
