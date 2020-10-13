@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import discord.utils
+from discord.voice_client import VoiceClient
 from translate import Translator
 from datetime import datetime
 import pytz
