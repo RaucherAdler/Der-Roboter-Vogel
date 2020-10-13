@@ -228,7 +228,7 @@ async def leave(ctx):
     voice_channel = member.voice.channel
     vc = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
     if voice_channel and vc != False:
-        await client.voice_clients.disconnect()
+        await vc.disconnect()
         ctx.send(f'Auf Wiedersehen!')
     else:
         ctx.send(f'Derzeit nicht in Sprachkanal!')
