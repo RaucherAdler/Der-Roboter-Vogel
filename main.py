@@ -227,13 +227,13 @@ async def leave(ctx):
     member = ctx.message.author
     voice_channel = member.voice.channel
     vc = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
-    if voice_channel and vc != False:
+    if voice_channel and vc != None:
         await vc.disconnect()
         ctx.send(f'Auf Wiedersehen!')
     else:
         ctx.send(f'Derzeit nicht in Sprachkanal!')
 
-#impliment gTTS
+#impliment gTTS & FFmpeg
 
 @client.command(aliases=['help'], description='Sends this message', usage='`/help`')
 async def _help(ctx):
