@@ -152,12 +152,12 @@ async def autorole(ctx, role, channel):
 async def fcp(ctx, amount):
     if amount == 'this server' or 'This Server' or 'server' or 'Server':
         FCP = 1
-        await ctx.send(f'`{amount} ≈ `{FCP} FCP`')
+        await ctx.send(f'`{amount}` ≈ `{FCP} FCP`')
     else:    
         amount = amount.replace('$', '')
         usdtofcp = 1 / 30
         FCP = float(usdtofcp) * float(amount)
-        await ctx.send(f'`{amount} USD ≈ {FCP} FCP`')
+        await ctx.send(f'`{amount} USD` ≈ `{FCP} FCP`')
 
 
 @client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD', usage='`/usd <Amount of FCP>`')
