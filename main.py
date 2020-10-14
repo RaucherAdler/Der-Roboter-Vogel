@@ -150,7 +150,7 @@ async def autorole(ctx, role, channel):
 @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)', usage='`/fcp <Amount of USD>`')
 async def fcp(ctx, amount):
     server = ['this server', 'This Server', 'server', 'Server']
-    if isinstance(amount, server):
+    if amount in server:
         FCP = 1
         await ctx.send(f'`{amount}` ≈ `{FCP} FCP`')
     else:    
