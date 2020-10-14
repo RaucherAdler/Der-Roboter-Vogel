@@ -4,7 +4,6 @@ import discord.utils
 from translate import Translator
 from datetime import datetime
 import pytz
-from gtts import gTTS
 
 
 intents = discord.Intents.default()
@@ -150,7 +149,8 @@ async def autorole(ctx, role, channel):
 
 @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)', usage='`/fcp <Amount of USD>`')
 async def fcp(ctx, amount):
-    if amount == 'this server' or 'This Server' or 'server' or 'Server':
+    server = ['this server', 'This Server', 'server', 'Server']
+    if isinstance(amount, server):
         FCP = 1
         await ctx.send(f'`{amount}` ≈ `{FCP} FCP`')
     else:    
