@@ -210,8 +210,9 @@ async def birthday(ctx, member : discord.Member):
     lyric_embed = discord.Embed(name=embed_name)
     lyric_embed.add_field(name=embed_name, value=embed_text)
     await ctx.send(embed=lyric_embed)
-    
-@client.command(description='Join Voice Channel', usage='`/join`')
+
+"""    
+@client.command(description='Join Voice Channel, ', usage='`/join`')
 async def join(ctx):
     member = ctx.message.author
     voice_channel = member.voice.channel
@@ -232,23 +233,7 @@ async def leave(ctx):
         await ctx.send(f'Auf Wiedersehen!')
     else:
         await ctx.send(f'Derzeit nicht in Sprachkanal!')
-
-
-@client.command(description='Sends TTS message into VC', usage='`/TTS`')
-async def TTS(ctx, message):
-    clientvc = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
-    member = ctx.message.author
-    membervc = member.voice.channel
-    if membervc == None:
-        await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
-    else:
-        if clientvc != membervc:
-            vc = await membervc.connect()
-        else:
-            vc = membervc
-        tts = gTTS(message)
-        tts.save('tts.mp3')
-        vc.play(discord.FFmpegPCMAudio(source='tts.mp3'))
+"""
 
 @client.command(aliases=['help'], description='Sends this message', usage='`/help`')
 async def _help(ctx):
