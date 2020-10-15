@@ -57,7 +57,7 @@ async def kick(ctx, user: discord.Member, *, reason=None):
     await ctx.send(f"{user} wurde getretten!")
     await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} getretten!')
     if reason!= None:
-        user.send(f'Grund: {reason}')
+        await user.send(f'Grund: {reason}')
     await user.kick(reason=reason)
 
 
@@ -68,7 +68,7 @@ async def ban(ctx, user: discord.Member, *, reason=None):
     await ctx.send(f"{user} wurde verboten!")
     await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} gesperrt!')
     if reason!= None:
-        user.send(f'Grund: {reason}')
+        await user.send(f'Grund: {reason}')
     await user.ban(reason=reason)
 
 
