@@ -13,7 +13,6 @@ intents.members = True
 
 
 client = commands.Bot(command_prefix = '/', intents=intents, help_command=PrettyHelp())
-client.remove_command('help')
 
 
 @client.event
@@ -242,22 +241,6 @@ async def leave(ctx):
     else:
         await ctx.send(f'Derzeit nicht in Sprachkanal!')
 """
-
-@client.command(aliases=['help'], description='Sends this message', usage='`/help`')
-async def _help(ctx):
-    help_embed = discord.Embed(name='Help', colour=Color.dark_red())
-    for command in client.commands:
-        helptext = ''
-        if command.name[0] == '_':
-            commandtext = 'Name: `' + command.aliases[0] + '`\nDescription: `' + command.description + '`\nUsage: `' + command.usage + '`\n'                
-            commandname = command.aliases[0]
-        else:
-            commandtext = 'Name: `' + command.name + '`\nDescription: `' + command.description + '`\nUsage: `' + command.usage + '`\n'
-            commandname = command.name
-        helptext += commandtext
-        help_embed.add_field(name=commandname, value=helptext, inline=False)
-    await ctx.send(embed=help_embed)
-
 
 key = 'NzYyNzY4MTE4MjEyMDY3MzI4.X3t9Kg.pLG6YLPVdbNqL9FI1iijx3YJ4T4'
 client.run(key)
