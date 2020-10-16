@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import discord.utils
 from discord import Color
+from pretty_help import PrettyHelp, Navigation
 from translate import Translator
 from datetime import datetime
 import pytz
@@ -11,7 +12,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 
-client = commands.Bot(command_prefix = '/', intents=intents)
+client = commands.Bot(command_prefix = '/', intents=intents, help_command=PrettyHelp())
 client.remove_command('help')
 
 
