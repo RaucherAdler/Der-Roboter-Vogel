@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import discord.utils
+from discord import Color
 from translate import Translator
 from datetime import datetime
 import pytz
@@ -102,7 +103,7 @@ async def test(ctx):
     await ctx.send(f'Es vermisst nie.')
 
 
-@client.command(aliases=['translate'], description='Translate text (currently only supports German', usage='`/translate <Message>`')
+@client.command(aliases=['translate'], description='Translate text (currently only supports German)', usage='`/translate <Message>`')
 async def _translate(ctx, message):
     _translate
     translator = Translator(to_lang="German")
@@ -243,7 +244,7 @@ async def leave(ctx):
 
 @client.command(aliases=['help'], description='Sends this message', usage='`/help`')
 async def _help(ctx):
-    help_embed = discord.Embed(name='Help')
+    help_embed = discord.Embed(name='Help', colour=Color.dark_red)
     for command in client.commands:
         helptext = ''
         if command.name[0] == '_':
