@@ -244,7 +244,7 @@ async def leave(ctx):
 
 @client.command(aliases=['help'], description='Sends this message', usage='`/help`')
 async def _help(ctx):
-    help_embed = discord.Embed(name='Help', colour=Color.dark_red)
+    help_embed = discord.Embed(name='Help', colour=Color.dark_red())
     for command in client.commands:
         helptext = ''
         if command.name[0] == '_':
