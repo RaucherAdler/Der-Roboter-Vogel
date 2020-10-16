@@ -99,7 +99,6 @@ async def unbanall(ctx):
 
 @client.command(description='a simple test command', usage='`/test`')
 async def test(ctx):
-    test
     await ctx.send(f'Es vermisst nie.')
 
 
@@ -116,7 +115,7 @@ async def _translate(ctx, message):
 async def giverole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
-        ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
+        await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:
         await member.add_roles(role)
         await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
@@ -127,7 +126,7 @@ async def giverole(ctx, member : discord.Member, role):
 async def removerole(ctx, member : discord.Member, role):
     role = discord.utils.get(ctx.guild.roles, name=role)
     if role == None:
-        ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
+        await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
     else:        
         await member.remove_roles(role)
         await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
