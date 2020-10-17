@@ -269,7 +269,7 @@ async def _help(ctx):
             name = command.name
         text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
         help_embed.add_field(name=name, value=text, inline=True)
-        help_embed.set_footer(text=ctx.message.author, image=ctx.message.author.avatar_url)
+        help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
     await ctx.send(embed=help_embed)
 
 
