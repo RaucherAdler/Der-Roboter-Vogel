@@ -41,15 +41,18 @@ async def on_member_join(member):
 
 class Moderation(commands.Cog):
 
+    def __init__(self, client):
+        self.client = client
+
     @client.command(description='Clears a given number of messages', usage='`/clear <Number of posts>`')
     @commands.has_permissions(manage_messages=True)
-    async def clear(ctx, amount=0):
+    async def clear(self, ctx, amount=0):
         await ctx.channel.purge(limit=amount+1)
 
 
     @client.command(description='Kicks a given user', usage='`/kick <Mention User>`')
     @commands.has_permissions(kick_members=True)
-    async def kick(ctx, user: discord.Member, *, reason=None):
+    async def kick(self, ctx, user: discord.Member, *, reason=None):
         await ctx.send(f"{user} wurde getretten!")
         await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} getretten!')
         if reason!= None:
@@ -59,7 +62,7 @@ class Moderation(commands.Cog):
 
     @client.command(description='Bans a given user', usage='`/ban <Mention User>`')
     @commands.has_permissions(ban_members=True)
-    async def ban(ctx, user: discord.Member, *, reason=None):
+    async def ban(self, ctx, user: discord.Member, *, reason=None):
         await user.ban(reason=reason)
         await ctx.send(f"{user} wurde verboten!")
         await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} gesperrt!')
@@ -70,7 +73,7 @@ class Moderation(commands.Cog):
 
     @client.command(description='Unbans a given user', usage='`/unban <User Name (i.e. Raucher Adler#1220)>`')
     @commands.has_permissions(ban_members=True)
-    async def unban(ctx, *, member):
+    async def unban(self, ctx, *, member):
         banned_users = await ctx.guild.bans()
         member_name, member_discriminator = member.split('#')
 
@@ -84,7 +87,7 @@ class Moderation(commands.Cog):
 
     @client.command(description='Unbans all banned users', usage='`/unbanall`')
     @commands.has_permissions(ban_members=True)
-    async def unbanall(ctx):
+    async def unbanall(self, ctx):
         banned_users = await ctx.guild.bans()
 
         for ban_entry in banned_users:
@@ -95,7 +98,7 @@ class Moderation(commands.Cog):
 
     @client.command(description='Gives role to a given user', usage='`/giverole <Mention User> <Role Name>`')
     @commands.has_permissions(manage_roles=True)
-    async def giverole(ctx, member : discord.Member, role):
+    async def giverole(self, ctx, member : discord.Member, role):
         role = discord.utils.get(ctx.guild.roles, name=role)
         if role == None:
             await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -106,7 +109,7 @@ class Moderation(commands.Cog):
 
     @client.command(description='Remvoes role from a given user', usage='`/removerole <Mention User> <Role Name>`')
     @commands.has_permissions(manage_roles=True)
-    async def removerole(ctx, member : discord.Member, role):
+    async def removerole(self, ctx, member : discord.Member, role):
         role = discord.utils.get(ctx.guild.roles, name=role)
         if role == None:
             await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -117,7 +120,7 @@ class Moderation(commands.Cog):
 
     @client.command(description='Setup Command for automatic role assignment', usage='`/autorole <Default Role Name> <Main Channel Name>`')
     @commands.has_permissions(manage_roles=True)
-    async def autorole(ctx, role, channel):
+    async def autorole(self, ctx, role, channel):
         drole = discord.utils.get(ctx.guild.roles, name=role)
         if drole == None:
             await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -138,8 +141,11 @@ client.add_cog(Moderation(client))
 
 class Chat(commands.Cog):
 
+    def __init__(self, client):
+        self.client = client
+
     @client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user', usage='`/greet < Mention User or "all" (optional)>`')
-    async def greet(ctx, member : discord.Member=None):
+    async def greet(self, ctx, member : discord.Member=None):
         tz_CDT = pytz.timezone('America/Chicago')
         now_CDT = datetime.now(tz_CDT)
         hour_CDT = now_CDT.hour
@@ -173,7 +179,7 @@ class Chat(commands.Cog):
 
 
     @client.command(aliases=['geburtstag'], description='Sends birthday message for a user', usage='`/birthday <Mention User>`')
-    async def birthday(ctx, member : discord.Member):
+    async def birthday(self, ctx, member : discord.Member):
         await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:')
         await ctx.send('Jetzt singen wir alle das Geburtstagslied:')
         embed_name = 'Geburtstagslied :birthday:'
@@ -189,14 +195,17 @@ client.add_cog(Chat(client))
 
 class Conversion(commands.Cog):
 
+    def __init__(self, client):
+        self.client = client
+
     @client.command(aliases=['translate'], description='Translate text (currently only supports German)', usage='`/translate <Message>`')
-    async def _translate(ctx, message):
+    async def _translate(self, ctx, message):
         translator = Translator(to_lang="German")
         translation = translator.translate(message)
         await ctx.send(translation)
 
     @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)', usage='`/fcp <Amount of USD>`')
-    async def fcp(ctx, amount):
+    async def fcp(self, ctx, amount):
         server = ['this server', 'This Server', 'server', 'Server']
         if amount in server:
             FCP = 1
@@ -209,7 +218,7 @@ class Conversion(commands.Cog):
 
 
     @client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD', usage='`/usd <Amount of FCP>`')
-    async def usd(ctx, amount):
+    async def usd(self, ctx, amount):
         amount = amount.replace('FCPfcp', '')
         fcptousd = 30
         USD = float(fcptousd) * float(amount)
@@ -218,8 +227,11 @@ client.add_cog(Conversion(client))
 
 class Voice(commands.Cog):
 
+    def __init__(self, client):
+        self.client = client
+
     @client.command(description='Join Voice Channel, ', usage='`/join`')
-    async def join(ctx):
+    async def join(self, ctx):
         member = ctx.message.author
         voice_channel = member.voice.channel
         if voice_channel != None:
@@ -230,7 +242,7 @@ class Voice(commands.Cog):
 
 
     @client.command(description='Leave Voice Channel', usage='`/leave`')
-    async def leave(ctx):
+    async def leave(self, ctx):
         member = ctx.message.author
         voice_channel = member.voice.channel
         vc = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
