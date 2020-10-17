@@ -262,7 +262,7 @@ class Voice(commands.Cog):
 async def _help(ctx):
     help_embed = discord.Embed(name='help', color=Color.dark_red())
     for command in client.commands:
-        if command[0] == '_':
+        if command.name[0] == '_':
             aliases = list(set(command.aliases))
             name = aliases[0]
         else:
