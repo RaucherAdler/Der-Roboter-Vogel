@@ -266,7 +266,7 @@ async def _help(ctx):
             aliases = list(set(command.aliases))
             name = aliases[0]
         else:
-            name = command.Name
+            name = command.name
         text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
         help_embed.add_field(name=name, value=text, inline=True)
     await ctx.send(help_embed)
