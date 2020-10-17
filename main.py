@@ -211,7 +211,7 @@ class Conversion(commands.Cog):
         await ctx.send(translation)
 
     @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)', usage='`/fcp <Amount of USD>`')
-    async def fcp(self, ctx, amount):
+    async def fcp(ctx, amount):
         server = ['this server', 'This Server', 'server', 'Server']
         if amount in server:
             FCP = 1
@@ -224,7 +224,7 @@ class Conversion(commands.Cog):
 
 
     @client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD', usage='`/usd <Amount of FCP>`')
-    async def usd(self, ctx, amount):
+    async def usd(ctx, amount):
         amount = amount.replace('FCPfcp', '')
         fcptousd = 30
         USD = float(fcptousd) * float(amount)
