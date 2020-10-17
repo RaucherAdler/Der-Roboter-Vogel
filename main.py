@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 import discord.utils
 from discord import Color
-from pretty_help import PrettyHelp
 from translate import Translator
 from datetime import datetime
 import pytz
@@ -14,6 +13,7 @@ intents.members = True
 
 client = commands.Bot(command_prefix = '/', intents=intents)
 
+client.remove_command('help')
 
 @client.event
 async def on_ready():
@@ -257,6 +257,19 @@ class Voice(commands.Cog):
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
+
+@client.command()
+async def help(ctx):
+    help_embed = discord.Embed(name='help', color=Color.dark_red())
+    for command in client.commands:
+        if command[0] == '_':
+            aliases = list(set(command.aliases))
+            name = aliases[0]
+        else:
+            name = command.Name
+        text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+        help_embed.add_field(name=name, value=text, inline=True)
+    await ctx.send(help_embed)
 
 
 def setup(client):
