@@ -39,6 +39,7 @@ async def on_member_join(member):
         await member.add_roles(role)
         await channelname.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
+
 class Moderation(commands.Cog):
 
     def __init__(self, client):
@@ -139,6 +140,7 @@ class Moderation(commands.Cog):
                 await ctx.send(f'Neue Standardrolle ist {role}!')
 client.add_cog(Moderation(client))
 
+
 class Chat(commands.Cog):
 
     def __init__(self, client):
@@ -193,6 +195,7 @@ class Chat(commands.Cog):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')    
 client.add_cog(Chat(client))
 
+
 class Conversion(commands.Cog):
 
     def __init__(self, client):
@@ -224,6 +227,7 @@ class Conversion(commands.Cog):
         USD = float(fcptousd) * float(amount)
         await ctx.send(f'`{amount} FCP` ≈ `{USD} USD`')
 client.add_cog(Conversion(client))
+
 
 class Voice(commands.Cog):
 
