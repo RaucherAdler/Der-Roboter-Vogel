@@ -14,8 +14,6 @@ intents.members = True
 
 client = commands.Bot(command_prefix = '/', intents=intents)
 
-client.help_command = PrettyHelp(color=Color.dark_red())
-
 
 @client.event
 async def on_ready():
