@@ -8,18 +8,20 @@ from datetime import datetime
 import pytz
 
 
+
 intents = discord.Intents.default()
 intents.members = True
-
 
 client = commands.Bot(command_prefix = '/', intents=intents)
 
 client.help_command = PrettyHelp(color=Color.dark_red())
 
+
 @client.event
 async def on_ready():
    await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name='Your Mom'))
    print('Bot ist bereit!')
+
 
 @client.event
 async def on_member_join(member):
@@ -38,6 +40,7 @@ async def on_member_join(member):
         role = member.guild.get_role(role_id)
         await member.add_roles(role)
         await channelname.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
+
 
 
 class Moderation(commands.Cog):
@@ -138,7 +141,7 @@ class Moderation(commands.Cog):
         else:
                 await newchannel.send(f'{channel}')
                 await ctx.send(f'Neue Standardrolle ist {role}!')
-client.add_cog(Moderation(client))
+
 
 
 class Chat(commands.Cog):
@@ -193,7 +196,7 @@ class Chat(commands.Cog):
     @client.command(description='Pings bots latency', usage='`/ping`')
     async def ping(ctx):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')    
-client.add_cog(Chat(client))
+
 
 
 class Conversion(commands.Cog):
@@ -226,7 +229,7 @@ class Conversion(commands.Cog):
         fcptousd = 30
         USD = float(fcptousd) * float(amount)
         await ctx.send(f'`{amount} FCP` ≈ `{USD} USD`')
-client.add_cog(Conversion(client))
+
 
 
 class Voice(commands.Cog):
@@ -255,8 +258,14 @@ class Voice(commands.Cog):
             await ctx.send(f'Auf Wiedersehen!')
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
-client.add_cog(Voice(client))
 
 
+
+def setup(client):
+    client.add_cog(Moderation(client))
+    client.add_cog(Chat(client))
+    client.add_cog(Conversion(client))
+    client.add_cog(Voice(client))
+        
 key = 'NzYyNzY4MTE4MjEyMDY3MzI4.X3t9Kg.pLG6YLPVdbNqL9FI1iijx3YJ4T4'
 client.run(key)
