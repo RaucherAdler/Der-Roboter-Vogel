@@ -269,7 +269,7 @@ async def _help(ctx):
             name = command.name
         text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
         help_embed.add_field(name=name, value=text, inline=True)
-    await ctx.send(help_embed)
+    await ctx.send(embed=help_embed)
 
 
 def setup(client):
