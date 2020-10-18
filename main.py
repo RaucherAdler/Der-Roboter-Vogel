@@ -235,7 +235,7 @@ class Voice(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @client.command(description='Join Voice Channel, ', usage='`/join`')
+    @client.command(description='Join Voice Channel', usage='`/join`')
     async def join(ctx):
         member = ctx.message.author
         voice_channel = member.voice.channel
