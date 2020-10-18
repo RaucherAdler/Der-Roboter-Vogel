@@ -284,7 +284,7 @@ async def _help(ctx):
 
 
 @client.command(description='Info on RoboterVogel', usage='`/info`')
-async info(ctx):
+async def info(ctx):
     info_embed = discord.Embed(color=Color.dark_red())
     info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Tapferer Falke#9811 (Raucher Adler) gemacht!', inline=True)
     info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler')
