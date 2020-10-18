@@ -157,7 +157,7 @@ class Chat(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user', usage='`/greet < Mention User or "all" (optional)>`')
+    @client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user', usage='`/greet < Mention User (optional)>`')
     async def greet(ctx, member : discord.Member=None):
         tz_CDT = pytz.timezone('America/Chicago')
         now_CDT = datetime.now(tz_CDT)
@@ -181,14 +181,11 @@ class Chat(commands.Cog):
             await ctx.send(f'{good} {time_of_day}, Vater!')
         elif author_id != 755875742595678290 and member == None:
             await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}!')
-        if member != None:
-            if member == 'all':
-                await ctx.send(f'{good} {time_of_day}, @everyone!')
+        elif member != None:
+            if member.id == 762768118212067328:
+                await ctx.send(f'Hallo {ctx.message.author.mention}, wie gehts?')
             else:
-                if member.id == 762768118212067328:
-                    await ctx.send(f'Hallo {ctx.message.author.mention}, wie gehts?')
-                else:
-                    await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
+                await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
 
 
     @client.command(aliases=['geburtstag'], description='Sends birthday message for a user', usage='`/birthday <Mention User>`')
