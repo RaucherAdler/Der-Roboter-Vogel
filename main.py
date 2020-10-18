@@ -44,7 +44,7 @@ async def on_member_join(member):
 @client.event
 async def on_guild_join(guild):
     owner = guild.owner
-    info_embed = client.invoke(client.get_command('info'))
+    info_embed = await client.invoke(client.get_command('info'))
     await owner.send(f'Hallo, ich bin RoboterVogel, dein neuer Bot!', embed=info_embed)
 
 class Moderation(commands.Cog):
