@@ -258,9 +258,9 @@ class Voice(commands.Cog):
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
 
-@client.command(name='Help — Here is a list of available commands:', description='Lists all commands & their usages', usage='`/help`')
+@client.command(name='help', description='Lists all commands & their usages', usage='`/help`')
 async def _help(ctx):
-    help_embed = discord.Embed(title='Help', color=Color.dark_red())
+    help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
     for command in client.commands:
         if command.name[0] == '_':
             aliases = list(set(command.aliases))
