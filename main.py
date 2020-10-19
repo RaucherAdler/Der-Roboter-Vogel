@@ -46,7 +46,7 @@ async def on_member_join(member):
 async def on_guild_join(guild):
     owner = guild.owner
     info_embed = discord.Embed(color=Color.dark_red())
-    info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Tapferer Falke#9811 (Raucher Adler) gemacht!', inline=True)
+    info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#1521 gemacht!', inline=True)
     info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler')
     info_embed.set_footer(text=owner, icon_url=owner.avatar_url)
     await owner.send(f'Hallo, ich bin RoboterVogel, dein neuer Bot!', embed=info_embed)
@@ -286,7 +286,7 @@ async def _help(ctx):
 @client.command(description='Info on RoboterVogel', usage='`/info`')
 async def info(ctx):
     info_embed = discord.Embed(color=Color.dark_red())
-    info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Tapferer Falke#9811 (Raucher Adler) gemacht!', inline=True)
+    info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#1521 gemacht!', inline=True)
     info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler')
     info_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
     await ctx.send(embed=info_embed)
