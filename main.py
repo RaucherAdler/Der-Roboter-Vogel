@@ -177,9 +177,9 @@ class Chat(commands.Cog):
 
         good = 'Gut' + word_ending
         author_id = ctx.message.author.id
-        if author_id == 755875742595678290 and member == None:
+        if author_id == 767633160765702145 and member == None:
             await ctx.send(f'{good} {time_of_day}, Vater!')
-        elif author_id != 755875742595678290 and member == None:
+        elif author_id != 767633160765702145 and member == None:
             await ctx.send(f'{good} {time_of_day}, {ctx.message.author.mention}!')
         elif member != None:
             if member.id == 762768118212067328:
