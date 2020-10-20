@@ -109,7 +109,7 @@ class Moderation(commands.Cog):
 
 
     @client.command(description='Gives role to a given user', usage='`/giverole <Mention User> <Role Name>`')
-    @commands.has_permissions(ban_members=False)
+    @commands.has_permissions(manage_roles=False)
     async def giverole(ctx, member : discord.Member, role):
         role = discord.utils.get(ctx.guild.roles, name=role)
         if role == None:
