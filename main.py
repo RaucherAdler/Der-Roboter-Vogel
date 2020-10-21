@@ -65,6 +65,7 @@ class Moderation(commands.Cog):
     @client.command(description='Kicks a given user', usage='`/kick <Mention User>`')
     @commands.has_permissions(kick_members=True)
     async def kick(ctx, user: discord.Member, *, reason=None):
+        await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
         await ctx.send(f"{user} wurde getretten!")
         if user.bot == True:
             await user.kick(reason=reason)
@@ -78,6 +79,7 @@ class Moderation(commands.Cog):
     @client.command(description='Bans a given user', usage='`/ban <Mention User>`')
     @commands.has_permissions(ban_members=True)
     async def ban(ctx, user: discord.Member, *, reason=None):
+        await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
         await ctx.send(f"{user} wurde verboten!")
         if user.bot == True:
             await user.ban(reason=reason)
@@ -206,10 +208,6 @@ class Chat(commands.Cog):
     @client.command(description='Pings bots latency', usage='`/ping`')
     async def ping(ctx):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
-
-    @client.command()
-    async def test(ctx):
-        await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
 
 
 
