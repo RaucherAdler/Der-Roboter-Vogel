@@ -203,11 +203,6 @@ class Chat(commands.Cog):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')    
 
 
-    @client.command()
-    async def vote(ctx, channel):
-        channel = discord.utils.get(ctx.guild.channels, name=channel)
-        message = await channel.fetch_message('768256925703471134')
-        await message.add_reaction('🦅')
 
 class Conversion(commands.Cog):
 
