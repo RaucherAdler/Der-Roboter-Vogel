@@ -206,7 +206,7 @@ class Chat(commands.Cog):
     @client.command()
     async def vote(ctx, channel):
         channel = discord.utils.get(ctx.guild.channels, name=channel)
-        message = await client.get_message(channel , '768256925703471134')
+        message = await channel.fetch_message('768256925703471134')
         await message.add_reaction(name='eagle')
 
 class Conversion(commands.Cog):
