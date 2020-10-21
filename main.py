@@ -205,7 +205,11 @@ class Chat(commands.Cog):
 
     @client.command(description='Pings bots latency', usage='`/ping`')
     async def ping(ctx):
-        await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')    
+        await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
+
+    @client.command()
+    async def test(ctx):
+        await ctx.send('https://media.tenor.co/videos/0c091d2454bb4c9b2b018cc96c78ba0f/mp4')
 
 
 
