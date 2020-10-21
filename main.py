@@ -209,7 +209,7 @@ class Chat(commands.Cog):
 
     @client.command()
     async def test(ctx):
-        await ctx.send('https://media.tenor.co/videos/0c091d2454bb4c9b2b018cc96c78ba0f/mp4')
+        await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
 
 
 
