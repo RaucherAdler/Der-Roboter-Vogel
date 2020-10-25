@@ -5,8 +5,8 @@ from discord import Color
 from translate import Translator
 from datetime import datetime
 import pytz
-
-
+from PIL import Image
+from random import randint
 
 
 intents = discord.Intents.default()
@@ -209,6 +209,19 @@ class Chat(commands.Cog):
     async def ping(ctx):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
+    @client.command()
+    async def randomimage(ctx, size=(128,128)):
+        image = Image.new('RGB', size)
+        for x in range(0, size[0]-1):
+            for y in range(0, size[1]-1):
+                coordinate = (x, y)
+                rvalue = str(randint(0, 255))
+                gvalue = str(randint(0, 255))
+                bvalue = str(randint(0, 255))
+                rgb = rvalue + gvalue + bvalue
+                rgb = int(rgb)
+                image.putpixel(coordinate, rgb)
+        await ctx.send(image=image)
 
 
 class Conversion(commands.Cog):
