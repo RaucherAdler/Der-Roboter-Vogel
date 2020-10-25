@@ -324,6 +324,7 @@ async def _help(ctx, commandarg=None):
                     text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
                     help_embed.add_field(name=name, value=text, inline=True)
     await ctx.send(embed=help_embed)
+    await ctx.send(f'commandarg: {commandarg}')
 
 
 @client.command(description='Info on RoboterVogel', usage='`/info`')
