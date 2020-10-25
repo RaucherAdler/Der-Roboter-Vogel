@@ -310,7 +310,7 @@ async def _help(ctx, commandarg=None):
             help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
             aliases = list(set(command.aliases))
             if aliases != None:
-                aliases.replace("'[]", '')
+                ', '.join(aliases)
                 help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: `{aliases}`'
             else:
                 help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
