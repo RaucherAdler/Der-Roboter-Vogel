@@ -221,7 +221,7 @@ class Chat(commands.Cog):
                 rgb = rvalue + gvalue + bvalue
                 rgb = int(rgb)
                 image.putpixel(coordinate, rgb)
-        await ctx.send(image=image)
+        await ctx.send(file=image)
 
 
 class Conversion(commands.Cog):
