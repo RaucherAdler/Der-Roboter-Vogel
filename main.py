@@ -223,7 +223,7 @@ class Chat(commands.Cog):
                 rgb = int(rgb)
                 image.putpixel(coordinate, rgb)
         image.save('image.png')
-        await ctx.send(file=discord.Image('image.png'))
+        await ctx.send(file=discord.File('image.png'))
         os.remove('image.png')
 
 
