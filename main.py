@@ -52,10 +52,13 @@ async def on_guild_join(guild):
     info_embed.set_footer(text=owner, icon_url=owner.avatar_url)
     await owner.send(f'Hallo, ich bin RoboterVogel, dein neuer Bot!', embed=info_embed)
 
+
+
 class Moderation(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+
 
     @client.command(description='Clears a given number of messages', usage='`/clear <Number of posts>`')
     @commands.has_permissions(manage_messages=True)
@@ -159,11 +162,62 @@ class Moderation(commands.Cog):
                 await ctx.send(f'Neue Standardrolle ist {role}!')
 
 
+    @client.command(name='help', description='Lists all commands & their usages', usage='`/help`')
+    async def _help(ctx, commandarg=None):
+        if commandarg == None:
+            help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
+            help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+
+            for command in client.commands:
+                if command.name[0] == '_':
+                    aliases = list(set(command.aliases))
+                    name = aliases[0]
+                else:
+                    name = command.name
+                text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+                help_embed.add_field(name=name, value=text, inline=True)
+        else:
+            command = discord.utils.get(client.commands, name=commandarg)
+            if command != None:
+                help_embed = discord.Embed(title=command.name, color=Color.dark_red())
+                help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
+                aliases = list(set(command.aliases))
+                if len(aliases) != 0:
+                    aliases = ', '.join(aliases)
+                    help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: `{aliases}`'
+                else:
+                    help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+                help_embed.add_field(name=command.name, value=help_text, inline=True)
+            else:
+                help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
+                help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+                    
+                for command in client.commands:
+                    if command.name[0] == '_':
+                        aliases = list(set(command.aliases))
+                        name = aliases[0]
+                    else:
+                        name = command.name
+                    text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+                    help_embed.add_field(name=name, value=text, inline=True)
+        await ctx.send(embed=help_embed)
+
+
+    @client.command(description='Info on RoboterVogel', usage='`/info`')
+    async def info(ctx):
+        info_embed = discord.Embed(color=Color.dark_red())
+        info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#1521 gemacht!', inline=True)
+        info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler', inline=True)
+        info_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+        await ctx.send(embed=info_embed)
+
+
 
 class Chat(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+
 
     @client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user', usage='`/greet < Mention User (optional)>`')
     async def greet(ctx, member : discord.Member=None):
@@ -206,9 +260,11 @@ class Chat(commands.Cog):
         lyric_embed.add_field(name=embed_name, value=embed_text)
         await ctx.send(embed=lyric_embed)
 
+
     @client.command(description='Pings bots latency', usage='`/ping`')
     async def ping(ctx):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
+
 
     @client.command(aliases=['randpng', 'randimg', 'pic', 'image'], description='Generates a random image', usage='`/randomimage <Width (Optional)> <Height (Optional)>`')
     async def randomimage(ctx, size_width=128, size_height=128):
@@ -233,11 +289,13 @@ class Conversion(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+
     @client.command(name='translate', description='Translate text (currently only supports German)', usage='`/translate <Message>`')
     async def _translate(ctx, message):
         translator = Translator(to_lang="German")
         translation = translator.translate(message)
         await ctx.send(translation)
+
 
     @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)', usage='`/fcp <Amount of USD>`')
     async def fcp(ctx, amount):
@@ -266,6 +324,7 @@ class Voice(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+
     @client.command(description='Join Voice Channel', usage='`/join`')
     async def join(ctx):
         member = ctx.message.author
@@ -288,55 +347,6 @@ class Voice(commands.Cog):
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
-
-@client.command(name='help', description='Lists all commands & their usages', usage='`/help`')
-async def _help(ctx, commandarg=None):
-    if commandarg == None:
-        help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
-        help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-
-        for command in client.commands:
-            if command.name[0] == '_':
-                aliases = list(set(command.aliases))
-                name = aliases[0]
-            else:
-                name = command.name
-            text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-            help_embed.add_field(name=name, value=text, inline=True)
-    else:
-        command = discord.utils.get(client.commands, name=commandarg)
-        if command != None:
-            help_embed = discord.Embed(title=command.name, color=Color.dark_red())
-            help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
-            aliases = list(set(command.aliases))
-            if len(aliases) != 0:
-                aliases = ', '.join(aliases)
-                help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: `{aliases}`'
-            else:
-                help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-            help_embed.add_field(name=command.name, value=help_text, inline=True)
-        else:
-            help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
-            help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-                
-            for command in client.commands:
-                if command.name[0] == '_':
-                    aliases = list(set(command.aliases))
-                    name = aliases[0]
-                else:
-                    name = command.name
-                text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                help_embed.add_field(name=name, value=text, inline=True)
-    await ctx.send(embed=help_embed)
-
-
-@client.command(description='Info on RoboterVogel', usage='`/info`')
-async def info(ctx):
-    info_embed = discord.Embed(color=Color.dark_red())
-    info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#1521 gemacht!', inline=True)
-    info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler', inline=True)
-    info_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-    await ctx.send(embed=info_embed)
 
 
 def setup(client):
