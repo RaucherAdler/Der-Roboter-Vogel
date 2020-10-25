@@ -305,8 +305,8 @@ async def _help(ctx, commandarg=None):
             help_embed.add_field(name=name, value=text, inline=True)
     else:
         for command in client.commands:
-            if commandarg == command.name or commandarg in list(set(command.aliases)):
-                help_embed = discord.Embed(title=command, color=Color.dark_red())
+            if commandarg == command.name:
+                help_embed = discord.Embed(title=command.name, color=Color.dark_red())
                 help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
                 aliases = list(set(command.aliases))
                 help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: {aliases}'
