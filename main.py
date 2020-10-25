@@ -211,7 +211,8 @@ class Chat(commands.Cog):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
     @client.command(aliases=['randpng', 'randimg', 'pic', 'image'])
-    async def randomimage(ctx, size=(128,128)):
+    async def randomimage(ctx, size_width=128, size_height=128):
+        size = (size_width, size_height)           
         image = Image.new('RGB', size)
         for x in range(0, size[0]-1):
             for y in range(0, size[1]-1):
