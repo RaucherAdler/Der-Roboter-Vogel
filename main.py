@@ -210,7 +210,7 @@ class Chat(commands.Cog):
     async def ping(ctx):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
-    @client.command(aliases=['randpng', 'randimg', 'pic', 'image'], description='Generates a random image', usage='`/randomimage <Width (Optional)> <Height (Optional)>')
+    @client.command(aliases=['randpng', 'randimg', 'pic', 'image'], description='Generates a random image', usage='`/randomimage <Width (Optional)> <Height (Optional)>`')
     async def randomimage(ctx, size_width=128, size_height=128):
         size = (size_width, size_height)           
         image = Image.new('RGB', size)
@@ -309,7 +309,11 @@ async def _help(ctx, commandarg=None):
             help_embed = discord.Embed(title=command.name, color=Color.dark_red())
             help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
             aliases = list(set(command.aliases))
-            help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: {aliases}'
+            if aliases != None:
+                aliases.replace("'[]", '')
+                help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: `{aliases}`'
+            else:
+                help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
             help_embed.add_field(name=command.name, value=help_text, inline=True)
         else:
             help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
