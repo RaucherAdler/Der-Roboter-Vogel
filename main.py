@@ -304,7 +304,7 @@ async def _help(ctx, commandarg=None):
             text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
             help_embed.add_field(name=name, value=text, inline=True)
     else:
-        command = discord.utils.get(client.Commands, name=commandarg)
+        command = discord.utils.get(client.commands.Command, name=commandarg)
         if command != None:
             help_embed = discord.Embed(title=command.name, color=Color.dark_red())
             help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
@@ -324,7 +324,6 @@ async def _help(ctx, commandarg=None):
                 text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
                 help_embed.add_field(name=name, value=text, inline=True)
     await ctx.send(embed=help_embed)
-    await ctx.send(f'commandarg: {commandarg}')
 
 
 @client.command(description='Info on RoboterVogel', usage='`/info`')
