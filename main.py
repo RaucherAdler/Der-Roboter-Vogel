@@ -7,6 +7,7 @@ from datetime import datetime
 import pytz
 from PIL import Image
 from random import randint
+import os
 
 
 intents = discord.Intents.default()
@@ -209,7 +210,7 @@ class Chat(commands.Cog):
     async def ping(ctx):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
-    @client.command()
+    @client.command(aliases=['randpng', 'randimg', 'pic', 'image'])
     async def randomimage(ctx, size=(128,128)):
         image = Image.new('RGB', size)
         for x in range(0, size[0]-1):
@@ -221,8 +222,11 @@ class Chat(commands.Cog):
                 rgb = rvalue + gvalue + bvalue
                 rgb = int(rgb)
                 image.putpixel(coordinate, rgb)
-                image.save('image.png')
-        await ctx.send(file='image.png')
+        image.save('image.png')
+        im = open('image.png', 'rb')
+        await ctx.send(file=im)
+        im.close()
+        os.remove('image.png')
 
 
 class Conversion(commands.Cog):
