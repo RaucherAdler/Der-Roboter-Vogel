@@ -210,7 +210,7 @@ class Chat(commands.Cog):
     async def ping(ctx):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
-    @client.command(aliases=['randpng', 'randimg', 'pic', 'image'])
+    @client.command(aliases=['randpng', 'randimg', 'pic', 'image'], description='Generates a random image', usage='`/randomimage <Width (Optional)> <Height (Optional)>')
     async def randomimage(ctx, size_width=128, size_height=128):
         size = (size_width, size_height)           
         image = Image.new('RGB', size)
