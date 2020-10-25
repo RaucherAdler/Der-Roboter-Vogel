@@ -304,25 +304,25 @@ async def _help(ctx, commandarg=None):
             text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
             help_embed.add_field(name=name, value=text, inline=True)
     else:
-        for command in client.commands:
-            if commandarg == command.name:
-                help_embed = discord.Embed(title=command.name, color=Color.dark_red())
-                help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
-                aliases = list(set(command.aliases))
-                help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: {aliases}'
-                help_embed.add_field(name=command.name, value=help_text, inline=True)
-            else:
-                help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
-                help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+        command = discord.utils.get(client.Commands, name=commandarg)
+        if command != None:
+            help_embed = discord.Embed(title=command.name, color=Color.dark_red())
+            help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
+            aliases = list(set(command.aliases))
+            help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: {aliases}'
+            help_embed.add_field(name=command.name, value=help_text, inline=True)
+        else:
+            help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
+            help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
                 
-                for command in client.commands:
-                    if command.name[0] == '_':
-                        aliases = list(set(command.aliases))
-                        name = aliases[0]
-                    else:
-                        name = command.name
-                    text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                    help_embed.add_field(name=name, value=text, inline=True)
+            for command in client.commands:
+                if command.name[0] == '_':
+                    aliases = list(set(command.aliases))
+                    name = aliases[0]
+                else:
+                    name = command.name
+                text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+                help_embed.add_field(name=name, value=text, inline=True)
     await ctx.send(embed=help_embed)
     await ctx.send(f'commandarg: {commandarg}')
 
