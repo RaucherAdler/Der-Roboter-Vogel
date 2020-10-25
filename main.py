@@ -309,7 +309,7 @@ async def _help(ctx, commandarg=None):
             help_embed = discord.Embed(title=command.name, color=Color.dark_red())
             help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
             aliases = list(set(command.aliases))
-            if aliases != None:
+            if len(aliases) != 0:
                 aliases = ', '.join(aliases)
                 help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: `{aliases}`'
             else:
