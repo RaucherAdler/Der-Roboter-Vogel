@@ -290,18 +290,39 @@ class Voice(commands.Cog):
 
 
 @client.command(name='help', description='Lists all commands & their usages', usage='`/help`')
-async def _help(ctx):
-    help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
-    help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+async def _help(ctx, commandarg=None):
+    if commandarg == None:
+        help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
+        help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
 
-    for command in client.commands:
-        if command.name[0] == '_':
-            aliases = list(set(command.aliases))
-            name = aliases[0]
-        else:
-            name = command.name
-        text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-        help_embed.add_field(name=name, value=text, inline=True)
+        for command in client.commands:
+            if command.name[0] == '_':
+                aliases = list(set(command.aliases))
+                name = aliases[0]
+            else:
+                name = command.name
+            text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+            help_embed.add_field(name=name, value=text, inline=True)
+    else:
+        for command in client.commands:
+            if commandarg == command.name:
+                help_embed = discord.Embed(title=command, color=Color.dark_red())
+                help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
+                help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+                help_embed.add_field(name=command.name, value=help_text, inline=True)
+            else:
+                if commandarg == None:
+                    help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
+                    help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+
+                    for command in client.commands:
+                        if command.name[0] == '_':
+                            aliases = list(set(command.aliases))
+                            name = aliases[0]
+                        else:
+                            name = command.name
+                        text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+                        help_embed.add_field(name=name, value=text, inline=True)
     await ctx.send(embed=help_embed)
 
 
