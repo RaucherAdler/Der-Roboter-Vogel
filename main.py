@@ -233,7 +233,7 @@ class Conversion(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @client.command(aliases=['translate'], description='Translate text (currently only supports German)', usage='`/translate <Message>`')
+    @client.command(name=['translate'], description='Translate text (currently only supports German)', usage='`/translate <Message>`')
     async def _translate(ctx, message):
         translator = Translator(to_lang="German")
         translation = translator.translate(message)
