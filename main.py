@@ -275,7 +275,8 @@ class Voice(commands.Cog):
 @client.command(name='help', description='Lists all commands & their usages', usage='`/help`')
 async def _help(ctx):
     help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
-    for cog_name, cog in client.cogs.items():
+    clientcogs = client.cogs
+    for cog_name, cog in clientcogs.items():
         for command in cog.commands:
             if command.name[0] == '_':
                 aliases = list(set(command.aliases))
@@ -284,7 +285,7 @@ async def _help(ctx):
                 name = command.name
             text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
             help_embed.add_field(name=name, value=text, inline=True)
-            help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+        help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
     await ctx.send(embed=help_embed)
 
 
