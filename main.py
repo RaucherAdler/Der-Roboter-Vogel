@@ -275,7 +275,7 @@ class Voice(commands.Cog):
 @client.command(name='help', description='Lists all commands & their usages', usage='`/help`')
 async def _help(ctx):
     help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
-    for cog in client.cogs:
+    for cog_name, cog in client.cogs.items():
         for command in cog.commands:
             if command.name[0] == '_':
                 aliases = list(set(command.aliases))
