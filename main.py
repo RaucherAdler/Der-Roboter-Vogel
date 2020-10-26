@@ -266,7 +266,7 @@ class Chat(commands.Cog):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
 
-    @client.command(aliases=['randpng', 'randimg', 'pic', 'image'], description='Generates a random image', usage='`/randomimage <Width (Optional)> <Height (Optional)>`')
+    @client.command(aliases=['randbmp', 'randimg', 'pic', 'image'], description='Generates a random image', usage='`/randomimage <Width (Optional)> <Height (Optional)>`')
     async def randomimage(ctx, size_width=128, size_height=128):
         size = (size_width, size_height)           
         image = Image.new('RGB', size)
@@ -279,12 +279,12 @@ class Chat(commands.Cog):
                 rgb = rvalue + gvalue + bvalue
                 rgb = int(rgb)
                 image.putpixel(coordinate, rgb)
-        image.save('image.png')
-        if os.stat('image.png').st_size >= 8388119:
+        image.save('image.bmp')
+        if os.stat('image.bmp').st_size >= 8388119:
             await ctx.send(f'Zu groß!')
-        elif os.stat('image.png').st_size < 8388119:
-            await ctx.send(file=discord.File('image.png'))
-            os.remove('image.png')
+        elif os.stat('image.bmp').st_size < 8388119:
+            await ctx.send(file=discord.File('image.bmp'))
+            os.remove('image.bmp')
 
 
 class Conversion(commands.Cog):
