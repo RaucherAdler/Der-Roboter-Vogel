@@ -284,9 +284,7 @@ class Chat(commands.Cog):
             await ctx.send(f'Zu groß!')
         elif os.stat('image.png').st_size < 10000000:
             await ctx.send(file=discord.File('image.png'))
-        else:
-            raise Exception('Uh-Oh, Retard Alert!')
-        os.remove('image.png')
+            os.remove('image.png')
 
 
 class Conversion(commands.Cog):
