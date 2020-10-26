@@ -280,7 +280,12 @@ class Chat(commands.Cog):
                 rgb = int(rgb)
                 image.putpixel(coordinate, rgb)
         image.save('image.png')
-        await ctx.send(file=discord.File('image.png'))
+        if os.stat('image.png').st_size >= 10000000:
+            await ctx.send(f'Zu groß!')
+        elif os.stat('image.png').st_size < 10000000:
+            await ctx.send(file=discord.File('image.png'))
+        else:
+            raise Exception('Uh-Oh, Retard Alert!')
         os.remove('image.png')
 
 
