@@ -218,18 +218,21 @@ class Moderation(commands.Cog):
         stats_embed = discord.Embed(name='Guild Stats', color=Color.dark_red())
         members = ctx.guild.members
         online_member_number = 0
-        member_number = 0
+        total_member_number = 0
         bot_number = 0
         for member in members:
             if member.status != 'offline' and not member.bot:
                 online_member_number += 1
-                member_number += 1
+                total_member_number += 1
+                continue
             elif member.status == 'offline' and not member.bot:
-                member_number += 1
+                total_member_number += 1
+                continue
             if member.bot == True:
                 bot_number += 1
+                continue
         stats_embed.add_field(name='Active Members: ', value=f'{online_member_number}', inline=True)
-        stats_embed.add_field(name='Total Members: ', value=f'{member_number}', inline=True)
+        stats_embed.add_field(name='Total Members: ', value=f'{total_member_number}', inline=True)
         stats_embed.add_field(name='Bots: ', value=f'{bot_number}', inline=True)
         stats_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed=stats_embed)
