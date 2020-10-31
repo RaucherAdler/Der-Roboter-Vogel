@@ -360,5 +360,4 @@ def setup(client):
     client.add_cog(Conversion(client))
     client.add_cog(Voice(client))
         
-key = 'NzYyNzY4MTE4MjEyMDY3MzI4.X3t9Kg.pLG6YLPVdbNqL9FI1iijx3YJ4T4'
 client.run(DISCORD_S3)
