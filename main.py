@@ -217,9 +217,6 @@ class Moderation(commands.Cog):
     async def stats(ctx):
         stats_embed = discord.Embed(name='Guild Stats', color=Color.dark_red())
         members = ctx.guild.members
-        online_member_number = 0
-        total_member_number = 0
-        bot_number = 0
         for member in members:
             if member.status != 'offline':
                 if member.bot == False:
