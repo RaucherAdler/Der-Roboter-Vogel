@@ -236,7 +236,7 @@ class Moderation(commands.Cog):
         stats_embed.add_field(name='Active Members: ', value=f'{online_member_number}', inline=True)
         stats_embed.add_field(name='Total Members: ', value=f'{total_member_number}', inline=True)
         stats_embed.add_field(name='Bots: ', value=f'{bot_number}', inline=True)
-        stats_embed.add_field(name=' ', value='Note: Active Members/Total Members discludes all bots', inline=True)
+        stats_embed.add_field(name='Note:', value='Active Members/Total Members discludes all bots', inline=True)
         stats_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed=stats_embed)
 
