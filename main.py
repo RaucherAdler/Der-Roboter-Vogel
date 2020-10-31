@@ -222,11 +222,11 @@ class Moderation(commands.Cog):
         bot_number = 0
         for member in members:
             if member.status != 'offline' and not member.bot:
-                online_member_number += 1
-                total_member_number += 1
+                online_member_number =+ 1
+                total_member_number =+ 1
                 continue
             elif member.status == 'offline' and not member.bot:
-                total_member_number += 1
+                total_member_number =+ 1
                 continue
             if member.bot == True:
                 bot_number += 1
