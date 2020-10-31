@@ -221,7 +221,7 @@ class Moderation(commands.Cog):
         total_member_number = 0
         bot_number = 0
         for member in members:
-            status = member.status
+            status = member.raw_status
             if status != 'offline':
                 if member.bot == False:
                     online_member_number = online_member_number + 1
