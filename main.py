@@ -213,7 +213,7 @@ class Moderation(commands.Cog):
         await ctx.send(embed=info_embed)
 
 
-    @client.command()
+    @client.command(description='Gets guild stats such as number of users, etc.', usage='`/stats`')
     async def stats(ctx):
         stats_embed = discord.Embed(name='Guild Stats', color=Color.dark_red())
         members = ctx.guild.members
