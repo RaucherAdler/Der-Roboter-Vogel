@@ -221,17 +221,19 @@ class Moderation(commands.Cog):
         total_member_number = 0
         bot_number = 0
         for member in members:
-            if member.status != 'offline':
+            status = member.status
+            if status != 'offline':
                 if member.bot == False:
                     online_member_number = online_member_number + 1
                     total_member_number =  total_member_number + 1
                 else:
                     bot_number = bot_number + 1
-            elif member.status == 'offline':
+            elif status == 'offline':
                 if member.bot == False:
                     total_member_number = total_member_number + 1
                 else:
                     bot_number = bot_number + 1
+            print(f'Status: {status}\n')
         stats_embed.add_field(name='Active Members: ', value=f'{online_member_number}', inline=True)
         stats_embed.add_field(name='Total Members: ', value=f'{total_member_number}', inline=True)
         stats_embed.add_field(name='Bots: ', value=f'{bot_number}', inline=True)
