@@ -206,12 +206,33 @@ class Moderation(commands.Cog):
 
     @client.command(description='Info on RoboterVogel', usage='`/info`')
     async def info(ctx):
-        info_embed = discord.Embed(color=Color.dark_red())
+        info_embed = discord.Embed(name='Info', color=Color.dark_red())
         info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#1521 gemacht!', inline=True)
         info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler', inline=True)
         info_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed=info_embed)
 
+
+    @client.command()
+    async def stats(ctx):
+        stats_embed = discord.Embed(name='Guild Stats', color=Color.dark_red())
+        members = ctx.guild.members
+        online_member_number = 0
+        member_number = 0
+        bot_number = 0
+        for member in members:
+            if member.status != 'offline' and not member.bot:
+                online_member_number += 1
+                member_number += 1
+            elif member.status == 'offline' and not member.bot:
+                member_number += 1
+            elif member.bot == True:
+                bot_number += 1
+        stats_embed.add_field(name='Active Members: ', value=f'{online_member_number}', inline=True)
+        stats_embed.add_field(name='Total Members: ', value=f'{member_number}', inline=True)
+        stats_embed.add_field(name='Bots: ', value=f'{bot_number}', inline=True)
+        stats_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+        await ctx.send(embed=stats_embed)
 
 
 class Chat(commands.Cog):
