@@ -10,7 +10,7 @@ from random import randint
 import os
 
 
-DISCORD_S3 = os.environ['DISCORD_TOKEN']
+#DISCORD_S3 = os.environ['DISCORD_TOKEN']
 
 intents = discord.Intents.default()
 intents.members = True
@@ -360,4 +360,4 @@ def setup(client):
     client.add_cog(Conversion(client))
     client.add_cog(Voice(client))
         
-client.run(DISCORD_S3)
+#client.run(DISCORD_S3)
