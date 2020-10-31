@@ -224,9 +224,9 @@ class Moderation(commands.Cog):
             if member.status != 'offline' and not member.bot:
                 online_member_number += 1
                 member_number += 1
-            elif member.status == 'offline' and not member.bot:
+            if member.status == 'offline' and not member.bot:
                 member_number += 1
-            elif member.bot == True:
+            if member.bot == True:
                 bot_number += 1
         stats_embed.add_field(name='Active Members: ', value=f'{online_member_number}', inline=True)
         stats_embed.add_field(name='Total Members: ', value=f'{member_number}', inline=True)
