@@ -228,12 +228,11 @@ class Moderation(commands.Cog):
                     total_member_number =  total_member_number + 1
                 else:
                     bot_number = bot_number + 1
-            if status == 'offline':
+            elif status == 'offline':
                 if member.bot == False:
                     total_member_number = total_member_number + 1
                 else:
                     bot_number = bot_number + 1
-            continue
         stats_embed.add_field(name='Active Members: ', value=f'{online_member_number}', inline=True)
         stats_embed.add_field(name='Total Members: ', value=f'{total_member_number}', inline=True)
         stats_embed.add_field(name='Bots: ', value=f'{bot_number}', inline=True)
