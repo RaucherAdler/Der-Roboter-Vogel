@@ -224,7 +224,7 @@ class Moderation(commands.Cog):
             if member.status != 'offline' and not member.bot:
                 online_member_number += 1
                 member_number += 1
-            if member.status == 'offline' and not member.bot:
+            elif member.status == 'offline' and not member.bot:
                 member_number += 1
             if member.bot == True:
                 bot_number += 1
