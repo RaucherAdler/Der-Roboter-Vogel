@@ -233,6 +233,7 @@ class Moderation(commands.Cog):
                     total_member_number = total_member_number + 1
                 else:
                     bot_number = bot_number + 1
+            print(f'Status:  {status}\nBot?: {member.bot}\n')
         stats_embed.add_field(name='Active Members: ', value=f'{online_member_number}', inline=True)
         stats_embed.add_field(name='Total Members: ', value=f'{total_member_number}', inline=True)
         stats_embed.add_field(name='Bots: ', value=f'{bot_number}', inline=True)
