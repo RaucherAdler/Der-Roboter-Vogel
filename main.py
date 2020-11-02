@@ -14,6 +14,7 @@ import os
 intents = discord.Intents.default()
 intents.members = True
 intents.guilds = True
+intents.presences = True
 
 client = commands.Bot(command_prefix = '/', intents=intents)
 
@@ -234,7 +235,7 @@ class Moderation(commands.Cog):
                     online_member_number = online_member_number + 1
                 else:
                     bot_number = bot_number + 1
-            print(f'Status:  {status}\nBot?: {member.bot}\n')
+            print(f'Status:  {status}\n')
         stats_embed.add_field(name='Active Members: ', value=f'{online_member_number}', inline=True)
         stats_embed.add_field(name='Total Members: ', value=f'{total_member_number}', inline=True)
         stats_embed.add_field(name='Bots: ', value=f'{bot_number}', inline=True)
