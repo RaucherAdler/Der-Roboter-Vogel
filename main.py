@@ -389,7 +389,7 @@ class Voice(commands.Cog):
         else:
             client_voice_channels = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
             client_voice_channel = client_voice_channels.channel
-            if member_voice_channel != client_voice_channel:
+            if member_voice_channel != client_voice_channel or client_voice_channel is None:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 member_voice_channel.connect()
                 vc = member_voice_channel
