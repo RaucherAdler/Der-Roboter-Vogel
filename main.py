@@ -393,26 +393,17 @@ class Voice(commands.Cog):
                 if member_voice_channel != client_voice_channel:
                     await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                     member_voice_channel.connect()
-                    vc = member_voice_channel
-                else:
-                    vc = member_voice_channel
-                    engine = pyttsx3.init()
-                    engine.say(message)
-                    engine.save_to_file('ttsmessage.mp3')
-                    source = await discord.FFmpegOpusAudio.from_probe('ttsmessage.mp3')
-                    vc.play(source)
-                    os.remove('ttsmessage.mp3')
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 member_voice_channel.connect()
-                vc = member_voice_channel
-                vc = member_voice_channel
-                engine = pyttsx3.init()
-                engine.say(message)
-                engine.save_to_file('ttsmessage.mp3')
-                source = await discord.FFmpegOpusAudio.from_probe('ttsmessage.mp3')
-                vc.play(source)
-                os.remove('ttsmessage.mp3')
+            vc = member_voice_channel
+            engine = pyttsx3.init()
+            engine.say(message)
+            engine.save_to_file('ttsmessage.mp3')
+            source = await discord.FFmpegOpusAudio.from_probe('ttsmessage.mp3')
+            vc.play(source)
+            os.remove('ttsmessage.mp3')
+        
 
 def setup(client):
     client.add_cog(Moderation(client))
