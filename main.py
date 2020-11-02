@@ -221,13 +221,14 @@ class Moderation(commands.Cog):
         total_member_number = 0
         bot_number = 0
         for member in members:
+            offline = discord.Status.offline
             status = member.status
-            if status == 'offline':
+            if status == offline:
                 if member.bot == False:
                     total_member_number =  total_member_number + 1
                 else:
                     bot_number = bot_number + 1
-            elif status != 'offline':
+            elif status != offline:
                 if member.bot == False:
                     total_member_number = total_member_number + 1
                     online_member_number = online_member_number + 1
