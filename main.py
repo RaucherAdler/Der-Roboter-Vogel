@@ -8,7 +8,7 @@ import pytz
 from PIL import Image
 from random import randint
 import os
-
+from gtts import gTTS
 
 
 intents = discord.Intents.default()
@@ -381,7 +381,25 @@ class Voice(commands.Cog):
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
-
+    @client.command(aliases=['TTS'], description='Sends a Text-to-Speech message into current VC', usage='`/TTS <Message>`')
+    async def tts(ctx, message):
+        member_voice_channel = ctx.message.author.voice.channel
+        if member_voice_channel == None:
+            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+        else:
+            client_voice_channels = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
+            client_voice_channel = client_voice_channels.channel
+            if member_voice_channel != client_voice_channel:
+                await ctx.send(f'Jetzt `{member_voice_channel}` eingeben')
+                member_voice_channel.connect()
+                vc = member_voice_channel
+            else:
+                vc = member_voice_channel
+                ttsmessage = gTTS(message)
+                ttsmessage.save('ttsmessage.mp3')
+                source = await discord.FFmpegOpusAudio.from_probe('ttsmessage.mp3')
+                vc.play(source)
+                os.remove('ttsmessage.mp3')
 
 def setup(client):
     client.add_cog(Moderation(client))
