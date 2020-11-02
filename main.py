@@ -400,6 +400,7 @@ class Voice(commands.Cog):
             engine = pyttsx3.init()
             engine.say(message)
             engine.save_to_file('ttsmessage.mp3')
+            engine.runAndWait()
             source = await discord.FFmpegOpusAudio.from_probe('ttsmessage.mp3')
             vc.play(source)
             os.remove('ttsmessage.mp3')
