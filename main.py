@@ -381,6 +381,8 @@ class Voice(commands.Cog):
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
+
+"""
     @client.command(aliases=['TTS'], description='Sends a Text-to-Speech message into current VC', usage='`/TTS <Message>`')
     async def tts(ctx, message):
         member_voice_channel = ctx.message.author.voice.channel
@@ -404,7 +406,9 @@ class Voice(commands.Cog):
             source = await discord.FFmpegOpusAudio.from_probe('ttsmessage.mp3')
             vc.play(source)
             os.remove('ttsmessage.mp3')
-        
+"""
+
+
 
 def setup(client):
     client.add_cog(Moderation(client))
