@@ -297,7 +297,7 @@ class Chat(commands.Cog):
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
 
-        scheduler.enter(60, 1, (await member.remove_role()), (bday_role))
+        scheduler.enter(60, 1, (await member.remove_roles()), (bday_role))
         scheduler.run()
 
 
