@@ -284,7 +284,7 @@ class Chat(commands.Cog):
 
     @client.command(aliases=['geburtstag'], description='Sends birthday message for a user', usage='`/birthday <Mention User>`')
     async def birthday(ctx, member : discord.Member):
-        bday_role = discord.ext.get(ctx.guild.roles, name='Geburtstagskind')
+        bday_role = discord.utils.get(ctx.guild.roles, name='Geburtstagskind')
         if bday_role == None:
             bday_role = await ctx.guild.create_role(name='Geburtstagskind', reason='Es ist Geburtstagszeit.')
         await member.add_roles(bday_role)
