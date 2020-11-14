@@ -296,8 +296,8 @@ class Chat(commands.Cog):
         lyric_embed.add_field(name=embed_name, value=embed_text)
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
-        rm_role = lambda member, role: [await member.remove_roles(role)]
-        scheduler.enter(60, 1, rm_role(member, bday_role))
+
+        scheduler.enter(60, 1, (await member.remove_role()), (bday_role))
         scheduler.run()
 
 
