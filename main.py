@@ -288,8 +288,7 @@ class Chat(commands.Cog):
             bday_role = await ctx.guild.create_role(name='Geburtstagskind', reason='Es ist Geburtstagszeit.')
         await member.add_roles(bday_role)
         scheduler = sched.scheduler(time.time, time.sleep)
-        await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:')
-        await ctx.send('Jetzt singen wir alle das Geburtstagslied:')
+        await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:\nJetzt singen wir alle das Geburtstagslied:')
         embed_name = 'Geburtstagslied :birthday:'
         embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}!\nZum Geburtstag viel Glück!'.format(name=member.name)
         lyric_embed = discord.Embed(name=embed_name)
