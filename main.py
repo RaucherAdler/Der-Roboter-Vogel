@@ -57,10 +57,6 @@ async def on_guild_join(guild):
     await owner.send(f'Hallo, ich bin RoboterVogel, dein neuer Bot!', embed=info_embed)
 
 
-def rm_role(member, role): #for command scheduling in birthday command
-    await member.remove_roles(role)
-
-
 class Moderation(commands.Cog):
 
     def __init__(self, client):
@@ -300,7 +296,8 @@ class Chat(commands.Cog):
         lyric_embed.add_field(name=embed_name, value=embed_text)
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
-        scheduler.enter(60, 1, rm_role, (member, bday_role))
+        rm_role = lambda member, role: [await member.remove_roles(role)]
+        scheduler.enter(60, 1, rm_role(member, bday_role))
         scheduler.run()
 
 
