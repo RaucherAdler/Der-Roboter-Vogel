@@ -298,6 +298,7 @@ class Chat(commands.Cog):
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
         scheduler.enter(60, 1, member.remove_roles, (bday_role))
+        scheduler.run()
 
 
     @client.command(description='Pings bots latency', usage='`/ping`')
