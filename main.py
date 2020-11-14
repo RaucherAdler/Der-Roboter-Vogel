@@ -4,11 +4,13 @@ import discord.utils
 from discord import Color
 from translate import Translator
 from datetime import datetime
+import time
+import sched
 import pytz
 from PIL import Image
 from random import randint
 import os
-import pyttsx3
+#import pyttsx3
 
 
 intents = discord.Intents.default()
@@ -282,14 +284,20 @@ class Chat(commands.Cog):
 
     @client.command(aliases=['geburtstag'], description='Sends birthday message for a user', usage='`/birthday <Mention User>`')
     async def birthday(ctx, member : discord.Member):
+        bday_role = discord.ext.get(ctx.guild.roles, name='Geburtstagskind')
+        if bday_role == None:
+            bday_role = await ctx.guild.create_role(name='Geburtstagskind', reason='Es ist Geburtstagszeit.')
+        await member.add_roles(bday_role)
+        scheduler = sched.scheduler(time.time, time.sleep)
         await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:')
         await ctx.send('Jetzt singen wir alle das Geburtstagslied:')
         embed_name = 'Geburtstagslied :birthday:'
-        embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}!\nZum Geburtstag viel Glück!'.format(name=member.mention)
+        embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}!\nZum Geburtstag viel Glück!'.format(name=member.name)
         lyric_embed = discord.Embed(name=embed_name)
         lyric_embed.add_field(name=embed_name, value=embed_text)
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
+        scheduler.enter(60, 1, await member.remove_roles, (bday_role))
 
 
     @client.command(description='Pings bots latency', usage='`/ping`')
