@@ -294,7 +294,7 @@ class Chat(commands.Cog):
         lyric_embed.add_field(name=embed_name, value=embed_text)
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
-        asyncio.sleep(60)
+        await asyncio.sleep(60)
         await member.remove_roles(bday_role)
 
 
