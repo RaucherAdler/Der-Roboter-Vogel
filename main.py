@@ -295,7 +295,7 @@ class Chat(commands.Cog):
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
         asyncio.sleep(60)
-        await member.remove(bday_role)
+        await member.remove_roles(bday_role)
 
 
     @client.command(description='Pings bots latency', usage='`/ping`')
