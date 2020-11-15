@@ -346,6 +346,7 @@ class Chat(commands.Cog):
         time_since_epoch = time.time()
         time_embed.add_field(name='Zeit seit Epoche:', value=f'{time_since_epoch}s', inline=True)
         time_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+        await ctx.send(embed=time_embed)
 
 
 class Conversion(commands.Cog):
