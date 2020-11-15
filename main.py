@@ -286,7 +286,11 @@ class Chat(commands.Cog):
         bday_role = discord.utils.get(ctx.guild.roles, name='Geburtstagskind')
         if bday_role == None:
             bday_role = await ctx.guild.create_role(name='Geburtstagskind', reason='Es ist Geburtstagszeit.')
-        await member.add_roles(bday_role)
+        has_role = discord.utils.get(member.roles, name='Geburtstagskind')
+        if has_role == None:
+            await member.add_roles(bday_role)
+        else:
+            pass
         await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:\nJetzt singen wir alle das Geburtstagslied:')
         embed_name = 'Geburtstagslied :birthday:'
         embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}!\nZum Geburtstag viel Glück!'.format(name=member.name)
