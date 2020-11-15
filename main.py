@@ -330,7 +330,7 @@ class Chat(commands.Cog):
 
     @client.command(aliases=['zeit'], description='Tells the time', usage='`/time`')
     async def time(ctx):
-        time_embed = discord.Embed(name='time', color=Color.dark_red)
+        time_embed = discord.Embed(name='time', color=Color.dark_red())
         date = datetime.date.today()
         formatted_date = date.strftime('%d/%m/%Y')
         weekday = date.strftime('%A')
