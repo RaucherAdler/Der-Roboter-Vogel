@@ -4,6 +4,7 @@ import discord.utils
 from discord import Color
 import asyncio
 from translate import Translator
+import datetime as dt
 from datetime import datetime
 import time
 import pytz
@@ -331,7 +332,7 @@ class Chat(commands.Cog):
     @client.command(aliases=['zeit'], description='Tells the time', usage='`/time`')
     async def time(ctx):
         time_embed = discord.Embed(name='time', color=Color.dark_red())
-        date = datetime.date.today()
+        date = dt.date.today()
         formatted_date = date.strftime('%d/%m/%Y')
         weekday = date.strftime('%A')
         monthtext = date.strftime('%B')
