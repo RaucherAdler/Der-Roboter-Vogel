@@ -95,7 +95,7 @@ class Moderation(commands.Cog):
             await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} gesperrt!')
             if reason!= None:
                 await user.send(f'Grund: {reason}')
-            await user.ban(reason=reason)
+            await user.ban(reason=reason, delete_message_days=delete_message_days)
 
 
     @client.command(description='Unbans a given user', usage='`/unban <User Name (i.e. Raucher Adler#1220)>`')
