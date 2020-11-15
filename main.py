@@ -344,7 +344,7 @@ class Chat(commands.Cog):
         GMT_time = datetime.now(GMT)
         time_embed.add_field(name='Zeit(GMT):', value=f'{GMT_time.strftime("%I:%M:%S%p")} {"/"} {GMT_time.strftime("%H:%M:%S")}', inline=True)
         time_since_epoch = time.time()
-        time_embed.add_field('Zeit seit Epoche:', value=f'{time_since_epoch}s', inline=True)
+        time_embed.add_field(name='Zeit seit Epoche:', value=f'{time_since_epoch}s', inline=True)
         time_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
 
 
