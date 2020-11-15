@@ -105,7 +105,7 @@ class Moderation(commands.Cog):
 
             if (user.name, user.discriminator) == (member_name, member_discriminator):
                 await ctx.guild.unban(user)
-                await ctx.send(f'{user.mention} wurde nicht verboten!')
+                await ctx.send(f'{user} wurde nicht verboten!')
 
 
     @client.command(description='Unbans all banned users', usage='`/unbanall`')
@@ -116,7 +116,7 @@ class Moderation(commands.Cog):
         for ban_entry in banned_users:
             user = ban_entry.user
             await ctx.guild.unban(user)
-            await ctx.send(f'{user.mention} wurde nicht verboten!')
+            await ctx.send(f'{user} wurde nicht verboten!')
 
 
     @client.command(description='Gives role to a given user', usage='`/giverole <Mention User> <Role Name>`')
