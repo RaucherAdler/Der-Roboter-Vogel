@@ -2,10 +2,10 @@ import discord
 from discord.ext import commands
 import discord.utils
 from discord import Color
+import asyncio
 from translate import Translator
 from datetime import datetime
 import time
-import sched
 import pytz
 from PIL import Image
 from random import randint
@@ -294,6 +294,8 @@ class Chat(commands.Cog):
         lyric_embed.add_field(name=embed_name, value=embed_text)
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
+        asyncio.sleep(60)
+        await member.remove(bday_role)
 
 
     @client.command(description='Pings bots latency', usage='`/ping`')
