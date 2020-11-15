@@ -291,7 +291,7 @@ class Chat(commands.Cog):
         await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:\nJetzt singen wir alle das Geburtstagslied:')
         embed_name = 'Geburtstagslied :birthday:'
         embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}!\nZum Geburtstag viel Glück!'.format(name=member.name)
-        lyric_embed = discord.Embed(name=embed_name)
+        lyric_embed = discord.Embed(name=embed_name, color=Color.dark_red())
         lyric_embed.add_field(name=embed_name, value=embed_text)
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
