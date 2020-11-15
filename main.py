@@ -329,7 +329,7 @@ class Chat(commands.Cog):
             os.remove('image.png')
 
 
-    @client.command(aliases=['zeit'], description='Tells the time', usage='`/time`')
+    @client.command(aliases=['zeit', 'Time', 'Zeit'], description='Tells the time', usage='`/time`')
     async def time(ctx):
         time_embed = discord.Embed(name='time', color=Color.dark_red())
         date = dt.date.today()
