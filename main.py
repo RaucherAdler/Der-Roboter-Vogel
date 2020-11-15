@@ -294,10 +294,7 @@ class Chat(commands.Cog):
         lyric_embed.add_field(name=embed_name, value=embed_text)
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
-        #scheduler = sched.scheduler(time.time, time.sleep)
-        #scheduler.enter(60, 1, (await member.remove_roles(bday_role)))
-        #scheduler.run()
-        time.sleep(60); await member.remove_roles(bday_role)
+        time.sleep(86400); await member.remove_roles(bday_role)
 
 
     @client.command(description='Pings bots latency', usage='`/ping`')
