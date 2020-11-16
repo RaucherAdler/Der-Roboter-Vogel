@@ -345,6 +345,26 @@ class Chat(commands.Cog):
         await ctx.send(embed=time_embed)
 
 
+    @client.command(aliases=['Font','fraktur', 'Fraktur'], description='Converts a given text into the Fraktur Font.', usage='`/font <Message>`')
+    async def font(ctx, message):
+        new_message = ''
+        latin_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        latin_lowercase = 'abcdefghijklmnopqrstuvwxyz'
+        fraktur_uppercase = "𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ"
+        fraktur_lowercase = "𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷"
+        for letter in message:
+            if letter in latin_uppercase:
+                index = latin_uppercase.index(letter)
+                fraktur_letter = fraktur_uppercase[index]
+            elif letter in latin_lowercase:
+                index = latin_lowercase.index(letter)
+                fraktur_letter = fraktur_lowercase[index]
+            else:
+                fraktur_letter = letter
+            new_message = new_message + fraktur_letter
+        await ctx.send(new_message)
+
+
 class Conversion(commands.Cog):
 
     def __init__(self, client):
