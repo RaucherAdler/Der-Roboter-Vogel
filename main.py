@@ -335,7 +335,7 @@ class Chat(commands.Cog):
         translator = Translator(to_lang='German')
         weekday_DE = translator.translate(weekday)
         monthtext_DE = translator.translate(monthtext)
-        time_embed.add_field(name='das Datum', value=f'Heute haben wir {weekday_DE} den {date.strftime("%d")}{"."} {monthtext_DE}{","} ({formatted_date})', inline=True)
+        time_embed.add_field(name='Das Datum', value=f'Heute haben wir {weekday_DE} den {date.strftime("%d")}{"."} {monthtext_DE}{","} ({formatted_date})', inline=True)
         GMT = pytz.timezone('GMT')
         GMT_time = datetime.now(GMT)
         time_embed.add_field(name='Zeit(GMT):', value=f'{GMT_time.strftime("%I:%M:%S%p")} {"/"} {GMT_time.strftime("%H:%M:%S")}', inline=True)
@@ -385,7 +385,7 @@ class Conversion(commands.Cog):
             FCP = 1
             await ctx.send(f'`{amount}` ≈ `{FCP} FCP`')
         else:    
-            amount = amount.replace('$', '')
+            amount = amount.replace('$,', '')
             usdtofcp = 1 / 30
             FCP = float(usdtofcp) * float(amount)
             await ctx.send(f'`{amount} USD` ≈ `{FCP} FCP`')
