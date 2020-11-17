@@ -11,6 +11,7 @@ import pytz
 from PIL import Image
 from random import randint
 import os
+import urllib.request
 #import pyttsx3
 
 
@@ -67,13 +68,19 @@ async def on_member_remove(member):
 @client.command()
 async def cg(ctx):
     client_user = client.get_user(762768118212067328)
-    guild = await client.create_guild(name='Der Offizielle RoboterVogel Server', region='us_central', icon=client_user.avatar)
+    client_avatar_url = client_user.avatar_url
+    urllib.request.urlretrieve(client_avatar_url, 'avatar.png')
+    f = open('avatar.png', wb)
+    guild = await client.create_guild(name='Der Offizielle RoboterVogel Server', region='us_central', icon=f)
+    os.remove('avatar.png')
+    await ctx.send('Created guild')
     invite = await guild.create_invite()
     print(invite)
     client_owner_id = client.owner_id
     client_owner = client.get_user(client_owner_id)
     await client_owner.send(invite)
-    await ctx.send('Created guild')
+    
+
 
 
 @client.event
