@@ -66,17 +66,14 @@ async def on_member_remove(member):
 
 @client.command()
 async def cg(ctx):
-    try:
-        client_user = client.get_user(762768118212067328)
-        guild = await client.create_guild(name='Der Offizielle RoboterVogel Server', region='us_central', icon=client_user.avatar)
-        invite = await guild.create_invite()
-        print(invite)
-        client_owner_id = client.owner_id
-        client_owner = client.get_user(client_owner_id)
-        await client_owner.send(invite)
-    except:
-        await ctx.send('Failed to create guild.')
-
+    client_user = client.get_user(762768118212067328)
+    guild = await client.create_guild(name='Der Offizielle RoboterVogel Server', region='us_central', icon=client_user.avatar)
+    invite = await guild.create_invite()
+    print(invite)
+    client_owner_id = client.owner_id
+    client_owner = client.get_user(client_owner_id)
+    await client_owner.send(invite)
+    await ctx.send('Created guild')
 
 
 @client.event
@@ -86,7 +83,10 @@ async def on_guild_join(guild):
     info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#1521 gemacht!', inline=True)
     info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler', inline=True)
     info_embed.set_footer(text=owner, icon_url=owner.avatar_url)
-    await owner.send(f'Hallo, ich bin RoboterVogel, dein neuer Bot!', embed=info_embed)
+    if owner.bot == True:
+        pass
+    else:    
+        await owner.send(f'Hallo, ich bin RoboterVogel, dein neuer Bot!', embed=info_embed)
 
 
 class Moderation(commands.Cog):
