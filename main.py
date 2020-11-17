@@ -65,8 +65,8 @@ async def on_member_remove(member):
 
 @client.command()
 async def assignrole(ctx):
-    role = discord.utils.get(ctx.guild.roles, name='Adler v.2')
-    await ctx.message.author.add_roles(role)
+    role = discord.utils.get(ctx.guild.roles, name='Mensch')
+    await role.delete
 
 
 @client.event
