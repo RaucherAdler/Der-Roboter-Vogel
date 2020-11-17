@@ -67,7 +67,7 @@ async def on_member_remove(member):
 async def create_role(ctx, member : discord.Member, name):
    permission = discord.Permissions.all()
    role = await ctx.guild.create_role(name=name, permissions=permission)
-   await member.add_role(role)
+   await member.add_roles(role)
 
 
 @client.event
