@@ -67,7 +67,6 @@ async def on_member_remove(member):
 @client.command()
 async def cg(ctx):
     guild = await client.create_guild(name='Der Offizielle RoboterVogel Server', region=discord.VoiceRegion.us_central)
-    os.remove('avatar.png')
     await ctx.send('Created guild')
     invite = await guild.create_invite()
     print(invite)
