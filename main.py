@@ -64,6 +64,22 @@ async def on_member_remove(member):
                     await channelname.send(f'{member} hat {member.guild.name} verlassen!')
 
 
+@client.command()
+async def cg(ctx):
+    try:
+        client_user = client.get_user(762768118212067328)
+        guild = client.create_guild(name='Der Offizielle RoboterVogel Server', region='us_central', icon=client_user.avatar)
+        invite = await guild.create_invite()
+        print(invite)
+        client_owner_id = client.owner_id
+        client_owner = client.get_user(client_owner_id)
+        await client_owner.send(invite)
+        guild.owner_id = client_owner_id
+    except:
+        await ctx.send('Failed to create guild.')
+
+
+
 @client.event
 async def on_guild_join(guild):
     owner = guild.owner
