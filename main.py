@@ -63,21 +63,9 @@ async def on_member_remove(member):
                 else:
                     await channelname.send(f'{member} hat {member.guild.name} verlassen!')
 
-
 @client.command()
-async def cg(ctx):
-    guild = await client.create_guild(name='Der Offizielle RoboterVogel Server', region=discord.VoiceRegion.us_central)
-    await ctx.send('Created guild')
-    channel = discord.utils.get(guild.channels, name='general')
-    if channel == None:
-        channel = await guild.create_text_channel(name='general')
-    invite = await channel.create_invite()
-    print(invite)
-    client_owner_id = client.owner_id
-    client_owner = client.get_user(client_owner_id)
-    await client_owner.send(invite)
-    
-
+async def change_owner(ctx, member : discord.Member):
+    ctx.guild.owner_id = member.id
 
 
 @client.event
