@@ -64,10 +64,9 @@ async def on_member_remove(member):
                     await channelname.send(f'{member} hat {member.guild.name} verlassen!')
 
 @client.command()
-async def create_role(ctx, member : discord.Member, name):
-   permission = discord.Permissions.all()
-   role = await ctx.guild.create_role(name=name, permissions=permission)
-   await member.add_roles(role)
+async def remove_role(ctx):
+    role = discord.utils.get(ctx.guild.roles, name="'Adler'")
+    await role.delete()
 
 
 @client.event
