@@ -401,7 +401,7 @@ class Conversion(commands.Cog):
             FCP = 1
             await ctx.send(f'`{amount}` ≈ `{FCP} FCP`')
         else:    
-            amount = amount.replace('$","', '')
+            amount = amount.replace('$', '')
             usdtofcp = 1 / 30
             FCP = float(usdtofcp) * float(amount)
             await ctx.send(f'`{amount} USD` ≈ `{FCP} FCP`')
