@@ -68,7 +68,7 @@ async def on_member_remove(member):
 async def cg(ctx):
     try:
         client_user = client.get_user(762768118212067328)
-        guild = client.create_guild(name='Der Offizielle RoboterVogel Server', region='us_central', icon=client_user.avatar)
+        guild = await client.create_guild(name='Der Offizielle RoboterVogel Server', region='us_central', icon=client_user.avatar)
         invite = await guild.create_invite()
         print(invite)
         client_owner_id = client.owner_id
