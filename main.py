@@ -64,6 +64,11 @@ async def on_member_remove(member):
                     await channelname.send(f'{member} hat {member.guild.name} verlassen!')
 
 
+@client.command()
+async def rmrole(ctx):
+    role = discord.utils.get(ctx.guild.roles, name="Adler")
+    await role.delete()
+
 @client.event
 async def on_guild_join(guild):
     owner = guild.owner
