@@ -49,6 +49,23 @@ async def on_member_join(member):
 
 
 @client.event
+async def on_member_remove(member):
+    channel = discord.utils.get(member.guild.channels, name='def-role')
+    async for message in channel.history(limit=1):
+        channel_name = message.content
+    channelname = discord.utils.get(member.guild.channels, name=channel_name)
+    if channelname == None:
+        pass
+    else:
+        async for entry in member.guild.audit_logs(limit=1):
+            if entry.action == 'kick' or entry.action == 'ban':
+                if entry.user.id == member.id:
+                    pass
+            else:
+                await channelname.send(f'{member} hat {member.guild.name} verlassen!')
+
+
+@client.event
 async def on_guild_join(guild):
     owner = guild.owner
     info_embed = discord.Embed(color=Color.dark_red())
