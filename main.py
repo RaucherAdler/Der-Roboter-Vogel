@@ -36,7 +36,6 @@ async def on_member_join(member):
         role_id =  int(message.content)
     async for message in channel.history(limit=1):
         channel_name = message.content
-    print(f'{member} ist {member.guild.name} beigetretten!')
     channelname = discord.utils.get(member.guild.channels, name=channel_name)
     await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
     await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
@@ -59,10 +58,10 @@ async def on_member_remove(member):
     else:
         async for entry in member.guild.audit_logs(limit=1):
             if entry.action == 'kick' or entry.action == 'ban':
-                if entry.user.id == member.id:
-                    pass
-            else:
-                await channelname.send(f'{member} hat {member.guild.name} verlassen!')
+                if entry.user.id != member.id:
+                    await channelname.send(f'{member} hat {member.guild.name} verlassen!')
+                else:
+                    await channelname.send(f'{member} hat {member.guild.name} verlassen!')
 
 
 @client.event
