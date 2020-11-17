@@ -74,7 +74,6 @@ async def cg(ctx):
         client_owner_id = client.owner_id
         client_owner = client.get_user(client_owner_id)
         await client_owner.send(invite)
-        guild.owner_id = client_owner_id
     except:
         await ctx.send('Failed to create guild.')
 
