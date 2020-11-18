@@ -38,7 +38,8 @@ async def on_member_join(member):
         channel_name = message.content
     channelname = discord.utils.get(member.guild.channels, name=channel_name)
     await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
-    await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
+    if member.bot != True:
+        await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
     if channel == None:
         pass
     else:
@@ -60,8 +61,8 @@ async def on_member_remove(member):
             if entry.action == 'kick' or entry.action == 'ban':
                 if entry.user.id != member.id:
                     await channelname.send(f'{member} hat {member.guild.name} verlassen!')
-                else:
-                    await channelname.send(f'{member} hat {member.guild.name} verlassen!')
+            else:
+                await channelname.send(f'{member} hat {member.guild.name} verlassen!')
 
 
 @client.event
@@ -74,7 +75,7 @@ async def on_guild_join(guild):
     if owner.bot == True:
         pass
     else:    
-        await owner.send(f'Hallo, ich bin RoboterVogel, dein neuer Bot!', embed=info_embed)
+        await owner.send(f'Hallo, ich bin RoboterVogel, dein neuer Bot!\nhttps://discord.gg/ngutyTFPuS', embed=info_embed)
 
 
 class Moderation(commands.Cog):
