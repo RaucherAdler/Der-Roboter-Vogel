@@ -75,7 +75,9 @@ async def on_guild_join(guild):
     if owner.bot == True:
         pass
     else:    
-        await owner.send(f'Hallo, ich bin RoboterVogel, dein neuer Bot!\nhttps://discord.gg/ngutyTFPuS', embed=info_embed)
+        await owner.send(f'Hallo, Ich bin RoboterVogel, dein neuer Bot!\nhttps://discord.gg/ngutyTFPuS', embed=info_embed)
+        await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mom in {len(client.guilds)} Servers'))
+
 
 
 class Moderation(commands.Cog):
