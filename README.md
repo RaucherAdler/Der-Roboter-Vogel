@@ -5,7 +5,7 @@ It has many features you may need such as moderation commands, some fun commands
 
 # On Development:
 The bot is still in development and is an on-going project of mine.
-Due to it being a single person project as well as some extenuating circumstances, some features I wish to implement will be delayed/not included for the foreseeable future.
+Due to it being a single person project as well as some extenuating circumstances as well as other limitations, some features I wish to implement will be delayed/not included for the foreseeable future.
 Nonetheless, I plan to continue to developing the bot and I appreciate that others as well as myself will continue to use it as long as I can host it.
 I also appreciate any suggestions for potential features, as coming up with things people may want and find useful is not my strong suit.
 
