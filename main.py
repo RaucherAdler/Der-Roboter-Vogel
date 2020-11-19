@@ -265,7 +265,7 @@ class Moderation(commands.Cog):
 
     @client.command(aliases=['Nickname', 'Nick', 'nick'], description="Changes a given user's nickname", usage='`/nickname <Mention Member> <Nickname>`')
     @commands.has_permissions(manage_nicknames=True)
-    async def nickname(member : discord.Member, nickname):
+    async def nickname(ctx, member : discord.Member, nickname):
         await member.edit(nick=nickname)
 
 
