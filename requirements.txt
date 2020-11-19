@@ -5,4 +5,3 @@ async-timeout==3.0.1
 translate==3.5.0
 pytz==2020.1
 Pillow==8.0.1
-pyttsx3==2.90
