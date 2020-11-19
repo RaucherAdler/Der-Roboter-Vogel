@@ -269,7 +269,7 @@ class Moderation(commands.Cog):
         await member.edit(nick=nickname)
 
 
-    @client.command(description='Transfers ownership of current guild (Note: In order for this command to work, you must first manually transfer ownership to the bot so it is best to just manually transfer ownership.', usage='`/transfer_ownership <Mention Member>`')
+    @client.command(description='Transfers ownership of current guild (Note: In order for this command to work, you must first manually transfer ownership to the bot (which to my knowledge is not possible) so it is best to just manually transfer ownership.)', usage='`/transfer_ownership <Mention Member>`')
     @commands.has_permissions(manage_guild=True)
     async def transfer_ownership(ctx, member : discord.Member):
         try:
