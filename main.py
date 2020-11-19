@@ -263,13 +263,10 @@ class Moderation(commands.Cog):
         await ctx.send(embed=stats_embed)
 
 
-    @client.command(aliases=['Nickname', 'Nick', 'nick'], description="Changes a given user's nickname", usage='`/nickname <Mention Member> <Nickname>`')
+    @client.command(aliases=['Nickname', 'Nick'], description="Changes a given user's nickname", usage='`/nickname <Mention Member> <Nickname>`')
     @commands.has_permissions(manage_nicknames=True)
     async def nickname(ctx, member : discord.Member, nickname):
-        try:
-            await member.edit(nick=nickname)
-        except:
-            await ctx.send('Error')
+        await member.edit(nick=nickname)
 
 
     @client.command(description='Transfers ownership of current guild', usage='`/transfer_ownership <Mention Member>`')
