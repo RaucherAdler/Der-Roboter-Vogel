@@ -268,10 +268,11 @@ class Moderation(commands.Cog):
     async def nickname(member : discord.Member, nickname):
         await member.edit(nick=nickname)
 
+
     @client.command(description='Transfers ownership of current guild', usage='`/transfer_ownership <Mention Member>`')
     @commands.has_permissions(manage_guild=True)
     async def transfer_ownership(ctx, member : discord.Member):
-        if ctx.guild.owner == member:
+        if ctx.guild.owner == ctx.message.author:
             await ctx.guild.edit(owner=member)
             await ctx.send(f'Das Eigentum an {ctx.guild.name} wurde auf {member} übertragen.')
         else:
