@@ -19,7 +19,7 @@ intents.members = True
 intents.guilds = True
 intents.presences = True
 
-client = commands.AutoShardedClient(command_prefix = '/', intents=intents)
+client = commands.AutoShardedBot(command_prefix = '/', intents=intents)
 
 client.remove_command('help')
 
