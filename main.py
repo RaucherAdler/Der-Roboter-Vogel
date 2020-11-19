@@ -263,6 +263,12 @@ class Moderation(commands.Cog):
         await ctx.send(embed=stats_embed)
 
 
+    @client.command(aliases=['Nickname', 'Nick', 'nick'], description="Changes a given user's nickname", usage='`/nickname <Mention User> <Nickname>`')
+    @commands.has_permissions(manage_nicknames=True)
+    async def nickname(ctx, member : discord.Member, nickname):
+        await member.edit(nick=nickname)
+
+
 class Chat(commands.Cog):
 
     def __init__(self, client):
