@@ -9,4 +9,4 @@ Due to it being a single person project as well as some extenuating circumstance
 Nonetheless, I plan to continue to developing the bot and I appreciate that others as well as myself will continue to use it as long as I can host it.
 I also appreciate any suggestions for potential features, as coming up with things people may want and find useful is not my strong suit.
 
-If you wish to reach me, you can shoot me a DM on Discord (Raucher Adler#1521) or by email (raucheradler@gmail.com), or if you find me anywhere else, that works too.
+If you wish to reach me, you can shoot me a DM on Discord (Raucher Adler#1521), on [Github](https://github.com/RaucherAdler/Der-Roboter-Vogel/) or by email (raucheradler@gmail.com), or if you find me anywhere else, that works too.
