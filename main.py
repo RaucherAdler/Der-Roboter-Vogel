@@ -19,7 +19,7 @@ intents.members = True
 intents.guilds = True
 intents.presences = True
 
-client = commands.Bot(command_prefix = '/', intents=intents)
+client = commands.AutoShardedClient(command_prefix = '/', intents=intents)
 
 client.remove_command('help')
 
@@ -266,6 +266,7 @@ class Moderation(commands.Cog):
         stats_embed.add_field(name='Note:', value='Active Members/Total Members discludes all bots', inline=True)
         stats_embed.add_field(name='Inhaber:', value=f'{ctx.guild.owner}', inline=True)
         stats_embed.add_field(name='Server erstellt am:', value=f'{ctx.guild.created_at} (UTC)', inline=True)
+        stats_embed.add_field(name='Shard ID:', value=f'{ctx.guild.shard_id}', inline=True)
         stats_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed=stats_embed)
 
