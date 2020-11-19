@@ -79,6 +79,10 @@ async def on_guild_join(guild):
         await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
 
 
+@client.event
+async def on_guild_remove(guild):
+    await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
+
 
 class Moderation(commands.Cog):
 
