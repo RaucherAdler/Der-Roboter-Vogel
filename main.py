@@ -11,7 +11,7 @@ import pytz
 from PIL import Image
 from random import randint
 import os
-#import pyttsx3
+#import pyttsx3, add pyttsx3==2.90 to requirements.txt
 
 
 intents = discord.Intents.default()
