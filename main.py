@@ -263,11 +263,19 @@ class Moderation(commands.Cog):
         await ctx.send(embed=stats_embed)
 
 
-    @client.command(aliases=['Nickname', 'Nick', 'nick'], description="Changes a given user's nickname", usage='`/nickname <Mention User> <Nickname>`')
+    @client.command(aliases=['Nickname', 'Nick', 'nick'], description="Changes a given user's nickname", usage='`/nickname <Mention Member> <Nickname>`')
     @commands.has_permissions(manage_nicknames=True)
-    async def nickname(ctx, member : discord.Member, nickname):
+    async def nickname(member : discord.Member, nickname):
         await member.edit(nick=nickname)
 
+    @client.command(description='Transfers ownership of current guild', usage='`/transfer_ownership <Mention Member>`')
+    @commands.has_permissions(manage_guild=True)
+    async def transfer_ownership(ctx, member : discord.Member):
+        if ctx.guild.owner == member:
+            await ctx.guild.edit(owner=member)
+            await ctx.send(f'Das Eigentum an {ctx.guild.name} wurde auf {member} übertragen.')
+        else:
+            await ctx.send('Sie sind nicht der Eigentümer dieses Servers.')
 
 class Chat(commands.Cog):
 
