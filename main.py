@@ -259,7 +259,7 @@ class Moderation(commands.Cog):
         stats_embed.add_field(name='Total Members: ', value=f'{total_member_number}', inline=True)
         stats_embed.add_field(name='Bots: ', value=f'{bot_number}', inline=True)
         stats_embed.add_field(name='Note:', value='Active Members/Total Members discludes all bots', inline=True)
-        stats_embed.add_field(name=':', value=f'{ctx.guild.owner}', inline=True)
+        stats_embed.add_field(name='Inhaber:', value=f'{ctx.guild.owner}', inline=True)
         stats_embed.add_field(name='Server erstellt am:', value=f'{ctx.guild.created_at} (UTC)', inline=True)
         stats_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed=stats_embed)
