@@ -76,7 +76,7 @@ async def on_guild_join(guild):
         pass
     else:    
         await owner.send(f'Hallo, Ich bin RoboterVogel, dein neuer Bot!\nhttps://discord.gg/ngutyTFPuS', embed=info_embed)
-        await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mom in {len(client.guilds)} Servers'))
+        await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
 
 
 
@@ -269,15 +269,14 @@ class Moderation(commands.Cog):
         await member.edit(nick=nickname)
 
 
-    @client.command(description='Transfers ownership of current guild', usage='`/transfer_ownership <Mention Member>`')
+    @client.command(description='Transfers ownership of current guild (Note: In order for this command to work, you must first manually trsnsfer ownership to the bot so it i s best to just manually transfer ownership.' usage='`/transfer_ownership <Mention Member>`')
     @commands.has_permissions(manage_guild=True)
     async def transfer_ownership(ctx, member : discord.Member):
-        if ctx.guild.owner == ctx.message.author:
+        try:
             await ctx.guild.edit(owner=member)
             await ctx.send(f'Das Eigentum an {ctx.guild.name} wurde auf {member} übertragen.')
-        else:
-            await ctx.send('Sie sind nicht der Eigentümer dieses Servers.')
-
+        except:
+            await ctx.send('Error')
 
 class Chat(commands.Cog):
 
