@@ -232,6 +232,7 @@ class Moderation(commands.Cog):
         info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler', inline=True)
         info_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed=info_embed)
+        await ctx.send('https://discord.gg/ngutyTFPuS')
 
 
     @client.command(description='Gets guild stats such as number of users, etc.', usage='`/stats`')
