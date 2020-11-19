@@ -278,6 +278,17 @@ class Moderation(commands.Cog):
         else:
             await ctx.send('Sie sind nicht der Eigentümer dieses Servers.')
 
+
+    @client.command(description='Transfers ownership of current guild', usage='`/transfer_ownership <Mention Member>`')
+    @commands.has_permissions(manage_guild=True)
+    async def _transfer_ownership(ctx, member : discord.Member):
+        try:
+            await ctx.guild.edit(owner=member)
+            await ctx.send(f'Das Eigentum an {ctx.guild.name} wurde auf {member} übertragen.')
+        except:
+            await ctx.send(f'Error.')
+
+
 class Chat(commands.Cog):
 
     def __init__(self, client):
