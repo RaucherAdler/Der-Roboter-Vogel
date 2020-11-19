@@ -266,7 +266,10 @@ class Moderation(commands.Cog):
     @client.command(aliases=['Nickname', 'Nick', 'nick'], description="Changes a given user's nickname", usage='`/nickname <Mention Member> <Nickname>`')
     @commands.has_permissions(manage_nicknames=True)
     async def nickname(ctx, member : discord.Member, nickname):
-        await member.edit(nick=nickname)
+        try:
+            await member.edit(nick=nickname)
+        except:
+            await ctx.send('Error')
 
 
     @client.command(description='Transfers ownership of current guild', usage='`/transfer_ownership <Mention Member>`')
