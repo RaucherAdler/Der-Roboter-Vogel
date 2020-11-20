@@ -13,7 +13,8 @@ from random import randint
 import os
 from gtts import gTTS
 import youtube_dl
-
+import requests
+from bs4 import BeautifulSoup
 
 intents = discord.Intents.default()
 intents.members = True
@@ -501,12 +502,11 @@ class Voice(commands.Cog):
             source = discord.FFmpegOpusAudio(source='message.mp3', executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             current_VoiceClient.play(source)
-            await member_voice_channel.disconnect()
+            await current_VoiceClient.disconnect()
 
 
-    @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video (currently only supports links)`')
+    @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video/title to search for>`')
     async def music(ctx, song):
-        #song_embed = discord.Embed(name='Song', color=Color.dark_red())
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
@@ -519,32 +519,37 @@ class Voice(commands.Cog):
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
+        if 'https://www.youtube.com/watch?v='not in song:
+            query_link = 'https://www.youtube.com/results?search_query=' + song
+            r = requests.get(query_link)
+            page = r.text
+            soup = BeautifulSoup(page, 'html.parser')
+            videos = soup.findAll('a',attrs={'class':'yt-uix-tile-link'})
+            video_list = []
+            for v in videos:
+                tmp = 'https://www.youtube.com' + v['href']
+                video_list.append(tmp)
+            link = video_list[0]
+        else:
+            link = song
         ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            #for video in ydl.extract_info(song, download=False):
-                #for property in ['id', 'title', 'duration']:
-                    #if property == 'title':
-                        #song_embed.add_field(name='Title:', value=video.get(property), inline=True)
-                    #elif property == 'duration':
-                        #song_embed.add_field(name='Duration', value=video.get(property), inline=True)
-                    #elif property == 'id':
-                        #filename = f'{video.get(property)}.mp3'
-            #song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-            #await ctx.send(embed=song_embed)
-            attr_dict = ydl.extract_info(song, download=False)
+            song_embed = discord.Embed(name='Song', color=Color.dark_red())
+            attr_dict = ydl.extract_info(link, download=False)
             video_title = attr_dict['title']
+            song_embed.add_field(name='Title:', value=video_title, inline=True)
             video_id = attr_dict['id']
             video_duration = attr_dict['duration']
+            song_embed.add_field(name='Duration', value=video_duration, inline=True)
             filename = video_title + '-' + video_id +'.mp3'
             await ctx.send('Downloading...')
-            ydl.download([song])
+            ydl.download([link])
             source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
-            await ctx.send(f'Spielen Jetzt:\nSong: {video_title} ({song})\nDuration: {video_duration}')
+            await ctx.send(f'Spielen Jetzt:', embed=song_embed)
             current_VoiceClient.play(source)
-            await member_voice_channel.disconnect()
+            await current_VoiceClient.disconnect()
 
-        
 
 def setup(client):
     client.add_cog(Moderation(client))
