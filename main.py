@@ -532,7 +532,7 @@ class Voice(commands.Cog):
             #await ctx.send(embed=song_embed)
             attr_dict = ydl.extract_info(song, download=False)
             video_title = attr_dict['title']
-            video_id = attr_dict.keys['id']
+            video_id = attr_dict['id']
             filename = video_title + video_id +'.mp3'
             await ctx.send('Downloading...')
             ydl.download([song])
