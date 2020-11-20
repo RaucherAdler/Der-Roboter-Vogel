@@ -13,8 +13,8 @@ from random import randint
 import os
 from gtts import gTTS
 import youtube_dl
-import requests
-from bs4 import BeautifulSoup
+from youtube_search import YoutubeSearch
+
 
 intents = discord.Intents.default()
 intents.members = True
@@ -521,15 +521,11 @@ class Voice(commands.Cog):
                 await member_voice_channel.connect()
         if 'https://www.youtube.com/watch?v='not in song:
             await ctx.send(f'Searching Youtube for `{song}`')
-            query_link = 'https://www.youtube.com/results?search_query=' + song
-            r = requests.get(query_link)
-            page = r.text
-            soup = BeautifulSoup(page, 'html.parser')
-            videos = soup.find_all("a", {"id": "video-title"})
+            #query_link = 'https://www.youtube.com/results?search_query=' + song
+            result = YoutubeSearch(song, max_results=2).to_dict()
             video_list = []
-            for v in videos:
-                tmp = 'https://www.youtube.com' + v['href']
-                video_list.append(tmp)
+            for v in result:
+                video_list.append(v)
             print(video_list)
             link = video_list[0]
         else:

@@ -8,4 +8,4 @@ Pillow==8.0.1
 gTTS==2.2.1
 ffmpeg
 youtube_dl==2020.11.19
-beautifulsoup4==4.9.3
+youtube-search==1.1.1
