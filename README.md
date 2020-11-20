@@ -1,7 +1,7 @@
 # On RoboterVogel:
 RoboterVogel is a general purpose discord bot by me.
 I have themed this bot around a common theme in my online projects: Birds and German stuff, mostly symbols and the language as I feel that it is a beautiful culture that is being abandoned slowly by its own people. Although I'm not a German (though my ancestors were), I feel I may be able to play a part, no matter how small, in keeping it alive.
-It has many features you may need such as moderation commands, some fun commands, as well as just some other junk.
+It has many features you may need such as moderation commands, music commands, some fun commands, as well as just some other junk.
 
 # On Development:
 The bot is still in development and is an on-going project of mine.
