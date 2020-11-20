@@ -530,7 +530,7 @@ class Voice(commands.Cog):
             for v in videos:
                 tmp = 'https://www.youtube.com' + v['href']
                 video_list.append(tmp)
-            link = video_list[0]
+            print(video_list)
         else:
             link = song
         ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
