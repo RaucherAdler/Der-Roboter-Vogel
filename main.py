@@ -518,7 +518,7 @@ class Voice(commands.Cog):
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
-        ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192','outtmpl': 'song.mp3'}]}
+        ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             #for video in ydl.extract_info(song, download=False):
                 #for property in ['id', 'title', 'duration']:
