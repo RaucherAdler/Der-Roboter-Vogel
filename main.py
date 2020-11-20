@@ -530,6 +530,7 @@ class Voice(commands.Cog):
                             filename = f'{video.get(property)}.mp3'
                 song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
+                await ctx.send('Downloading...')
                 ydl.download([song])
                 source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
                 current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
