@@ -491,13 +491,14 @@ class Voice(commands.Cog):
                 member_voice_channel.connect()
             tts = gTTS(text=message, lang=language)
             tts.save('message.mp3')
-            source = discord.FFmpegOpusAudio(source='message.mp3', executable='ffmpeg')
-            current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             try:
+                source = discord.FFmpegOpusAudio(source='message.mp3', executable='ffmpeg')
+                current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
                 current_VoiceClient.play(source)
+                await ctx.send('Played Audio.')
+                os.remove('message.mp3')
             except:
                 await ctx.send('Failed to play audio.')
-            os.remove('message.mp3')
 
 
 def setup(client):
