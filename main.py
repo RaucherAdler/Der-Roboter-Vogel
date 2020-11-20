@@ -506,7 +506,7 @@ class Voice(commands.Cog):
 
 
     @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video/title to search for>`')
-    async def music(ctx, song):
+    async def music(ctx,* song):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
@@ -525,7 +525,7 @@ class Voice(commands.Cog):
             r = requests.get(query_link)
             page = r.text
             soup = BeautifulSoup(page, 'html.parser')
-            videos = soup.find_all('a')
+            videos = soup.find_all('a', {'id': "video-title"})
             video_list = []
             for v in videos:
                 tmp = 'https://www.youtube.com' + v['href']
