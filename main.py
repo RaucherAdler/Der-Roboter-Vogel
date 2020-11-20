@@ -541,6 +541,7 @@ class Voice(commands.Cog):
             video_id = attr_dict['id']
             video_duration = attr_dict['duration']
             song_embed.add_field(name='Duration', value=video_duration, inline=True)
+            print(f'Thumbnail URL:\n{thumbnail}\nType: {type(thumbnail)}')
             song_embed.set_thumbnail(thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             filename = video_title + '-' + video_id +'.mp3'
