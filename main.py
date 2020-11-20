@@ -503,7 +503,7 @@ class Voice(commands.Cog):
             current_VoiceClient.play(source)
 
 
-    @client.command(aliases=['Music', 'musik', 'Musik', 'p'], description='Plays Music from youtube', usage='`/music <video (currently only supports links)`')
+    @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video (currently only supports links)`')
     async def music(ctx, song):
         #song_embed = discord.Embed(name='Song', color=Color.dark_red())
         member_voice_channel = ctx.message.author.voice.channel
