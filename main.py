@@ -534,7 +534,7 @@ class Voice(commands.Cog):
             video_title = attr_dict['title']
             video_id = attr_dict['id']
             video_duration = attr_dict['duration']
-            filename = video_title + video_id +'.mp3'
+            filename = video_title + '-' + video_id +'.mp3'
             await ctx.send('Downloading...')
             ydl.download([song])
             source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
