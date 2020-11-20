@@ -534,7 +534,7 @@ class Voice(commands.Cog):
                 thumbnail = thumbnails[0]
         before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         opts = '-vn'
-        ydl_opts = {'preferredcodec': 'mp3','preferredquality': '192'}
+        ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True'}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             attr_dict = ydl.extract_info(link, download=False)
             video_title = attr_dict['title']
