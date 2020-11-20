@@ -518,7 +518,7 @@ class Voice(commands.Cog):
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
-        ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
+        ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192', 'outtmpl': 'song.mp3'}]}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             #for video in ydl.extract_info(song, download=False):
                 #for property in ['id', 'title', 'duration']:
@@ -531,10 +531,13 @@ class Voice(commands.Cog):
             #song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             #await ctx.send(embed=song_embed)
             await ctx.send('Downloading...')
-            source = discord.FFmpegOpusAudio(source=ydl.download([song]), executable='ffmpeg')
+            ydl.download([song])
+            source = discord.FFmpegOpusAudio('song.mp3', executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             await ctx.send('Spielen:')
-            current_VoiceClient.play(source)   
+            while not current_VoiceClient.play(source):
+                os.remove('song.mp3')
+
         
 
 def setup(client):
