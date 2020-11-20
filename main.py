@@ -523,7 +523,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Searching Youtube for `{song}`')
             #query_link = 'https://www.youtube.com/results?search_query=' + song
             result = YoutubeSearch(song, max_results=1).to_dict()
-            print(f'Result: result \nType: {type(result)}')
+            print(f'Result: {result} \nType: {type(result)}')
             #link = 'https://www.youtube.com' + result('url_suffix')
             thumbnail = result('thumbnails')
         else:
