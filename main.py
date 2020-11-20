@@ -471,8 +471,8 @@ class Voice(commands.Cog):
     async def leave(ctx):
         member = ctx.message.author
         voice_channel = member.voice.channel
-        vc = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
-        if voice_channel and vc != None:
+        vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if voice_channel != None and vc != None:
             await vc.disconnect()
             await ctx.send(f'Auf Wiedersehen!')
         else:
