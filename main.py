@@ -532,8 +532,9 @@ class Voice(commands.Cog):
             for v in result:
                 thumbnails = v['thumbnails']
                 thumbnail = thumbnails[0]
-        #FFMPEG_OPTS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
-        ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
+        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
+        opts = '-vn'
+        ydl_opts = {'preferredcodec': 'mp3','preferredquality': '192'}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             attr_dict = ydl.extract_info(link, download=False)
             video_title = attr_dict['title']
@@ -547,7 +548,7 @@ class Voice(commands.Cog):
             filename = video_title + '-' + video_id +'.mp3'
             await ctx.send('Downloading...')
             ydl.download([link])
-            source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
+            source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg', before_options=before_opts, options=opts)
             await ctx.send(f'Spielen Jetzt:', embed=song_embed)
             current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
             current_voice_client.play(source, after=os.remove(filename))
