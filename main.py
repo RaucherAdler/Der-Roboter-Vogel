@@ -12,6 +12,7 @@ from PIL import Image
 from random import randint
 import os
 from gtts import gTTS
+import youtube_dl
 
 
 intents = discord.Intents.default()
@@ -501,6 +502,39 @@ class Voice(commands.Cog):
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             current_VoiceClient.play(source)
 
+
+        @client.command(aliases=['Music', 'musik', 'Musik'], description='Plays Music from youtube', usage='`/music <video (currently only supports links)`')
+        async def music(ctx, song):
+            song_embed = discord.Embed(name='Song', color=Color.dark_red())
+            member_voice_channel = ctx.message.author.voice.channel
+            if member_voice_channel == None:
+                await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+            else:
+                client_voice_channels = discord.utils.get(client.voice_clients, guild=ctx.guild)
+                if client_voice_channels != None:
+                    client_voice_channel = client_voice_channels.channel
+                    if member_voice_channel != client_voice_channel:
+                        await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+                else:
+                    await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
+                    await member_voice_channel.connect()
+            ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                for video in ydl.extract_info(song, download=False):
+                    for property in ['id', 'title', 'duration']:
+                        if property == 'title':
+                            song_embed.add_field(name='Title:', value=video.get(property), inline=True)
+                        elif property == 'duration':
+                            song_embed.add_field(name='Duration', value=video.get(property), inline=True)
+                        elif property == 'id':
+                            filename = f'{video.get(property)}.mp3'
+                song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+                await ctx.send(embed=song_embed)
+                ydl.download([song])
+                source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
+                current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
+                current_VoiceClient.play(source)
+        
 
 def setup(client):
     client.add_cog(Moderation(client))
