@@ -520,6 +520,7 @@ class Voice(commands.Cog):
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
         if 'https://www.youtube.com/watch?v='not in song:
+            await ctx.send(f'Searching Youtube for `{song}`')
             query_link = 'https://www.youtube.com/results?search_query=' + song
             r = requests.get(query_link)
             page = r.text
