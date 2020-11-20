@@ -531,8 +531,8 @@ class Voice(commands.Cog):
             #song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             #await ctx.send(embed=song_embed)
             attr_dict = ydl.extract_info(song, download=False)
-            title = attr_dict.values('title')
-            id = attr_dict.values('id')
+            title = attr_dict.keys('title')
+            id = attr_dict.keys('id')
             filename = title + id +'.mp3'
             await ctx.send('Downloading...')
             ydl.download([song])
