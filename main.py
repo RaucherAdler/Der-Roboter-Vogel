@@ -525,12 +525,11 @@ class Voice(commands.Cog):
             r = requests.get(query_link)
             page = r.text
             soup = BeautifulSoup(page, 'html.parser')
-            videos = soup.find_all('a')
+            videos = soup.find_all(lambda tag: tag.name == "a" and tag.get("class") == "yt-simple-endpoint style-scope ytd-video-renderer")
             video_list = []
             for v in videos:
-                if '/watch?' in v['href']:
-                    tmp = 'https://www.youtube.com' + v['href']
-                    video_list.append(tmp)
+                tmp = 'https://www.youtube.com' + v['href']
+                video_list.append(tmp)
             print(video_list)
             link = video_list[0]
         else:
