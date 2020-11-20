@@ -485,10 +485,10 @@ class Voice(commands.Cog):
                 client_voice_channel = client_voice_channels.channel
                 if member_voice_channel != client_voice_channel:
                     await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
-                    member_voice_channel.connect()
+                    await member_voice_channel.connect()
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
-                member_voice_channel.connect()
+                await member_voice_channel.connect()
             try:
                 tts = gTTS(text=message, lang=language)
             except ValueError:
