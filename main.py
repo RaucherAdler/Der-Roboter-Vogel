@@ -533,24 +533,25 @@ class Voice(commands.Cog):
             for v in result:
                 thumbnails = v['thumbnails']
                 thumbnail = thumbnails[0]
+        FFMPEG_OPTS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
         ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            song_embed = discord.Embed(name='Song', color=Color.dark_red())
             attr_dict = ydl.extract_info(link, download=False)
             video_title = attr_dict['title']
-            song_embed.add_field(name='Title:', value=video_title, inline=True)
             video_id = attr_dict['id']
             video_duration = attr_dict['duration']
+            song_embed = discord.Embed(name='Song', color=Color.dark_red())
+            song_embed.add_field(name='Title:', value=video_title, inline=True)
             song_embed.add_field(name='Duration:', value=f'{video_duration}s', inline=True)
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             filename = video_title + '-' + video_id +'.mp3'
             await ctx.send('Downloading...')
             ydl.download([link])
-            source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
+            source = discord.FFmpegPCMAudio(source=filename, executable='ffmpeg', **FFMPEG_OPTS)
             await ctx.send(f'Spielen Jetzt:', embed=song_embed)
             current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
-            current_voice_client.play(source)
+            current_voice_client.play(source, after = lambda e: print('done', e))
 
 
 def setup(client):
