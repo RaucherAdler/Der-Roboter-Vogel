@@ -539,9 +539,8 @@ class Voice(commands.Cog):
             ydl.download([song])
             source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
-            await ctx.send(f'Spielen Jetzt:\n{video_title} ({song})\n{video_duration}')
-            while not current_VoiceClient.play(source):
-                os.remove('song.mp3')
+            await ctx.send(f'Spielen Jetzt:\nSong: {video_title} ({song})\nDuration: {video_duration}')
+            current_VoiceClient.play(source)
 
         
 
