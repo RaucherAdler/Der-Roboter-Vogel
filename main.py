@@ -480,7 +480,7 @@ class Voice(commands.Cog):
         if member_voice_channel == None:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
         else:
-            client_voice_channels = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
+            client_voice_channels = discord.utils.get(client.voice_clients, guild=ctx.guild)
             if client_voice_channels != None:
                 client_voice_channel = client_voice_channels.channel
                 if member_voice_channel != client_voice_channel:
@@ -489,7 +489,10 @@ class Voice(commands.Cog):
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 member_voice_channel.connect()
-            tts = gTTS(text=message, lang=language)
+            try:
+                tts = gTTS(text=message, lang=language)
+            except ValueError:
+                tts = gTTS(text=message, lang='en')
             tts.save('message.mp3')
             source = discord.FFmpegOpusAudio(source='message.mp3', executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
