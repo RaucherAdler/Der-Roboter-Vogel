@@ -602,7 +602,7 @@ class Voice(commands.Cog):
                         client_vc.stop()
                         await ctx.send(f'Medien stehen an')
                     else:
-                        await ctx.send(f'Keine Medienspiele'
+                        await ctx.send(f'Keine Medienspiele')
                 else:
                     await ctx.send(f'Derzeit in einem anderen Sprachkanal')
             else:
