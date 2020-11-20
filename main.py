@@ -522,14 +522,13 @@ class Voice(commands.Cog):
         if 'https://www.youtube.com/watch?v='not in song:
             await ctx.send(f'Searching Youtube for `{song}`')
             #query_link = 'https://www.youtube.com/results?search_query=' + song
-            result = YoutubeSearch(song, max_results=2).to_dict()
-            video_list = []
-            for v in result:
-                video_list.append(v)
-            print(video_list)
-            link = video_list[0]
+            result = YoutubeSearch(song, max_results=1).to_dict()
+            link = 'https://www.youtube.com' + result['url_suffix']
+            thumbnail = result['thumbnails']
         else:
             link = song
+            result = YoutubeSearch(link, max_results=1).to_dict()
+            thumbnail = result['thumbnails']
         ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             song_embed = discord.Embed(name='Song', color=Color.dark_red())
@@ -539,6 +538,8 @@ class Voice(commands.Cog):
             video_id = attr_dict['id']
             video_duration = attr_dict['duration']
             song_embed.add_field(name='Duration', value=video_duration, inline=True)
+            song_embed.set_thumbnail(thumbnail)
+            song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             filename = video_title + '-' + video_id +'.mp3'
             await ctx.send('Downloading...')
             ydl.download([link])
