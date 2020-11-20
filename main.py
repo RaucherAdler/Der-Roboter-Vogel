@@ -538,19 +538,77 @@ class Voice(commands.Cog):
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             attr_dict = ydl.extract_info(link, download=False)
             video_title = attr_dict['title']
-            video_id = attr_dict['id']
             video_duration = attr_dict['duration']
             song_embed = discord.Embed(name='Song', color=Color.dark_red())
             song_embed.add_field(name='Title:', value=video_title, inline=True)
             song_embed.add_field(name='Duration:', value=f'{video_duration}s', inline=True)
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-            await ctx.send('Downloading...')
             source = attr_dict['formats'][0]['url']
             source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
             await ctx.send(f'Spielen Jetzt:', embed=song_embed)
             current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
             current_voice_client.play(source)
+
+
+    @client.command(description='Resumes current song', usage='`/resume`')
+    async def resume(ctx):
+        member_vc = ctx.message.author.voice.channel
+        client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if member_vc != None:
+            if client_vc != None:
+                if client_vc.channel == member_vc:
+                    if client_vc.is_paused():
+                        client_vc.resume()
+                        await ctx.send(f'Medien nicht angehalten')
+                    else:
+                        await ctx.send(f'Keine Medienspiele')
+                else:
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+            else:
+                await ctx.send(f'Derzeit nicht in Sprachkanal!')
+        else:
+            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+
+
+    @client.command(description='Pauses current song', usage='`/pause`')
+    async def pause(ctx):
+        member_vc = ctx.message.author.voice.channel
+        client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if member_vc != None:
+            if client_vc != None:
+                if client_vc.channel == member_vc:
+                    if client_vc.is_playing():
+                        client_vc.pause()
+                        await ctx.send(f'Medien in Pause')
+                    else:
+                        await ctx.send(f'Keine Medienspiele')
+                else:
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+            else:
+                await ctx.send(f'Derzeit nicht in Sprachkanal!')
+        else:
+            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+
+
+    @client.command(description='Stops current song', usage='`/stop`')
+    async def stop(ctx):
+        member_vc = ctx.message.author.voice.channel
+        client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if member_vc != None:
+            if client_vc != None:
+                if client_vc.channel == member_vc:
+                    if client_vc.is_playing() or client_vc.is_paused():
+                        client_vc.stop()
+                        await ctx.send(f'Medien stehen an')
+                    else:
+                        await ctx.send(f'Keine Medienspiele'
+                else:
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+            else:
+                await ctx.send(f'Derzeit nicht in Sprachkanal!')
+        else:
+            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
 def setup(client):
