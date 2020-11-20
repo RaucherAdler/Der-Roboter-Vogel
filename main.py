@@ -501,7 +501,7 @@ class Voice(commands.Cog):
             tts.save('message.mp3')
             source = discord.FFmpegOpusAudio(source='message.mp3', executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
-            current_VoiceClient.play(source, after=os.remove())
+            current_VoiceClient.play(source, after=os.remove('message.mp3'))
 
 
     @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video/title to search for>`')
@@ -550,7 +550,7 @@ class Voice(commands.Cog):
             source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
             await ctx.send(f'Spielen Jetzt:', embed=song_embed)
             current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
-            current_voice_client.play(source, after=os.remove('filename'))
+            current_voice_client.play(source, after=os.remove(filename))
 
 
 def setup(client):
