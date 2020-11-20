@@ -550,7 +550,8 @@ class Voice(commands.Cog):
             ydl.download([link])
             source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
             await ctx.send(f'Spielen Jetzt:', embed=song_embed)
-            member_voice_channel.play(source)
+            current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
+            current_voice_client.play(source)
 
 
 def setup(client):
