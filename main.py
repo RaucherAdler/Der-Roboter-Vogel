@@ -545,13 +545,12 @@ class Voice(commands.Cog):
             song_embed.add_field(name='Duration:', value=f'{video_duration}s', inline=True)
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-            filename = video_title + '-' + video_id +'.mp3'
             await ctx.send('Downloading...')
             source = attr_dict['formats'][0]['url']
             source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
             await ctx.send(f'Spielen Jetzt:', embed=song_embed)
             current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
-            current_voice_client.play(source, after=os.remove(filename))
+            current_voice_client.play(source)
 
 
 def setup(client):
