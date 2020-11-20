@@ -506,7 +506,7 @@ class Voice(commands.Cog):
 
     @client.command(aliases=['Music', 'musik', 'Musik'], description='Plays Music from youtube', usage='`/music <video (currently only supports links)`')
     async def music(ctx, song):
-        song_embed = discord.Embed(name='Song', color=Color.dark_red())
+        #song_embed = discord.Embed(name='Song', color=Color.dark_red())
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
@@ -521,16 +521,18 @@ class Voice(commands.Cog):
                 await member_voice_channel.connect()
         ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            for video in ydl.extract_info(song, download=False):
-                for property in ['id', 'title', 'duration']:
-                    if property == 'title':
-                        song_embed.add_field(name='Title:', value=video.get(property), inline=True)
-                    elif property == 'duration':
-                        song_embed.add_field(name='Duration', value=video.get(property), inline=True)
-                    elif property == 'id':
-                        filename = f'{video.get(property)}.mp3'
-            song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-            await ctx.send(embed=song_embed)
+            #for video in ydl.extract_info(song, download=False):
+                #for property in ['id', 'title', 'duration']:
+                    #if property == 'title':
+                        #song_embed.add_field(name='Title:', value=video.get(property), inline=True)
+                    #elif property == 'duration':
+                        #song_embed.add_field(name='Duration', value=video.get(property), inline=True)
+                    #elif property == 'id':
+                        #filename = f'{video.get(property)}.mp3'
+            url_beginning, id = song.split('=')
+            filename = id + '.mp3'
+            #song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+            #await ctx.send(embed=song_embed)
             await ctx.send('Downloading...')
             ydl.download([song])
             source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
