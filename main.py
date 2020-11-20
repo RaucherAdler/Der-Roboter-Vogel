@@ -492,7 +492,7 @@ class Voice(commands.Cog):
             vc = member_voice_channel
             tts = gTTS(message)
             tts.save('ttsmessage.mp3')
-            source = await discord.FFmpegOpusAudio(source='ttsmessage.mp3', executable='ffmpeg')
+            source = discord.FFmpegOpusAudio(source='ttsmessage.mp3', executable='ffmpeg')
             vc.play(source)
             os.remove('ttsmessage.mp3')
 
