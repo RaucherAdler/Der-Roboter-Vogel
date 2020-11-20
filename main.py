@@ -528,9 +528,11 @@ class Voice(commands.Cog):
             videos = soup.find_all('a', {'id': "video-title"})
             video_list = []
             for v in videos:
-                tmp = 'https://www.youtube.com' + v['href']
-                video_list.append(tmp)
+                if '/watch?' in v['href']:
+                    tmp = 'https://www.youtube.com' + v['href']
+                    video_list.append(tmp)
             print(video_list)
+            link = video_list[0]
         else:
             link = song
         ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
