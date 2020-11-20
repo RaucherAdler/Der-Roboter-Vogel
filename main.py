@@ -474,8 +474,8 @@ class Voice(commands.Cog):
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
 
-    @client.command(aliases=['TTS', 'texttospeech'], description='Sends a Text-to-Speech message into current VC', usage='`/TTS <Message>`')
-    async def tts(ctx, message):
+    @client.command(aliases=['TTS', 'texttospeech'], description='Sends a Text-to-Speech message into current VC', usage='`/TTS <Message> <Language (Optional)>`')
+    async def tts(ctx, message, language='en'):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
@@ -489,7 +489,7 @@ class Voice(commands.Cog):
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 member_voice_channel.connect()
-            tts = gTTS(message)
+            tts = gTTS(text=message, lang=language)
             tts.save('ttsmessage.mp3')
             source = discord.FFmpegOpusAudio(source='ttsmessage.mp3', executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
