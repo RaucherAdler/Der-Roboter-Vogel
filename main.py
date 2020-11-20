@@ -523,13 +523,15 @@ class Voice(commands.Cog):
             await ctx.send(f'Searching Youtube for `{song}`')
             #query_link = 'https://www.youtube.com/results?search_query=' + song
             result = YoutubeSearch(song, max_results=1).to_dict()
-            print(f'Result: {result} \nType: {type(result)}')
-            #link = 'https://www.youtube.com' + result('url_suffix')
-            thumbnail = result('thumbnails')
+            for v in result:
+                url_suffix = v['url_suffix']
+                thumbnail = v['thumbnails']
+                link = 'https://www.youtube.com' + url_suffix
         else:
             link = song
             result = YoutubeSearch(link, max_results=1).to_dict()
-            thumbnail = result('thumbnails')
+            for v in result:
+                thumbnail = v['thumbnails']
         ydl_opts = {'postprocessors': [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': '192'}]}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             song_embed = discord.Embed(name='Song', color=Color.dark_red())
