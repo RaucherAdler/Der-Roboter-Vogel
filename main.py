@@ -11,7 +11,7 @@ import pytz
 from PIL import Image
 from random import randint
 import os
-import pyttsx3
+from gtts import gTTS
 
 
 intents = discord.Intents.default()
@@ -490,11 +490,8 @@ class Voice(commands.Cog):
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 member_voice_channel.connect()
             vc = member_voice_channel
-            engine = pyttsx3.init()
-            engine.say(message)
-            engine.runAndWait()
-            engine.save_to_file('ttsmessage.mp3')
-            engine.stop()
+            tts = gTTS(message)
+            tts.save('ttsmessage.mp3')
             source = await discord.FFmpegOpusAudio(source='ttsmessage.mp3', executable='ffmpeg')
             vc.play(source)
             os.remove('ttsmessage.mp3')
