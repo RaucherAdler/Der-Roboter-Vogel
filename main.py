@@ -456,8 +456,12 @@ class Voice(commands.Cog):
         member = ctx.message.author
         voice_channel = member.voice.channel
         if voice_channel != None:
-            await ctx.send(f'Jetzt `{voice_channel}` eingeben!')
-            await voice_channel.connect()
+            bot_voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
+            if bot_voice_client == None:
+                await ctx.send(f'Jetzt `{voice_channel}` eingeben!')
+                await voice_channel.connect()
+            else:
+                await ctx.send(f'Derzeit in einem anderen Sprachkanal')
         else:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
@@ -484,8 +488,7 @@ class Voice(commands.Cog):
             if client_voice_channels != None:
                 client_voice_channel = client_voice_channels.channel
                 if member_voice_channel != client_voice_channel:
-                    await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
-                    await member_voice_channel.connect()
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
