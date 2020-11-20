@@ -548,6 +548,7 @@ class Voice(commands.Cog):
             filename = video_title + '-' + video_id +'.mp3'
             await ctx.send('Downloading...')
             ydl.download([link])
+            discord.opus.load_opus('opus')
             source = discord.FFmpegPCMAudio(source=filename, executable='ffmpeg', **FFMPEG_OPTS)
             await ctx.send(f'Spielen Jetzt:', embed=song_embed)
             current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
