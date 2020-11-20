@@ -494,7 +494,6 @@ class Voice(commands.Cog):
             source = discord.FFmpegOpusAudio(source='message.mp3', executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             current_VoiceClient.play(source)
-            await ctx.send('Played Audio.')
 
 
 def setup(client):
