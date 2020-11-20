@@ -525,7 +525,7 @@ class Voice(commands.Cog):
             r = requests.get(query_link)
             page = r.text
             soup = BeautifulSoup(page, 'html.parser')
-            videos = soup.find_all('a', {'id': "video-title"})
+            videos = soup.find_all('a')
             video_list = []
             for v in videos:
                 if '/watch?' in v['href']:
