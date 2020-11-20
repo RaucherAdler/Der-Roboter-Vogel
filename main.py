@@ -525,7 +525,7 @@ class Voice(commands.Cog):
             r = requests.get(query_link)
             page = r.text
             soup = BeautifulSoup(page, 'html.parser')
-            videos = soup.findAll('a',attrs={'class':'yt-uix-tile-link'})
+            videos = soup.findAll('a',attrs={'class':'yt-simple-endpoint.style-scope.ytd-video-renderer'})
             video_list = []
             for v in videos:
                 tmp = 'https://www.youtube.com' + v['href']
