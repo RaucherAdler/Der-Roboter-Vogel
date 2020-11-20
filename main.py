@@ -501,6 +501,7 @@ class Voice(commands.Cog):
             source = discord.FFmpegOpusAudio(source='message.mp3', executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             current_VoiceClient.play(source)
+            os.remove('message.mp3')
 
 
     @client.command(aliases=['Music', 'musik', 'Musik'], description='Plays Music from youtube', usage='`/music <video (currently only supports links)`')
@@ -535,6 +536,8 @@ class Voice(commands.Cog):
             source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             current_VoiceClient.play(source)
+            os.remove(filename)
+    
         
 
 def setup(client):
