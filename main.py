@@ -551,7 +551,7 @@ class Voice(commands.Cog):
             source = discord.FFmpegOpusAudio(source=filename, executable='ffmpeg')
             await ctx.send(f'Spielen Jetzt:', embed=song_embed)
             current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
-            current_voice_client.play(source, after = lambda e: print('done', e))
+            current_voice_client.play(source)
 
 
 def setup(client):
