@@ -543,7 +543,7 @@ class Voice(commands.Cog):
             video_duration = time.strftime("%H:%M:%S", ty_res)
             song_embed = discord.Embed(name='Song', color=Color.dark_red())
             song_embed.add_field(name='Title:', value=video_title, inline=True)
-            song_embed.add_field(name='Duration:', value=f'{video_duration}s', inline=True)
+            song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
