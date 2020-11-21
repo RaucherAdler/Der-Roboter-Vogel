@@ -539,6 +539,8 @@ class Voice(commands.Cog):
             attr_dict = ydl.extract_info(link, download=False)
             video_title = attr_dict['title']
             video_duration = attr_dict['duration']
+            ty_res = time.gmtime(video_duration)
+            video_duration = time.strftime("%H:%M:%S", ty_res)
             song_embed = discord.Embed(name='Song', color=Color.dark_red())
             song_embed.add_field(name='Title:', value=video_title, inline=True)
             song_embed.add_field(name='Duration:', value=f'{video_duration}s', inline=True)
