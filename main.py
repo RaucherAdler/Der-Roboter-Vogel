@@ -15,7 +15,6 @@ from gtts import gTTS
 import youtube_dl
 from youtube_search import YoutubeSearch
 import pymongo
-import json
 
 
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
@@ -26,9 +25,8 @@ collection = db["queues"]
 
 def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
-    attr = json.dumps(attributes)
     entries = g_coll["entries"] 
-    entries.insert_one(attr)
+    entries.insert_one(attributes)
     position = len(g_coll)
     return position
 
