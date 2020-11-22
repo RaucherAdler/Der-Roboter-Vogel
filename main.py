@@ -26,10 +26,11 @@ collection = db["queues"]
 
 def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
-    entries = []
-    g_coll["entries"].insert_one(entries)
+    if db.collection.find_one({f"{guild_id}" : {"entries" : []}}) != True:
+        entries = []
+        g_coll["entries"].insert_one(entries)
     attr = json.dumps(attributes)
-    g_coll.insert_one(attr)
+    g_coll["entries"].insert_one(attr)
     position = len(g_coll)
     return position
 
