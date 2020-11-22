@@ -591,32 +591,29 @@ class Voice(commands.Cog):
         opts = '-vn'
         ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True'}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            try:
-                attr_dict = ydl.extract_info(link, download=False)
-                video_title = attr_dict['title']
-                duration = attr_dict['duration']
-                ty_res = time.gmtime(duration)
-                video_duration = time.strftime("%H:%M:%S", ty_res)
-                song_embed = discord.Embed(name='Song', color=Color.dark_red())
-                song_embed.add_field(name='Title:', value=f'[{video_title}]({link})', inline=True)
-                song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
-                song_embed.set_thumbnail(url=thumbnail)
-                song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-                source = attr_dict['formats'][0]['url']
-                attributes = {"name" : video_title, "duration" : duration, "source" : source, "thumbnail" : thumbnail, "requested_by" : ctx.message.author, "url" : link, "channel" : ctx.channel, "guildid" : ctx.guild.id}
-                if current_voice_client.is_playing():
-                    pos = add_to_queue(ctx.guild.id, attributes)
-                    song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
-                    await ctx.send(f'Zur Warteschlange hinzugefügt:', embed=song_embed)
-                else:
-                    source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
-                    song_embed.add_field(name='Position in queue:', value=0, inline=True)
-                    await ctx.send(f'Spielen Jetzt:', embed=song_embed)
-                    current_voice_client.play(source)
-                    await asyncio.sleep(video_duration)
-                    await play_next(next_in_queue(collection[f"{ctx.guild.id}"]), current_voice_client)
-            except:
-                await ctx.send('Error!')
+            attr_dict = ydl.extract_info(link, download=False)
+            video_title = attr_dict['title']
+            duration = attr_dict['duration']
+            ty_res = time.gmtime(duration)
+            video_duration = time.strftime("%H:%M:%S", ty_res)
+            song_embed = discord.Embed(name='Song', color=Color.dark_red())
+            song_embed.add_field(name='Title:', value=f'[{video_title}]({link})', inline=True)
+            song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
+            song_embed.set_thumbnail(url=thumbnail)
+            song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+            source = attr_dict['formats'][0]['url']
+            attributes = {"name" : video_title, "duration" : duration, "source" : source, "thumbnail" : thumbnail, "requested_by" : ctx.message.author, "url" : link, "channel" : ctx.channel, "guildid" : ctx.guild.id}
+            if current_voice_client.is_playing():
+                pos = add_to_queue(ctx.guild.id, attributes)
+                song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
+                await ctx.send(f'Zur Warteschlange hinzugefügt:', embed=song_embed)
+            else:
+                source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
+                song_embed.add_field(name='Position in queue:', value=0, inline=True)
+                await ctx.send(f'Spielen Jetzt:', embed=song_embed)
+                current_voice_client.play(source)
+                await asyncio.sleep(video_duration)
+                await play_next(next_in_queue(collection[f"{ctx.guild.id}"]), current_voice_client)
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
