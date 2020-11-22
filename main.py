@@ -14,7 +14,52 @@ import os
 from gtts import gTTS
 import youtube_dl
 from youtube_search import YoutubeSearch
+import pymongo
+import json
 
+
+mongo_pswrd = os.environ["MONGODB_PASSWORD"]
+client = pymongo.MongoCient(f"mongodb+srv://RaucherAdler:{mongo_pswrd}@cluster0.klsio.mongodb.net/RoboterVogel?retryWrites=true&w=majority")
+db = client["RoboterVogel"]
+collection = db["queues"]
+
+
+def add_to_queue(guild_id, attributes):
+    g_coll = collection[f"{guild_id}"]
+    g_coll["entries"] = []
+    attr = json.dumps(attributes)
+    g_coll.insert_one(attr)
+    position = len(g_coll)
+    return position
+
+
+def next_in_queue(guild_id):
+    g_coll = collection[f"{guild_id}"]
+    entries = g_coll["entries"]
+    entry = entries[0]
+    if entry:
+        return entry
+        db.collection.remove(entry)
+
+
+async def play_next(entry, vc):
+    if entry != None:
+        name = entry["name"]
+        duration = entry["duration"]
+        source = entry["source"]
+        thumbnail = entry["thumbnail"]
+        requested_by = entry["requested_by"]
+        link = entry["url"]
+        channel = entry["channel"]
+        song_embed = discord.Embed(name='Song', color=Color.dark_red())
+        song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
+        song_embed.add_field(name='Duration:', value=f'{duration}', inline=True)
+        song_embed.set_thumbnail(url=thumbnail)
+        song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
+        source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
+        vc.play(source=source, after=play_next(next_in_queue(collection[f"{guild_id}"]), vc))
+        await channel.send("Jetzt Spielen:", embed=song_embed)
+        
 
 intents = discord.Intents.default()
 intents.members = True
@@ -547,10 +592,17 @@ class Voice(commands.Cog):
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
-            source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
-            await ctx.send(f'Spielen Jetzt:', embed=song_embed)
-            current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
-            current_voice_client.play(source)
+            attributes = {"name" : song_title, "duration" : video_duration, "source" : source, "thumbnail" : thumbnail, "requested_by" : ctx.message.author, "url" : link, "channel" : ctx.channel}
+            if current_voice_client.is_playing():
+                pos = add_to_queue(ctx.guild.id, attributes)
+                song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
+                await ctx.send(f'Spielen Jetzt:', embed=song_embed)
+            else:
+                source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
+                song_embed.add_field(name='Position in queue:', value=0, inline=True)
+                await ctx.send(f'Spielen Jetzt:', embed=song_embed)
+                current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
+                current_voice_client.play(source, after=play_next(next_in_queue(collection[f"{guild_id}"]), current_voice_client))
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
