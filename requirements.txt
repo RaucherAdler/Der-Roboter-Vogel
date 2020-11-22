@@ -9,3 +9,4 @@ gTTS==2.2.1
 ffmpeg
 youtube-search==1.1.1
 git+https://github.com/ytdl-org/youtube-dl.git
+pymongo==3.11.1
