@@ -596,7 +596,7 @@ class Voice(commands.Cog):
             if current_voice_client.is_playing():
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
-                await ctx.send(f'Spielen Jetzt:', embed=song_embed)
+                await ctx.send(f'Zur Warteschlange hinzugefügt:', embed=song_embed)
             else:
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
