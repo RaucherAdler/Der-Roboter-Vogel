@@ -39,7 +39,7 @@ def next_in_queue(guild_id):
     entry = entries[0]
     if entry:
         return entry
-        db.collection.update({"$push" : {"entries" : entry}})
+        db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
         
 
 intents = discord.Intents.default()
@@ -533,8 +533,7 @@ class Voice(commands.Cog):
             await vc.disconnect()
             await ctx.send(f'Auf Wiedersehen!')
             g_coll = collection[f"{ctx.guild.id}"]
-            entries = g_coll["entries"]
-            db.collection.update({"$push" : entries})
+            db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
@@ -619,7 +618,7 @@ class Voice(commands.Cog):
                 await ctx.send(f'Spielen Jetzt:', embed=song_embed)
                 current_voice_client.play(source)
                 await asyncio.sleep(video_duration)
-                await play_next(next_in_queue(guild_id), current_voice_client)
+                await play_next(next_in_queue(ctx.guild.id), current_voice_client)
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
@@ -673,7 +672,7 @@ class Voice(commands.Cog):
                         client_vc.stop()
                         g_coll = collection[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
-                        db.collection.update({"$push" : entries})
+                        db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
                         await ctx.send(f'Medien stehen an')
                     else:
                         await ctx.send(f'Keine Medienspiele')
