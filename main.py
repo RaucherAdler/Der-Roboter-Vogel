@@ -19,7 +19,7 @@ import json
 
 
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
-client = pymongo.MongoCient(f"mongodb+srv://RaucherAdler:{mongo_pswrd}@cluster0.klsio.mongodb.net/RoboterVogel?retryWrites=true&w=majority")
+client = pymongo.MongoClient(f"mongodb+srv://RaucherAdler:{mongo_pswrd}@cluster0.klsio.mongodb.net/RoboterVogel?retryWrites=true&w=majority")
 db = client["RoboterVogel"]
 collection = db["queues"]
 
