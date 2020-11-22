@@ -15,6 +15,7 @@ from gtts import gTTS
 import youtube_dl
 from youtube_search import YoutubeSearch
 import pymongo
+import json
 
 
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
@@ -26,7 +27,8 @@ collection = db["queues"]
 def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"] 
-    entries.insert_one(attributes)
+    attrs = json.dumps(attributes)
+    entries.insert_one(attrs)
     position = len(g_coll)
     return position
 
@@ -38,34 +40,6 @@ def next_in_queue(guild_id):
     if entry:
         return entry
         db.collection.remove(entry)
-
-
-async def play_next(entry, vc):
-    if entry != None:
-        name = entry["name"]
-        duration = entry["duration"]
-        source = entry["source"]
-        thumbnail = entry["thumbnail"]
-        requested_by = entry["requested_by"]
-        link = entry["url"]
-        channel = entry["channel"]
-        guild_id = entry["guilid"]
-        ty_res = time.gmtime(duration)
-        video_duration = time.strftime("%H:%M:%S", ty_res)
-        song_embed = discord.Embed(name='Song', color=Color.dark_red())
-        song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
-        song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
-        song_embed.set_thumbnail(url=thumbnail)
-        song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
-        source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
-        try:
-            await channel.send("Jetzt Spielen:", embed=song_embed)
-            vc.play(source=source)
-            await asyncio.sleep(duration)
-            await play_next(next_in_queue(collection[f"{guild_id}"]), vc)
-        except:
-            await channel.send('Error!')
-        
         
 
 intents = discord.Intents.default()
@@ -81,6 +55,36 @@ client.remove_command('help')
 async def on_ready():
    await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
    print('Bot ist bereit!')
+
+
+async def play_next(entry, vc):
+    if entry != None:
+        name = entry["name"]
+        duration = entry["duration"]
+        source = entry["source"]
+        thumbnail = entry["thumbnail"]
+        requested_by_id = entry["requested_by_id"]
+        link = entry["url"]
+        channel_id = entry["channel_id"]
+        guild_id = entry["guilid"]
+        ty_res = time.gmtime(duration)
+        video_duration = time.strftime("%H:%M:%S", ty_res)
+        guild = client.get_guild(guild_id)
+        requested_by = guild.get_member(requested_by_id)
+        channel = guild.get_channel(channel_id)
+        song_embed = discord.Embed(name='Song', color=Color.dark_red())
+        song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
+        song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
+        song_embed.set_thumbnail(url=thumbnail)
+        song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
+        source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
+        try:
+            await channel.send("Jetzt Spielen:", embed=song_embed)
+            vc.play(source=source)
+            await asyncio.sleep(duration)
+            await play_next(next_in_queue(collection[f"{guild_id}"]), vc)
+        except:
+            await channel.send('Error!')
 
 
 @client.event
@@ -600,7 +604,7 @@ class Voice(commands.Cog):
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
-            attributes = {"name" : video_title, "duration" : duration, "source" : source, "thumbnail" : thumbnail, "requested_by" : ctx.message.author, "url" : link, "channel" : ctx.channel, "guildid" : ctx.guild.id}
+            attributes = {"name" : video_title, "duration" : duration, "source" : source, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
             if current_voice_client.is_playing():
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
