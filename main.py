@@ -563,6 +563,7 @@ class Voice(commands.Cog):
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
+        current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
         if 'https://www.youtube.com/watch?v='not in song:
             await ctx.send(f'Searching Youtube for `{song}`')
             result = YoutubeSearch(song, max_results=1).to_dict()
@@ -592,7 +593,7 @@ class Voice(commands.Cog):
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
-            attributes = {"name" : song_title, "duration" : video_duration, "source" : source, "thumbnail" : thumbnail, "requested_by" : ctx.message.author, "url" : link, "channel" : ctx.channel}
+            attributes = {"name" : video_title, "duration" : video_duration, "source" : source, "thumbnail" : thumbnail, "requested_by" : ctx.message.author, "url" : link, "channel" : ctx.channel}
             if current_voice_client.is_playing():
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
@@ -601,7 +602,6 @@ class Voice(commands.Cog):
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Spielen Jetzt:', embed=song_embed)
-                current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
                 current_voice_client.play(source, after=play_next(next_in_queue(collection[f"{guild_id}"]), current_voice_client))
 
 
