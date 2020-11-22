@@ -602,7 +602,7 @@ class Voice(commands.Cog):
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Spielen Jetzt:', embed=song_embed)
-                current_voice_client.play(source, after=play_next(next_in_queue(collection[f"{guild_id}"]), current_voice_client))
+                current_voice_client.play(source, after=play_next(next_in_queue(collection[f"{ctx.guild.id}"]), current_voice_client))
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
