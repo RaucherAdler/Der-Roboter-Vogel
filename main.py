@@ -39,7 +39,7 @@ def next_in_queue(guild_id):
     entry = entries[0]
     if entry:
         return entry
-        db.collection.remove(entry)
+        db.collection.update( $pull : {"entries" : entry})
         
 
 intents = discord.Intents.default()
@@ -532,6 +532,9 @@ class Voice(commands.Cog):
         if voice_channel != None and vc != None:
             await vc.disconnect()
             await ctx.send(f'Auf Wiedersehen!')
+            g_coll = collection[f"{ctx.guild.id}"]
+            entries = g_coll["entries"]
+            db.collection.update[$push : entries]
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
@@ -609,13 +612,14 @@ class Voice(commands.Cog):
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
                 await ctx.send(f'Zur Warteschlange hinzugefügt:', embed=song_embed)
+                await ctx.send(embed=song_embed)
             else:
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Spielen Jetzt:', embed=song_embed)
                 current_voice_client.play(source)
                 await asyncio.sleep(video_duration)
-                await play_next(next_in_queue(collection[f"{ctx.guild.id}"]), current_voice_client)
+                await play_next(next_in_queue(guild_id), current_voice_client)
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
@@ -667,6 +671,9 @@ class Voice(commands.Cog):
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
                         client_vc.stop()
+                        g_coll = collection[f"{ctx.guild.id}"]
+                        entries = g_coll["entries"]
+                        db.collection.update[$push : entries]
                         await ctx.send(f'Medien stehen an')
                     else:
                         await ctx.send(f'Keine Medienspiele')
