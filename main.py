@@ -51,14 +51,19 @@ async def play_next(entry, vc):
         requested_by = entry["requested_by"]
         link = entry["url"]
         channel = entry["channel"]
+        guild_id = entry["guilid"]
         song_embed = discord.Embed(name='Song', color=Color.dark_red())
         song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
         song_embed.add_field(name='Duration:', value=f'{duration}', inline=True)
         song_embed.set_thumbnail(url=thumbnail)
         song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
-        vc.play(source=source, after=play_next(next_in_queue(collection[f"{guild_id}"]), vc))
-        await channel.send("Jetzt Spielen:", embed=song_embed)
+        try:
+            await channel.send("Jetzt Spielen:", embed=song_embed)
+            vc.play(source=source, after=play_next(next_in_queue(collection[f"{guild_id}"]), vc))
+        except:
+            await channel.send('Error!')
+        
         
 
 intents = discord.Intents.default()
@@ -593,7 +598,7 @@ class Voice(commands.Cog):
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
-            attributes = {"name" : video_title, "duration" : video_duration, "source" : source, "thumbnail" : thumbnail, "requested_by" : ctx.message.author, "url" : link, "channel" : ctx.channel}
+            attributes = {"name" : video_title, "duration" : video_duration, "source" : source, "thumbnail" : thumbnail, "requested_by" : ctx.message.author, "url" : link, "channel" : ctx.channel, "guildid" : ctx.guild.id}
             if current_voice_client.is_playing():
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
@@ -602,7 +607,10 @@ class Voice(commands.Cog):
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Spielen Jetzt:', embed=song_embed)
-                current_voice_client.play(source, after=play_next(next_in_queue(collection[f"{ctx.guild.id}"]), current_voice_client))
+                try:
+                    current_voice_client.play(source, after= await play_next(next_in_queue(collection[f"{ctx.guild.id}"]), current_voice_client))
+                except:
+                    await ctx.send('Error!')
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
