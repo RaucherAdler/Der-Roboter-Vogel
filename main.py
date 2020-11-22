@@ -39,7 +39,7 @@ def next_in_queue(guild_id):
     entry = entries[0]
     if entry:
         return entry
-        db.collection.update( $pull : {"entries" : entry})
+        db.collection.update({"$push" : {"entries" : entry}})
         
 
 intents = discord.Intents.default()
@@ -534,7 +534,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Auf Wiedersehen!')
             g_coll = collection[f"{ctx.guild.id}"]
             entries = g_coll["entries"]
-            db.collection.update[$push : entries]
+            db.collection.update[{"$push" : entries}]
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
@@ -673,7 +673,7 @@ class Voice(commands.Cog):
                         client_vc.stop()
                         g_coll = collection[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
-                        db.collection.update[$push : entries]
+                        db.collection.update[{"$push" : entries}]
                         await ctx.send(f'Medien stehen an')
                     else:
                         await ctx.send(f'Keine Medienspiele')
