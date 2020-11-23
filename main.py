@@ -84,12 +84,7 @@ async def play_next(entry, vc):
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
         try:
             await channel.send("Jetzt Spielen:", embed=song_embed)
-            vc.play(source=source)
-            while vc.is_playing():
-                await asyncio.sleep(duration)
-            await play_next(next_in_queue(collection[f"{guild_id}"]), vc)
-        except:
-            await channel.send('Error!')
+            await vc.play(source=source, after=play_next(next_in_queue(collection[f"{guild_id}"]), vc))
 
 
 @client.event
@@ -563,7 +558,7 @@ class Voice(commands.Cog):
             tts.save('message.mp3')
             source = discord.FFmpegOpusAudio(source='message.mp3', executable='ffmpeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
-            current_VoiceClient.play(source, after=os.remove('message.mp3'))
+            current_VoiceClient.play(source=source, after=os.remove('message.mp3'))
 
 
     @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video/title to search for>`')
@@ -623,10 +618,7 @@ class Voice(commands.Cog):
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Jetzt Spielen:', embed=song_embed)
-                current_voice_client.play(source)
-            while current_voice_client.is_playing():
-                await asyncio.sleep(duration)
-            await play_next(next_in_queue(ctx.guild.id), current_voice_client)
+                await current_voice_client.play(source, after=play_next(next_in_queue(ctx.guild.id), current_voice_client))
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
