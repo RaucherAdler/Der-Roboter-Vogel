@@ -82,9 +82,8 @@ async def play_next(entry, vc):
         song_embed.set_thumbnail(url=thumbnail)
         song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
-        try:
-            await channel.send("Jetzt Spielen:", embed=song_embed)
-            await vc.play(source=source, after=play_next(next_in_queue(collection[f"{guild_id}"]), vc))
+        await channel.send("Jetzt Spielen:", embed=song_embed)
+        await vc.play(source=source, after=play_next(next_in_queue(collection[f"{guild_id}"]), vc))
 
 @client.event
 async def on_member_join(member):
