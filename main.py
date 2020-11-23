@@ -581,12 +581,11 @@ class Voice(commands.Cog):
         current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
         if validators.url(song) == True:
             link = song
-            parsed_link = urlparse(link)
-            if parsed_link.path == 'watch':
-                result = YoutubeSearch(link, max_results=1).to_dict()
-                for v in result:
-                    thumbnails = v['thumbnails']
-                    thumbnail = thumbnails[0]
+            #parsed_link = urlparse(link) removing this for now, until I can implement feature for playlist
+            result = YoutubeSearch(link, max_results=1).to_dict()
+            for v in result:
+                thumbnails = v['thumbnails']
+                thumbnail = thumbnails[0]
         else:
             await ctx.send(f'Searching Youtube for `{song}`')
             result = YoutubeSearch(song, max_results=1).to_dict()
