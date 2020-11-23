@@ -86,7 +86,6 @@ async def play_next(entry, vc):
             await channel.send("Jetzt Spielen:", embed=song_embed)
             await vc.play(source=source, after=play_next(next_in_queue(collection[f"{guild_id}"]), vc))
 
-
 @client.event
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.channels, name='def-role')
