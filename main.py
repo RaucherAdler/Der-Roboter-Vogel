@@ -28,18 +28,17 @@ def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"] 
     entries.insert_one(attributes)
-    position = entries.count()
+    position = entries.count_documents()
     return position
 
 
 def next_in_queue(guild_id):
     g_coll = collection[f"{guild_id}"]
-    entries = g_coll["entries"]
-    entry = entries[0]
-    if entry:
-        entry_val = entry
-        db.collection.delete_one({f"{guild_id}" : "entries"})
-        return entry_val
+    for entry in g_coll.find_one():
+        if entry:
+            entry_val = entry
+            db.collection.delete_one({f"{guild_id}" : "entries"})
+            return entry_val
 
 
 intents = discord.Intents.default()
@@ -66,7 +65,7 @@ async def play_next(entry, vc):
         requested_by_id = entry["requested_by_id"]
         link = entry["url"]
         channel_id = entry["channel_id"]
-        guild_id = entry["guilid"]
+        guild_id = entry["guildid"]
         ty_res = time.gmtime(duration)
         video_duration = time.strftime("%H:%M:%S", ty_res)
         guild = client.get_guild(guild_id)
