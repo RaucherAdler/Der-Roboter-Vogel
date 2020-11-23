@@ -34,11 +34,14 @@ def add_to_queue(guild_id, attributes):
 
 def next_in_queue(guild_id):
     g_coll = collection[f"{guild_id}"]
-    for entry in g_coll.find_one():
-        if entry:
-            entry_val = entry
-            db.collection.delete_one({f"{guild_id}" : "entries"})
-            return entry_val
+    iterate = 0
+    for entry in g_coll.find():
+        if iterate == 0:
+            if entry:
+                entry_val = entry
+                db.collection.delete_one({f"{guild_id}" : "entries"})
+                return entry_val
+        iterate =+ 1
 
 
 intents = discord.Intents.default()
