@@ -535,7 +535,6 @@ class Voice(commands.Cog):
         if voice_channel != None and vc != None:
             await vc.disconnect()
             await ctx.send(f'Auf Wiedersehen!')
-            g_coll = collection[f"{ctx.guild.id}"]
             db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
@@ -674,7 +673,6 @@ class Voice(commands.Cog):
                     if client_vc.is_playing() or client_vc.is_paused():
                         client_vc.stop()
                         g_coll = collection[f"{ctx.guild.id}"]
-                        entries = g_coll["entries"]
                         db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
                         await ctx.send(f'Medien stehen an')
                     else:
