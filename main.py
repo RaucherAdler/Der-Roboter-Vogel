@@ -672,7 +672,6 @@ class Voice(commands.Cog):
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
                         client_vc.stop()
-                        g_coll = collection[f"{ctx.guild.id}"]
                         db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
                         await ctx.send(f'Medien stehen an')
                     else:
