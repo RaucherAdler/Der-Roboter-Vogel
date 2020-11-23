@@ -47,7 +47,7 @@ def next_in_queue(guild_id):
         iterate =+ 1
 
 
-def _handle_queue(loop, (guild_id, voice_client)):
+def _handle_queue(loop, guild_id, voice_client):
     asyncio.run_coroutine_threadsafe(play_next(next_in_queue(collection[f"{guild_id}"]), voice_client), loop)
 
 
@@ -88,7 +88,7 @@ async def play_next(entry, vc):
         song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
         await channel.send("Jetzt Spielen:", embed=song_embed)
-        vc.play(source=source, after=partial(_handle_queue, vc.loop, (guild_id, vc)))
+        vc.play(source=source, after=partial(_handle_queue, vc.loop, guild_id, vc))
 
 @client.event
 async def on_member_join(member):
@@ -618,7 +618,7 @@ class Voice(commands.Cog):
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Jetzt Spielen:', embed=song_embed)
-                current_voice_client.play(source, after=partial(_handle_queue, current_voice_client.loop, (ctx.guild.id, current_voice_client)))
+                current_voice_client.play(source, after=partial(_handle_queue, current_voice_client.loop, ctx.guild.id, current_voice_client))
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
