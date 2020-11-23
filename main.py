@@ -28,7 +28,7 @@ def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"] 
     entries.insert_one(attributes)
-    position = g_coll.count_documents(f"{guild_id}" : "entries")
+    position = g_coll.count_documents({f"{guild_id}" : "entries"})
     return position
 
 
