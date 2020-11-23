@@ -27,6 +27,7 @@ collection = db["queues"]
 def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"] 
+    attributes = dict(attributes)
     entries.insert_many(attributes)
     position = entries.count()
     return position
@@ -616,7 +617,7 @@ class Voice(commands.Cog):
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Spielen Jetzt:', embed=song_embed)
                 current_voice_client.play(source)
-                await asyncio.sleep(video_duration)
+                await asyncio.sleep(duration)
                 await play_next(next_in_queue(ctx.guild.id), current_voice_client)
 
 
