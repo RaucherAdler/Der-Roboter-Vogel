@@ -18,7 +18,6 @@ import pymongo
 import json
 import validators
 from urllib.parse import urlparse
-from urlparse import urlparse
 
 
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
