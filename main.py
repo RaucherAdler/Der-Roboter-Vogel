@@ -83,7 +83,8 @@ async def play_next(entry, vc):
         try:
             await channel.send("Jetzt Spielen:", embed=song_embed)
             vc.play(source=source)
-            await asyncio.sleep(duration)
+            while vc.is_playing():
+                await asyncio.sleep(duration)
             await play_next(next_in_queue(collection[f"{guild_id}"]), vc)
         except:
             await channel.send('Error!')
@@ -618,7 +619,8 @@ class Voice(commands.Cog):
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Spielen Jetzt:', embed=song_embed)
                 current_voice_client.play(source)
-                await asyncio.sleep(duration)
+                while current_voice_client.is_playing():
+                    await asyncio.sleep(duration)
                 await play_next(next_in_queue(ctx.guild.id), current_voice_client)
 
 
