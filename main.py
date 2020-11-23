@@ -624,9 +624,9 @@ class Voice(commands.Cog):
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Jetzt Spielen:', embed=song_embed)
                 current_voice_client.play(source)
-                while current_voice_client.is_playing():
-                    await asyncio.sleep(duration)
-                await play_next(next_in_queue(ctx.guild.id), current_voice_client)
+            while current_voice_client.is_playing():
+                await asyncio.sleep(duration)
+            await play_next(next_in_queue(ctx.guild.id), current_voice_client)
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
