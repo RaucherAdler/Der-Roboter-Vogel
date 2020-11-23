@@ -38,9 +38,10 @@ def next_in_queue(guild_id):
     entries = g_coll["entries"]
     entry = entries[0]
     if entry:
-        return entry
+        entry_val = entry
         db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
-        
+        return entry_val
+
 
 intents = discord.Intents.default()
 intents.members = True
@@ -606,7 +607,7 @@ class Voice(commands.Cog):
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
-            attributes = {"name" : video_title, "duration" : duration, "source" : source, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
+            attributes : dict = {"name" : video_title, "duration" : duration, "source" : source, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
             if current_voice_client.is_playing():
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
