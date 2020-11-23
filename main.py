@@ -27,7 +27,6 @@ collection = db["queues"]
 def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"] 
-    json_attrs = json.dumps(attributes)
     entries.insert_one(attributes)
     position = entries.count()
     return position
@@ -39,7 +38,7 @@ def next_in_queue(guild_id):
     entry = entries[0]
     if entry:
         entry_val = entry
-        db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
+        db.collection.delete_one({f"{guild_id}" : "entries"})
         return entry_val
 
 
@@ -612,7 +611,6 @@ class Voice(commands.Cog):
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
                 await ctx.send(f'Zur Warteschlange hinzugefügt:', embed=song_embed)
-                await ctx.send(embed=song_embed)
             else:
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
