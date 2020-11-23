@@ -16,6 +16,8 @@ import youtube_dl
 from youtube_search import YoutubeSearch
 import pymongo
 import json
+import validators
+from urlparse import urlparse
 
 
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
@@ -28,7 +30,7 @@ def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"] 
     entries.insert_one(attributes)
-    position = g_coll.count_documents({f"{guild_id}" : "entries"})
+    position = g_coll.count_documents({f"{guild_id}" : "entries"}) #does this, just not correctly.
     return position
 
 
@@ -579,7 +581,17 @@ class Voice(commands.Cog):
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
         current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
-        if 'https://www.youtube.com/watch?v='not in song:
+        if validators.url(song) == True:
+            link = song
+            parsed_link = urlparse(link)
+            if parsed_link.path == 'watch':
+                result = YoutubeSearch(link, max_results=1).to_dict()
+                for v in result:
+                    thumbnails = v['thumbnails']
+                    thumbnail = thumbnails[0]
+            elif parsed_link.path == 'playlist':
+                await ctx.send('Wiedergabelisten noch nicht unterstützt!')
+        else:
             await ctx.send(f'Searching Youtube for `{song}`')
             result = YoutubeSearch(song, max_results=1).to_dict()
             for v in result:
@@ -587,12 +599,6 @@ class Voice(commands.Cog):
                 thumbnails = v['thumbnails']
                 thumbnail = thumbnails[0]
                 link = 'https://www.youtube.com' + url_suffix
-        else:
-            link = song
-            result = YoutubeSearch(link, max_results=1).to_dict()
-            for v in result:
-                thumbnails = v['thumbnails']
-                thumbnail = thumbnails[0]
         before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         opts = '-vn'
         ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True'}
@@ -616,7 +622,7 @@ class Voice(commands.Cog):
             else:
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
-                await ctx.send(f'Spielen Jetzt:', embed=song_embed)
+                await ctx.send(f'Jetzt Spielen:', embed=song_embed)
                 current_voice_client.play(source)
                 while current_voice_client.is_playing():
                     await asyncio.sleep(duration)
