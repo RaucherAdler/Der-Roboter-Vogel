@@ -587,8 +587,6 @@ class Voice(commands.Cog):
                 for v in result:
                     thumbnails = v['thumbnails']
                     thumbnail = thumbnails[0]
-            elif parsed_link.path == 'playlist':
-                await ctx.send('Wiedergabelisten noch nicht unterstützt!')
         else:
             await ctx.send(f'Searching Youtube for `{song}`')
             result = YoutubeSearch(song, max_results=1).to_dict()
