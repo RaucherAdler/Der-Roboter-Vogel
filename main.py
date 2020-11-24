@@ -47,7 +47,11 @@ def next_in_queue(guild_id):
         iterate =+ 1
 
 
-def _handle_queue(loop, guild_id, voice_client):
+def _handle_queue(**kwargs):
+    for v in kwargs.items():
+        loop = v["loop"]
+        guild_id = v["guild_id"]
+        voice_client = v["voice_client"]
     asyncio.run_coroutine_threadsafe(play_next(next_in_queue(collection[f"{guild_id}"]), voice_client), loop)
 
 
