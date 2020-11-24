@@ -88,8 +88,7 @@ async def play_next(entry, vc):
         song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
         await channel.send("Jetzt Spielen:", embed=song_embed)
-        funct = partial(_handle_queue, vc.loop, guild_id, vc)
-        vc.play(source=source, after=funct)
+        vc.play(source=source, after=partial(_handle_queue, loop=vc.loop, guild_id=guild_id, voice_client=vc))
 
 
 @client.event
@@ -620,8 +619,7 @@ class Voice(commands.Cog):
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
                 await ctx.send(f'Jetzt Spielen:', embed=song_embed)
-                funct = partial(_handle_queue, current_voice_client.loop, ctx.guild.id, current_voice_client)
-                current_voice_client.play(source, after=funct) #see https://stackoverflow.com/questions/64758815/is-it-possible-to-put-an-async-function-as-a-callable-argument
+                current_voice_client.play(source, after=partial(_handle_queue, loop=current_voice_client.loop, guild_id=ctx.guild.id, voice_client=current_voice_client))
 
 
     @client.command(description='Resumes current song', usage='`/resume`')
