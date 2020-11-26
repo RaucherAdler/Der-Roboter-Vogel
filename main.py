@@ -38,7 +38,7 @@ def add_to_queue(guild_id, attributes):
 def next_in_queue(guild_id):
     g_coll = collection[{f"{guild_id}" : "entries"}]
     iterate = 0
-    async for entry in g_coll.find():
+    for entry in g_coll.find():
         if iterate == 0:
             if entry:
                 print('Getting next')
@@ -54,10 +54,10 @@ def _handle_queue(**kwargs):
     loop = kwargs["loop"]
     guild_id = kwargs["guild_id"]
     voice_client = kwargs["voice_client"]
-    async with next_in_queue(guild_id) as entry:
-        if entry != None:
-            print('playing next')
-            asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
+    entry = next_in_queue(guild_id)
+    if entry != None:
+        print('playing next')
+        asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
 
 intents = discord.Intents.default()
