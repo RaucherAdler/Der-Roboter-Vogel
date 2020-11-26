@@ -29,22 +29,17 @@ collection = db["queues"]
 
 def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
-    entries = g_coll["entries"] 
+    entries = g_coll["entries"]
+    position = collection.count({f"{guild_id}" : "entries"})
+    attributes["id"] = position
     entries.insert_one(attributes)
-    position = collection.count_documents({f"{guild_id}" : "entries"})
-    return position
+    return (position + 1)
 
 
 def next_in_queue(guild_id):
     g_coll = collection[{f"{guild_id}" : "entries"}]
-    iterate = 0
-    for entry in g_coll.find():
-        if iterate == 0:
-            print('Getting next')
-            entry_val = entry
-            db.collection.delete_one({f"{guild_id}" : "entries"})
-            return entry_val
-        iterate =+ 1
+    entry = g_coll.find_one_and_delete({"id" : 0})
+    return entry
 
 
 def _handle_queue(**kwargs):
