@@ -628,7 +628,7 @@ class Music(commands.Cog):
         context = commands.Context
 
 
-    async def _handle_queue(self, error=None):
+    def _handle_queue(self, error=None):
         print('_handle_queue began')
         ctx = Music.context
         loop = client.loop
