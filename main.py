@@ -38,12 +38,15 @@ def add_to_queue(guild_id, attributes):
 def next_in_queue(guild_id):
     g_coll = collection[{f"{guild_id}" : "entries"}]
     iterate = 0
-    for entry in g_coll.find():
+    async for entry in g_coll.find():
         if iterate == 0:
             if entry:
+                print('Getting next')
                 entry_val = entry
                 db.collection.delete_one({f"{guild_id}" : "entries"})
                 return entry_val
+            else:
+                return None
         iterate =+ 1
 
 
@@ -51,8 +54,10 @@ def _handle_queue(**kwargs):
     loop = kwargs["loop"]
     guild_id = kwargs["guild_id"]
     voice_client = kwargs["voice_client"]
-    entry = next_in_queue(guild_id)
-    asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
+    async with next_in_queue(guild_id) as entry:
+        if entry != None:
+            print('playing next')
+            asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
 
 intents = discord.Intents.default()
@@ -74,31 +79,30 @@ async def on_ready():
 
 
 async def play_next(entry, vc):
-    if entry != None:
-        name = entry["name"]
-        duration = entry["duration"]
-        source = entry["source"]
-        thumbnail = entry["thumbnail"]
-        requested_by_id = entry["requested_by_id"]
-        link = entry["url"]
-        channel_id = entry["channel_id"]
-        guild_id = entry["guildid"]
-        ty_res = time.gmtime(duration)
-        video_duration = time.strftime("%H:%M:%S", ty_res)
-        guild = client.get_guild(guild_id)
-        requested_by = guild.get_member(requested_by_id)
-        channel = guild.get_channel(channel_id)
-        song_embed = discord.Embed(name='Song', color=Color.dark_red())
-        song_embed.add_field(name=song_embed.author, value='Jetzt Spielen:')
-        song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
-        song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
-        song_embed.set_thumbnail(url=thumbnail)
-        song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
-        song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
-        source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
-        await channel.send(embed=song_embed)
-        funct = partial(_handle_queue)
-        vc.play(source=source, after=funct(loop=vc.loop, guild_id=guild_id, voice_client=vc))
+    name = entry["name"]
+    duration = entry["duration"]
+    source = entry["source"]
+    thumbnail = entry["thumbnail"]
+    requested_by_id = entry["requested_by_id"]
+    link = entry["url"]
+    channel_id = entry["channel_id"]
+    guild_id = entry["guildid"]
+    ty_res = time.gmtime(duration)
+    video_duration = time.strftime("%H:%M:%S", ty_res)
+    guild = client.get_guild(guild_id)
+    requested_by = guild.get_member(requested_by_id)
+    channel = guild.get_channel(channel_id)
+    song_embed = discord.Embed(name='Song', color=Color.dark_red())
+    song_embed.add_field(name=song_embed.author, value='Jetzt Spielen:')
+    song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
+    song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
+    song_embed.set_thumbnail(url=thumbnail)
+    song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
+    song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
+    source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
+    await channel.send(embed=song_embed)
+    funct = partial(_handle_queue)
+    vc.play(source=source, after=funct(loop=vc.loop, guild_id=guild_id, voice_client=vc))
 
 
 @client.event
