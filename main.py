@@ -642,7 +642,7 @@ class Music(commands.Cog):
 
 
     @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video/title to search for>`')
-    async def music(self, ctx, song):
+    async def music(ctx, song):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
@@ -698,7 +698,7 @@ class Music(commands.Cog):
                 song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
                 Music.context = ctx
-                current_voice_client.play(source, after=self._handle_queue)
+                current_voice_client.play(source, after=Music._handle_queue)
 
 
 def setup(client):
