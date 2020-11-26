@@ -51,6 +51,7 @@ def next_in_queue(guild_id):
 
 
 def _handle_queue(**kwargs):
+    print('_handle_queue began')
     loop = kwargs["loop"]
     guild_id = kwargs["guild_id"]
     voice_client = kwargs["voice_client"]
