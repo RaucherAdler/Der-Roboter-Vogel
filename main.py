@@ -39,7 +39,7 @@ def add_to_queue(guild_id, attributes):
 def next_in_queue(guild_id):
     g_coll = collection[{f"{guild_id}" : "entries"}]
     entry = g_coll.find_one_and_delete({"id" : 0})
-    return entry
+    return entry #issue seems to be here, returns None when it should return the entry, or at least that's how it seems
 
 
 intents = discord.Intents.default()
@@ -204,7 +204,7 @@ class Moderation(commands.Cog):
 
     @client.command(description='Gives role to a given user', usage='`/giverole <Mention User> <Role Name>`')
     @commands.has_permissions(manage_roles=True)
-    async def giverole(ctx, member : discord.Member, role):
+    async def giverole(ctx, member : discord.Member, *, role):
         role = discord.utils.get(ctx.guild.roles, name=role)
         if role == None:
             await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -215,7 +215,7 @@ class Moderation(commands.Cog):
 
     @client.command(description='Remvoes role from a given user', usage='`/removerole <Mention User> <Role Name>`')
     @commands.has_permissions(manage_roles=True)
-    async def removerole(ctx, member : discord.Member, role):
+    async def removerole(ctx, member : discord.Member, *, role):
         role = discord.utils.get(ctx.guild.roles, name=role)
         if role == None:
             await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
@@ -330,7 +330,7 @@ class Moderation(commands.Cog):
 
     @client.command(aliases=['Nickname', 'Nick'], description="Changes a given user's nickname", usage='`/nickname <Mention Member> <Nickname>`')
     @commands.has_permissions(manage_nicknames=True)
-    async def nickname(ctx, member : discord.Member, nickname):
+    async def nickname(ctx, member : discord.Member, *, nickname):
         await member.edit(nick=nickname)
 
 
@@ -448,7 +448,7 @@ class Chat(commands.Cog):
 
 
     @client.command(aliases=['Font','fraktur', 'Fraktur'], description='Converts a given text into the Fraktur Font.', usage='`/font <Message>`')
-    async def font(ctx, message):
+    async def font(ctx, *, message):
         new_message = ''
         latin_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         latin_lowercase = 'abcdefghijklmnopqrstuvwxyz'
@@ -474,14 +474,14 @@ class Conversion(commands.Cog):
 
 
     @client.command(name='translate', description='Translate text (currently only supports German)', usage='`/translate <Message>`')
-    async def _translate(ctx, message):
+    async def _translate(ctx, *, message):
         translator = Translator(to_lang="German")
         translation = translator.translate(message)
         await ctx.send(translation)
 
 
     @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)', usage='`/fcp <Amount of USD>`')
-    async def fcp(ctx, amount):
+    async def fcp(ctx, *, amount):
         server = ['this server', 'This Server', 'server', 'Server']
         if amount in server:
             FCP = 1
@@ -494,7 +494,7 @@ class Conversion(commands.Cog):
 
 
     @client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD', usage='`/usd <Amount of FCP>`')
-    async def usd(ctx, amount):
+    async def usd(ctx, *, amount):
         amount = amount.replace('FCPfcp', '')
         fcptousd = 30
         USD = float(fcptousd) * float(amount)
@@ -642,7 +642,7 @@ class Music(commands.Cog):
 
 
     @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video/title to search for>`')
-    async def music(ctx, song):
+    async def music(ctx, *, song):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
