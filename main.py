@@ -42,18 +42,6 @@ def next_in_queue(guild_id):
     return entry
 
 
-def _handle_queue(**kwargs):
-    print('_handle_queue began')   
-    loop = kwargs["loop"]
-    guild_id = kwargs["guild_id"]
-    voice_client = kwargs["voice_client"]
-    entry = next_in_queue(guild_id)
-    print(f'Got entry:\n{entry}')
-    if entry != None:
-        print('playing next')
-        asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
-
-
 intents = discord.Intents.default()
 intents.members = True
 intents.guilds = True
@@ -572,65 +560,6 @@ class Voice(commands.Cog):
             current_VoiceClient.play(source=source, after=os.remove('message.mp3'))
 
 
-    @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video/title to search for>`')
-    async def music(ctx, song):
-        member_voice_channel = ctx.message.author.voice.channel
-        if member_voice_channel == None:
-            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
-        else:
-            client_voice_channels = discord.utils.get(client.voice_clients, guild=ctx.guild)
-            if client_voice_channels != None:
-                client_voice_channel = client_voice_channels.channel
-                if member_voice_channel != client_voice_channel:
-                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
-            else:
-                await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
-                await member_voice_channel.connect()
-        current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
-        if validators.url(song) == True:
-            link = song
-            #parsed_link = urlparse(link) removing this for now, until I can implement feature for playlist
-            result = YoutubeSearch(link, max_results=1).to_dict()
-            for v in result:
-                thumbnails = v['thumbnails']
-                thumbnail = thumbnails[0]
-        else:
-            await ctx.send(f'Searching Youtube for `{song}`')
-            result = YoutubeSearch(song, max_results=1).to_dict()
-            for v in result:
-                url_suffix = v['url_suffix']
-                thumbnails = v['thumbnails']
-                thumbnail = thumbnails[0]
-                link = 'https://www.youtube.com' + url_suffix
-        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
-        opts = '-vn'
-        ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True'}
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            attr_dict = ydl.extract_info(link, download=False)
-            video_title = attr_dict['title']
-            duration = attr_dict['duration']
-            ty_res = time.gmtime(duration)
-            video_duration = time.strftime("%H:%M:%S", ty_res)
-            song_embed = discord.Embed(name='Song', color=Color.dark_red())
-            song_embed.add_field(name='Title:', value=f'[{video_title}]({link})', inline=True)
-            song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
-            song_embed.set_thumbnail(url=thumbnail)
-            song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-            source = attr_dict['formats'][0]['url']
-            attributes : dict = {"name" : video_title, "duration" : duration, "source" : source, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
-            if current_voice_client.is_playing():
-                pos = add_to_queue(ctx.guild.id, attributes)
-                song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
-                song_embed.set_author(name='Zur Warteschlange hinzugefügt:', icon_url=ctx.message.author.avatar_url)
-                await ctx.send(embed=song_embed)
-            else:
-                source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
-                song_embed.add_field(name='Position in queue:', value=0, inline=True)
-                song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
-                await ctx.send(embed=song_embed)
-                current_voice_client.play(source, after= _handle_queue(loop=current_voice_client.loop, guild_id=ctx.guild.id, voice_client=current_voice_client))
-
-
     @client.command(description='Resumes current song', usage='`/resume`')
     async def resume(ctx):
         member_vc = ctx.message.author.voice.channel
@@ -692,11 +621,92 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
+class Music(commands.Cog):
+
+    def __init__(self, client):
+        self.client = client
+        context = commands.Context
+
+
+    async def _handle_queue(self, error=None):
+        print('_handle_queue began')
+        ctx = Music.context
+        loop = client.loop
+        guild_id = ctx.guild.id
+        voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        entry = next_in_queue(guild_id)
+        print(f'Got entry:\n{entry}')
+        if entry != None:
+            print('playing next')
+            asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
+
+
+    @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video/title to search for>`')
+    async def music(self, ctx, song):
+        member_voice_channel = ctx.message.author.voice.channel
+        if member_voice_channel == None:
+            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+        else:
+            client_voice_channels = discord.utils.get(client.voice_clients, guild=ctx.guild)
+            if client_voice_channels != None:
+                client_voice_channel = client_voice_channels.channel
+                if member_voice_channel != client_voice_channel:
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+            else:
+                await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
+                await member_voice_channel.connect()
+        current_voice_client = discord.utils.get(client.voice_clients, channel=member_voice_channel)
+        if validators.url(song) == True:
+            link = song
+            #parsed_link = urlparse(link) removing this for now, until I can implement feature for playlist
+            result = YoutubeSearch(link, max_results=1).to_dict()
+            for v in result:
+                thumbnails = v['thumbnails']
+                thumbnail = thumbnails[0]
+        else:
+            await ctx.send(f'Searching Youtube for `{song}`')
+            result = YoutubeSearch(song, max_results=1).to_dict()
+            for v in result:
+                url_suffix = v['url_suffix']
+                thumbnails = v['thumbnails']
+                thumbnail = thumbnails[0]
+                link = 'https://www.youtube.com' + url_suffix
+        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
+        opts = '-vn'
+        ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True'}
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            attr_dict = ydl.extract_info(link, download=False)
+            video_title = attr_dict['title']
+            duration = attr_dict['duration']
+            ty_res = time.gmtime(duration)
+            video_duration = time.strftime("%H:%M:%S", ty_res)
+            song_embed = discord.Embed(name='Song', color=Color.dark_red())
+            song_embed.add_field(name='Title:', value=f'[{video_title}]({link})', inline=True)
+            song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
+            song_embed.set_thumbnail(url=thumbnail)
+            song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+            source = attr_dict['formats'][0]['url']
+            attributes : dict = {"name" : video_title, "duration" : duration, "source" : source, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
+            if current_voice_client.is_playing():
+                pos = add_to_queue(ctx.guild.id, attributes)
+                song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
+                song_embed.set_author(name='Zur Warteschlange hinzugefügt:', icon_url=ctx.message.author.avatar_url)
+                await ctx.send(embed=song_embed)
+            else:
+                source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
+                song_embed.add_field(name='Position in queue:', value=0, inline=True)
+                song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
+                await ctx.send(embed=song_embed)
+                Music.context = ctx
+                current_voice_client.play(source, after=self._handle_queue)
+
+
 def setup(client):
     client.add_cog(Moderation(client))
     client.add_cog(Chat(client))
     client.add_cog(Conversion(client))
     client.add_cog(Voice(client))
+    client.add_cog(Music(client))
 
 DISCORD_S3 = os.environ['DISCORD_TOKEN']     
 client.run(DISCORD_S3)
