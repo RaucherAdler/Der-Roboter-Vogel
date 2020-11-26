@@ -31,12 +31,12 @@ def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"] 
     entries.insert_one(attributes)
-    position = g_coll.count_documents({f"{guild_id}" : "entries"}) #does this, just not correctly.
+    position = entries.count_documents() #does this, just not correctly, returns 0.
     return position
 
 
 def next_in_queue(guild_id):
-    g_coll = collection[f"{guild_id}"]
+    g_coll = collection[{f"{guild_id}" : "entries"}]
     iterate = 0
     for entry in g_coll.find():
         if iterate == 0:
