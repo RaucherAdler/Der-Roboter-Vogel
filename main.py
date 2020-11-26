@@ -37,6 +37,7 @@ def add_to_queue(guild_id, attributes):
 
 
 def next_in_queue(guild_id):
+    print('Next_in_queue begins')
     g_coll = collection[{f"{guild_id}" : "entries"}]
     entry = g_coll.find_one_and_delete({"id" : 0})
     return entry #issue seems to be here, returns None when it should return the entry, or at least that's how it seems
@@ -61,6 +62,7 @@ async def on_ready():
 
 
 async def play_next(entry, vc):
+    print('play_next begins')
     name = entry["name"]
     duration = entry["duration"]
     source = entry["source"]
@@ -83,7 +85,7 @@ async def play_next(entry, vc):
     song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
     source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
     await channel.send(embed=song_embed)
-    vc.play(source=source, after=_handle_queue(loop=vc.loop, guild_id=guild_id, voice_client=vc))
+    vc.play(source=source, after=Music._handle_queue)
 
 
 @client.event
@@ -631,6 +633,7 @@ class Music(commands.Cog):
     def _handle_queue(self, error=None):
         print('_handle_queue began')
         ctx = Music.context
+        ctx.send('Successfully got Context.')
         loop = client.loop
         guild_id = ctx.guild.id
         voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
