@@ -623,12 +623,12 @@ class Voice(commands.Cog):
             if current_voice_client.is_playing():
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
-                song_embed.add_field_at(index=0, name=song_embed.author, value='Zur Warteschlange hinzugefügt:')
+                song_embed.insert_field_at(index=0, name=song_embed.author, value='Zur Warteschlange hinzugefügt:')
                 await ctx.send(embed=song_embed)
             else:
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
-                song_embed.add_field_at(index=0, name=song_embed.author, value='Jetzt Spielen:')
+                song_embed.insert_field_at(index=0, name=song_embed.author, value='Jetzt Spielen:')
                 await ctx.send(embed=song_embed)
                 funct = partial(_handle_queue)
                 current_voice_client.play(source, after=funct(loop=current_voice_client.loop, guild_id=ctx.guild.id, voice_client=current_voice_client))
