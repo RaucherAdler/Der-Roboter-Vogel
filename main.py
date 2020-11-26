@@ -51,11 +51,12 @@ def next_in_queue(guild_id):
 
 
 def _handle_queue(**kwargs):
-    print('_handle_queue began')
+    print('_handle_queue began')   
     loop = kwargs["loop"]
     guild_id = kwargs["guild_id"]
     voice_client = kwargs["voice_client"]
     entry = next_in_queue(guild_id)
+    print(f'Got entry:\n{entry}')
     if entry != None:
         print('playing next')
         asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
