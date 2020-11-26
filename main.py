@@ -51,7 +51,8 @@ def _handle_queue(**kwargs):
     loop = kwargs["loop"]
     guild_id = kwargs["guild_id"]
     voice_client = kwargs["voice_client"]
-    asyncio.run_coroutine_threadsafe(play_next(next_in_queue(collection[f"{guild_id}"]), voice_client), loop)
+    entry = next_in_queue(guild_id)
+    asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
 
 intents = discord.Intents.default()
