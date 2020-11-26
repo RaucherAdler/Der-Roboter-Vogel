@@ -606,7 +606,7 @@ class Voice(commands.Cog):
                 link = 'https://www.youtube.com' + url_suffix
         before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         opts = '-vn'
-        ydl_opts = 'bestaudio noplaylist -4'
+        ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True'}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             attr_dict = ydl.extract_info(link, download=False)
             video_title = attr_dict['title']
