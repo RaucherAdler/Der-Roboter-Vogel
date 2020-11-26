@@ -40,13 +40,10 @@ def next_in_queue(guild_id):
     iterate = 0
     for entry in g_coll.find():
         if iterate == 0:
-            if entry:
-                print('Getting next')
-                entry_val = entry
-                db.collection.delete_one({f"{guild_id}" : "entries"})
-                return entry_val
-            else:
-                return None
+            print('Getting next')
+            entry_val = entry
+            db.collection.delete_one({f"{guild_id}" : "entries"})
+            return entry_val
         iterate =+ 1
 
 
