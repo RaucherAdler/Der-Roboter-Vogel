@@ -88,12 +88,13 @@ async def play_next(entry, vc):
         requested_by = guild.get_member(requested_by_id)
         channel = guild.get_channel(channel_id)
         song_embed = discord.Embed(name='Song', color=Color.dark_red())
+        song_embed.add_field(name=song_embed.author, value='Jetzt Spielen:')
         song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
         song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
         song_embed.set_thumbnail(url=thumbnail)
         song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
-        await channel.send("Jetzt Spielen:", embed=song_embed)
+        await channel.send(embed=song_embed)
         funct = partial(_handle_queue)
         vc.play(source=source, after=funct(loop=vc.loop, guild_id=guild_id, voice_client=vc))
 
@@ -612,6 +613,7 @@ class Voice(commands.Cog):
             ty_res = time.gmtime(duration)
             video_duration = time.strftime("%H:%M:%S", ty_res)
             song_embed = discord.Embed(name='Song', color=Color.dark_red())
+            song_embed.set_author(name=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             song_embed.add_field(name='Title:', value=f'[{video_title}]({link})', inline=True)
             song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
             song_embed.set_thumbnail(url=thumbnail)
@@ -621,11 +623,13 @@ class Voice(commands.Cog):
             if current_voice_client.is_playing():
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
-                await ctx.send(f'Zur Warteschlange hinzugefügt:', embed=song_embed)
+                song_embed.add_field_at(index=0, name=song_embed.author, value='Zur Warteschlange hinzugefügt:')
+                await ctx.send(embed=song_embed)
             else:
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.add_field(name='Position in queue:', value=0, inline=True)
-                await ctx.send(f'Jetzt Spielen:', embed=song_embed)
+                song_embed.add_field_at(index=0, name=song_embed.author, value='Jetzt Spielen:')
+                await ctx.send(embed=song_embed)
                 funct = partial(_handle_queue)
                 current_voice_client.play(source, after=funct(loop=current_voice_client.loop, guild_id=ctx.guild.id, voice_client=current_voice_client))
 
