@@ -40,7 +40,7 @@ def next_in_queue(guild_id):
     print('Next_in_queue begins')
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entires"]
-    entry = entries.find_one_and_delete({"_id" : 0})
+    entry = entries.find_one_and_delete("_id" : 0)
     return entry #issue seems to be here, returns None when it should return the entry, or at least that's how it seems
 
 
