@@ -690,12 +690,12 @@ class Music(commands.Cog):
         source = attr_dict['formats'][0]['url']
         attributes : dict = {"name" : video_title, "duration" : duration, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
         if current_voice_client.is_playing():
-            add_to_queue(ctx.guild.id, attributes)
+            pos = add_to_queue(ctx.guild.id, attributes)
+            song_embed.add_field(name='Position in queue:', value=pos, inline=True)
             song_embed.set_author(name='Zur Warteschlange hinzugefügt:', icon_url=ctx.message.author.avatar_url)
             await ctx.send(embed=song_embed)
         else:
             source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
-            song_embed.add_field(name='Position in queue:', value=0, inline=True)
             song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
             await ctx.send(embed=song_embed)
             Music.context = ctx
