@@ -84,7 +84,9 @@ async def play_next(entry, vc):
     song_embed.set_thumbnail(url=thumbnail)
     song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
     song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
-    source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg')
+    before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
+    opts = '-vn'
+    source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
     await channel.send(embed=song_embed)
     vc.play(source=source, after=Music._handle_queue)
 
