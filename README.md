@@ -11,4 +11,4 @@ I also appreciate any suggestions for potential features, as coming up with thin
 # More Info
 [Add RoboterVogel to your server](https://discord.com/api/oauth2/authorize?client_id=762768118212067328&permissions=8&scope=bot)
 
-If you wish to reach me, you can shoot me a DM on [Discord](https://discord.gg/ngutyTFPuS) (Raucher Adler#1521), on [Github](https://github.com/RaucherAdler/Der-Roboter-Vogel/) or by [Email](raucheradler@gmail.com), or if you find me anywhere else, that works too.
+If you wish to reach me, you can shoot me a DM on [Discord](https://discord.gg/6GFQcFHjSK) (Raucher Adler#1521), on [Github](https://github.com/RaucherAdler/Der-Roboter-Vogel/) or by [Email](raucheradler@gmail.com), or if you find me anywhere else, that works too.

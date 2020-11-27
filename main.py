@@ -137,7 +137,7 @@ async def on_guild_join(guild):
     if owner.bot == True:
         pass
     else:    
-        await owner.send(f'Hallo, Ich bin RoboterVogel, dein neuer Bot!\nhttps://discord.gg/ngutyTFPuS', embed=info_embed)
+        await owner.send(f'Hallo, Ich bin RoboterVogel, dein neuer Bot!\nhttps://discord.gg/6GFQcFHjSK', embed=info_embed)
     await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
     
 
@@ -298,7 +298,7 @@ class Moderation(commands.Cog):
         info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler', inline=True)
         info_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed=info_embed)
-        await ctx.send('https://discord.gg/ngutyTFPuS')
+        await ctx.send('https://discord.gg/6GFQcFHjSK')
 
 
     @client.command(description='Gets guild stats such as number of users, etc.', usage='/stats')
