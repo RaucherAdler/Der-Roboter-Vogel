@@ -8,4 +8,7 @@ Due to it being a single person project, some features I wish to implement will 
 Nonetheless, I plan to continue to developing the bot and I appreciate that others as well as myself will continue to use it as long as I can host it.
 I also appreciate any suggestions for potential features, as coming up with things people may want and find useful is not my strong suit.
 
+# More Info
+[Add RoboterVogel to your server](https://discord.com/api/oauth2/authorize?client_id=762768118212067328&permissions=8&scope=bot)
+
 If you wish to reach me, you can shoot me a DM on [Discord](https://discord.gg/ngutyTFPuS) (Raucher Adler#1521), on [Github](https://github.com/RaucherAdler/Der-Roboter-Vogel/) or by [Email](raucheradler@gmail.com), or if you find me anywhere else, that works too.
