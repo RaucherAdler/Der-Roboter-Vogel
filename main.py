@@ -37,7 +37,6 @@ def add_to_queue(guild_id, attributes):
 
 
 def next_in_queue(guild_id):
-    print('Next_in_queue begins')
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"]
     entry = entries.find_one_and_delete({"_id" : 0})
@@ -63,10 +62,8 @@ async def on_ready():
 
 
 async def play_next(entry, vc):
-    print('play_next begins')
     name = entry["name"]
     duration = entry["duration"]
-    source = entry["source"]
     thumbnail = entry["thumbnail"]
     requested_by_id = entry["requested_by_id"]
     link = entry["url"]
@@ -77,8 +74,11 @@ async def play_next(entry, vc):
     guild = client.get_guild(guild_id)
     requested_by = guild.get_member(requested_by_id)
     channel = guild.get_channel(channel_id)
+    ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True'}
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        attr_dict = ydl.extract_info(link, download=False)
+    source = attr_dict["formats"][0]["url"]
     song_embed = discord.Embed(name='Song', color=Color.dark_red())
-    song_embed.add_field(name=song_embed.author, value='Jetzt Spielen:')
     song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
     song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
     song_embed.set_thumbnail(url=thumbnail)
@@ -632,17 +632,12 @@ class Music(commands.Cog):
 
 
     def _handle_queue(self, error=None):
-        print('_handle_queue began')
         ctx = Music.context
-        print('Successfully got Context.')
         loop = client.loop
         guild_id = ctx.guild.id
-        print('guild_id: ' + str(guild_id))
         voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
         entry = next_in_queue(guild_id)
-        print(f'Got entry:\n{entry}')
         if entry != None:
-            print('playing next')
             asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
 
@@ -691,7 +686,7 @@ class Music(commands.Cog):
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
-            attributes : dict = {"name" : video_title, "duration" : duration, "source" : source, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
+            attributes : dict = {"name" : video_title, "duration" : duration, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
             if current_voice_client.is_playing():
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=f'{pos}', inline=True)
