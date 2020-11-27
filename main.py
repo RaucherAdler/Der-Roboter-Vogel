@@ -152,13 +152,13 @@ class Moderation(commands.Cog):
         self.client = client
 
 
-    @client.command(description='Clears a given number of messages', usage='`/clear <Number of posts>`')
+    @client.command(description='Clears a given number of messages', usage='/clear <Number of posts>')
     @commands.has_permissions(manage_messages=True)
     async def clear(ctx, amount=0):
         await ctx.channel.purge(limit=amount+1)
 
 
-    @client.command(description='Kicks a given user', usage='`/kick <Mention User>`')
+    @client.command(description='Kicks a given user', usage='/kick <Mention User>')
     @commands.has_permissions(kick_members=True)
     async def kick(ctx, user: discord.Member, *, reason=None):
         await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
@@ -170,7 +170,7 @@ class Moderation(commands.Cog):
         await user.kick(reason=reason)
 
 
-    @client.command(description='Bans a given user', usage='`/ban <Mention User> <Delete Messages from given number of Days tops 7 (Optional)>`')
+    @client.command(description='Bans a given user', usage='/ban <Mention User> <Delete Messages from given number of Days tops 7 (Optional)>')
     @commands.has_permissions(ban_members=True)
     async def ban(ctx, user: discord.Member, *, reason=None, delete_message_days=0):
         await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
@@ -182,7 +182,7 @@ class Moderation(commands.Cog):
         await user.ban(reason=reason, delete_message_days=delete_message_days)
 
 
-    @client.command(description='Unbans a given user', usage='`/unban <User Name (i.e. Raucher Adler#1220)>`')
+    @client.command(description='Unbans a given user', usage='/unban <User Name (i.e. Raucher Adler#1220)>')
     @commands.has_permissions(ban_members=True)
     async def unban(ctx, *, member):
         banned_users = await ctx.guild.bans()
@@ -196,7 +196,7 @@ class Moderation(commands.Cog):
                 await ctx.send(f'{user} wurde nicht verboten!')
 
 
-    @client.command(description='Unbans all banned users', usage='`/unbanall`')
+    @client.command(description='Unbans all banned users', usage='/unbanall')
     @commands.has_permissions(ban_members=True)
     async def unbanall(ctx):
         banned_users = await ctx.guild.bans()
@@ -207,7 +207,7 @@ class Moderation(commands.Cog):
             await ctx.send(f'{user} wurde nicht verboten!')
 
 
-    @client.command(description='Gives role to a given user', usage='`/giverole <Mention User> <Role Name>`')
+    @client.command(description='Gives role to a given user', usage='/giverole <Mention User> <Role Name>')
     @commands.has_permissions(manage_roles=True)
     async def giverole(ctx, member : discord.Member, *, role):
         role = discord.utils.get(ctx.guild.roles, name=role)
@@ -218,7 +218,7 @@ class Moderation(commands.Cog):
             await ctx.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 
-    @client.command(description='Remvoes role from a given user', usage='`/removerole <Mention User> <Role Name>`')
+    @client.command(description='Remvoes role from a given user', usage='/removerole <Mention User> <Role Name>')
     @commands.has_permissions(manage_roles=True)
     async def removerole(ctx, member : discord.Member, *, role):
         role = discord.utils.get(ctx.guild.roles, name=role)
@@ -229,7 +229,7 @@ class Moderation(commands.Cog):
             await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
 
-    @client.command(description='Setup Command for automatic role assignment', usage='`/autorole <Default Role Name> <Main Channel Name>`')
+    @client.command(description='Setup Command for automatic role assignment', usage='/autorole <Default Role Name> <Main Channel Name>')
     @commands.has_permissions(manage_roles=True)
     async def autorole(ctx, role, channel):
         drole = discord.utils.get(ctx.guild.roles, name=role)
@@ -250,7 +250,7 @@ class Moderation(commands.Cog):
                 await ctx.send(f'Neue Standardrolle ist {role}!')
 
 
-    @client.command(name='help', description='Lists all commands & their usages', usage='`/help`')
+    @client.command(name='help', description='Lists all commands & their usages', usage='/help')
     async def _help(ctx, commandarg=None):
         if commandarg == None:
             help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
@@ -291,7 +291,7 @@ class Moderation(commands.Cog):
         await ctx.send(embed=help_embed)
 
 
-    @client.command(description='Info on RoboterVogel', usage='`/info`')
+    @client.command(description='Info on RoboterVogel', usage='/info')
     async def info(ctx):
         info_embed = discord.Embed(name='Info', color=Color.dark_red())
         info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#1521 gemacht!', inline=True)
@@ -301,7 +301,7 @@ class Moderation(commands.Cog):
         await ctx.send('https://discord.gg/ngutyTFPuS')
 
 
-    @client.command(description='Gets guild stats such as number of users, etc.', usage='`/stats`')
+    @client.command(description='Gets guild stats such as number of users, etc.', usage='/stats')
     async def stats(ctx):
         stats_embed = discord.Embed(name='Guild Stats', color=Color.dark_red())
         members = ctx.guild.members
@@ -333,13 +333,13 @@ class Moderation(commands.Cog):
         await ctx.send(embed=stats_embed)
 
 
-    @client.command(aliases=['Nickname', 'Nick'], description="Changes a given user's nickname", usage='`/nickname <Mention Member> <Nickname>`')
+    @client.command(aliases=['Nickname', 'Nick'], description="Changes a given user's nickname", usage='/nickname <Mention Member> <Nickname>')
     @commands.has_permissions(manage_nicknames=True)
     async def nickname(ctx, member : discord.Member, *, nickname):
         await member.edit(nick=nickname)
 
 
-    @client.command(description='Transfers ownership of current guild (Note: In order for this command to work, you must first manually transfer ownership to the bot (which to my knowledge is not possible) so it is best to just manually transfer ownership.)', usage='`/transfer_ownership <Mention Member>`')
+    @client.command(description='Transfers ownership of current guild (Note: In order for this command to work, you must first manually transfer ownership to the bot (which to my knowledge is not possible) so it is best to just manually transfer ownership.)', usage='/transfer_ownership <Mention Member>')
     @commands.has_permissions(manage_guild=True)
     async def transfer_ownership(ctx, member : discord.Member):
         try:
@@ -354,7 +354,7 @@ class Chat(commands.Cog):
         self.client = client
 
 
-    @client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user', usage='`/greet < Mention User (optional)>`')
+    @client.command(aliases=['hello', 'hallo', 'begruessung', 'begrüßung', 'greeting', 'gruessen', 'grüßen'], description='Greets user, or sends gretting to a different user', usage='/greet < Mention User (optional)>')
     async def greet(ctx, member : discord.Member=None):
         tz_CDT = pytz.timezone('America/Chicago')
         now_CDT = datetime.now(tz_CDT)
@@ -385,7 +385,7 @@ class Chat(commands.Cog):
                 await ctx.send(f'Grüße von {ctx.message.author.mention}, {member.mention}!')
 
 
-    @client.command(aliases=['geburtstag'], description='Sends birthday message for a user', usage='`/birthday <Mention User>`')
+    @client.command(aliases=['geburtstag'], description='Sends birthday message for a user', usage='/birthday <Mention User>')
     async def birthday(ctx, member : discord.Member):
         bday_role = discord.utils.get(ctx.guild.roles, name='Geburtstagskind')
         if bday_role == None:
@@ -406,12 +406,12 @@ class Chat(commands.Cog):
         await member.remove_roles(bday_role)
 
 
-    @client.command(description='Pings bots latency', usage='`/ping`')
+    @client.command(description='Pings bots latency', usage='/ping')
     async def ping(ctx):
         await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
 
-    @client.command(aliases=['randpng', 'randimg', 'pic', 'image'], description='Generates a random image', usage='`/randomimage <Width (Optional)> <Height (Optional)>`')
+    @client.command(aliases=['randpng', 'randimg', 'pic', 'image'], description='Generates a random image', usage='/randomimage <Width (Optional)> <Height (Optional)>')
     async def randomimage(ctx, size_width=128, size_height=128):
         size = (size_width, size_height)           
         image = Image.new('RGB', size)
@@ -432,7 +432,7 @@ class Chat(commands.Cog):
             os.remove('image.png')
 
 
-    @client.command(aliases=['zeit', 'Time', 'Zeit'], description='Tells the time', usage='`/time`')
+    @client.command(aliases=['zeit', 'Time', 'Zeit'], description='Tells the time', usage='/time')
     async def time(ctx):
         time_embed = discord.Embed(name='time', color=Color.dark_red())
         date = dt.date.today()
@@ -452,7 +452,7 @@ class Chat(commands.Cog):
         await ctx.send(embed=time_embed)
 
 
-    @client.command(aliases=['Font','fraktur', 'Fraktur'], description='Converts a given text into the Fraktur Font.', usage='`/font <Message>`')
+    @client.command(aliases=['Font','fraktur', 'Fraktur'], description='Converts a given text into the Fraktur Font.', usage='/font <Message>')
     async def font(ctx, *, message):
         new_message = ''
         latin_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -478,14 +478,14 @@ class Conversion(commands.Cog):
         self.client = client
 
 
-    @client.command(name='translate', description='Translate text (currently only supports German)', usage='`/translate <Message>`')
+    @client.command(name='translate', description='Translate text (currently only supports German)', usage='/translate <Message>')
     async def _translate(ctx, *, message):
         translator = Translator(to_lang="German")
         translation = translator.translate(message)
         await ctx.send(translation)
 
 
-    @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)', usage='`/fcp <Amount of USD>`')
+    @client.command(aliases=['FCP'], description='Converts USD to FCP (Far Cry Primal)', usage='/fcp <Amount of USD>')
     async def fcp(ctx, *, amount):
         server = ['this server', 'This Server', 'server', 'Server']
         if amount in server:
@@ -498,7 +498,7 @@ class Conversion(commands.Cog):
             await ctx.send(f'`{amount} USD` ≈ `{FCP} FCP`')
 
 
-    @client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD', usage='`/usd <Amount of FCP>`')
+    @client.command(aliases=['USD'], description='Converts FCP (Far Cry Primal) to USD', usage='/usd <Amount of FCP>')
     async def usd(ctx, *, amount):
         amount = amount.replace('FCPfcp', '')
         fcptousd = 30
@@ -513,7 +513,7 @@ class Voice(commands.Cog):
         self.client = client
 
 
-    @client.command(description='Join Voice Channel', usage='`/join`')
+    @client.command(description='Join Voice Channel', usage='/join')
     async def join(ctx):
         member = ctx.message.author
         voice_channel = member.voice.channel
@@ -528,7 +528,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
-    @client.command(description='Leave Voice Channel', usage='`/leave`')
+    @client.command(description='Leave Voice Channel', usage='/leave')
     async def leave(ctx):
         member = ctx.message.author
         voice_channel = member.voice.channel
@@ -536,12 +536,12 @@ class Voice(commands.Cog):
         if voice_channel != None and vc != None:
             await vc.disconnect()
             await ctx.send(f'Auf Wiedersehen!')
-            db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
+            db.collection.delete({f"{ctx.guild.id}" : "entries"})
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
 
-    @client.command(aliases=['TTS', 'texttospeech'], description='Sends a Text-to-Speech message into current VC', usage='`/TTS <Message> <Language (Optional)>`')
+    @client.command(aliases=['TTS', 'texttospeech'], description='Sends a Text-to-Speech message into current VC', usage='/TTS <Message> <Language (Optional)>')
     async def tts(ctx, message, language='en'):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
@@ -565,7 +565,7 @@ class Voice(commands.Cog):
             current_VoiceClient.play(source=source, after=os.remove('message.mp3'))
 
 
-    @client.command(description='Resumes current song', usage='`/resume`')
+    @client.command(description='Resumes current song', usage='/resume')
     async def resume(ctx):
         member_vc = ctx.message.author.voice.channel
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
@@ -585,7 +585,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
-    @client.command(description='Pauses current song', usage='`/pause`')
+    @client.command(description='Pauses current song', usage='/pause')
     async def pause(ctx):
         member_vc = ctx.message.author.voice.channel
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
@@ -605,8 +605,8 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
-    @client.command(description='Stops current song', usage='`/stop`')
-    async def stop(ctx):
+    @client.command(aliases=['s', 'S', 'Skip'], description='Skips current song', usage='/skip')
+    async def skip(ctx):
         member_vc = ctx.message.author.voice.channel
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if member_vc != None:
@@ -614,8 +614,27 @@ class Voice(commands.Cog):
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
                         client_vc.stop()
-                        db.collection.delete_one({f"{ctx.guild.id}" : "entries"})
-                        await ctx.send(f'Medien stehen an')
+                        await ctx.send(f'Übersprungene Medien')
+                    else:
+                        await ctx.send(f'Keine Medienspiele')
+                else:
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+            else:
+                await ctx.send(f'Derzeit nicht in Sprachkanal!')
+        else:
+            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+
+
+    @client.command(aliases=['clearqueue', 'cq', 'CQ'], description='Clears all entries in queue', usage='/clear_queue')
+    async def clear_queue(ctx):
+        member_vc = ctx.message.author.voice.channel
+        client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if member_vc != None:
+            if client_vc != None:
+                if client_vc.channel == member_vc:
+                    if client_vc.is_playing() or client_vc.is_paused():
+                        db.collection.delete_many({f"{ctx.guild.id}" : "entries"})
+                        await ctx.send(f'Warteschlange gelöscht')
                     else:
                         await ctx.send(f'Keine Medienspiele')
                 else:
@@ -643,7 +662,7 @@ class Music(commands.Cog):
             asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
 
-    @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='`/music <video/title to search for>`')
+    @client.command(aliases=['Music', 'musik', 'Musik', 'p', 'P'], description='Plays Music from youtube', usage='/music <video/title to search for>')
     async def music(ctx, *, song):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
