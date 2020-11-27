@@ -633,9 +633,10 @@ class Music(commands.Cog):
     def _handle_queue(self, error=None):
         print('_handle_queue began')
         ctx = Music.context
-        ctx.send('Successfully got Context.')
+        print('Successfully got Context.')
         loop = client.loop
         guild_id = ctx.guild.id
+        print('guild_id: ' + str(guild_id))
         voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
         entry = next_in_queue(guild_id)
         print(f'Got entry:\n{entry}')
