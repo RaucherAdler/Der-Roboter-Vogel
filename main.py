@@ -172,7 +172,7 @@ class Moderation(commands.Cog):
 
     @client.command(description='Bans a given user', usage='/ban <Mention User> <Delete Messages from given number of Days tops 7 (Optional)>')
     @commands.has_permissions(ban_members=True)
-    async def ban(ctx, user: discord.Member, *, reason=None, delete_message_days=0):
+    async def ban(ctx, user: discord.Member, reason=None, delete_message_days=0):
         await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
         await ctx.send(f"{user} wurde verboten!")
         if user.bot != True:
