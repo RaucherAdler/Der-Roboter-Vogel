@@ -30,7 +30,7 @@ collection = db["queues"]
 def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"]
-    position = collection.count_documents({f"{guild_id}" : "entries"})
+    position = collection.aggregate({f"{guild_id}" : {"$size" : "entries"}})
     attributes["_id"] = position
     entries.insert_one(attributes)
     return (position + 1)
@@ -170,7 +170,7 @@ class Moderation(commands.Cog):
         await user.kick(reason=reason)
 
 
-    @client.command(description='Bans a given user', usage='/ban <Mention User> <Delete Messages from given number of Days tops 7 (Optional)>')
+    @client.command(description='Bans a given user', usage='/ban <Mention User>')
     @commands.has_permissions(ban_members=True)
     async def ban(ctx, user: discord.Member, *, reason=None):
         await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
@@ -182,7 +182,7 @@ class Moderation(commands.Cog):
         await user.ban(reason=reason, delete_message_days=0)
 
 
-    @client.command(description='Unbans a given user', usage='/unban <User Name (i.e. Raucher Adler#1220)>')
+    @client.command(description='Unbans a given user', usage='/unban <Username (i.e. Raucher Adler#1220)>')
     @commands.has_permissions(ban_members=True)
     async def unban(ctx, *, member):
         banned_users = await ctx.guild.bans()
