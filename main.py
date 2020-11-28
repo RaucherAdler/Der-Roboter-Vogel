@@ -29,10 +29,11 @@ collection = db["queues"]
 
 def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
-    entries = g_coll["entries"]
-    position = collection.aggregate({f"{guild_id}" : {"$size" : "entries"}})
+    entries = g_coll.find()
+    entries_doc = g_coll["entries"]
+    position = len(entries[0]["entries"])
     attributes["_id"] = position
-    entries.insert_one(attributes)
+    entries_doc.insert_one(attributes)
     return (position + 1)
 
 
