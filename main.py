@@ -676,6 +676,7 @@ class Voice(commands.Cog):
                 song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
                 song_embed.add_field(name='Title:', value=f'[{np_title}]({np_link})', inline=True)
                 song_embed.add_field(name='Duration:', value=f'{video_duration}')
+                await ctx.send(embed=song_embed)
             else:
                 await ctx.send(f'Keine Medienspiele')
         else:
