@@ -40,6 +40,9 @@ def next_in_queue(guild_id):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"]
     entry = entries.find_one_and_delete({"_id" : 0})
+    np_doc = g_coll["now_playing"]
+    np_doc.delete_many({})
+    np_doc.insert_one(entry)
     for entry in entries.find({}):
         _id = entry["_id"]
         if _id != 0:
@@ -541,7 +544,7 @@ class Voice(commands.Cog):
         if voice_channel != None and vc != None:
             await vc.disconnect()
             await ctx.send(f'Auf Wiedersehen!')
-            db.collection.delete({f"{ctx.guild.id}" : "entries"})
+            db.collection.delete_many({f"{ctx.guild.id}" : "entries"})
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
@@ -648,6 +651,35 @@ class Voice(commands.Cog):
                 await ctx.send(f'Derzeit nicht in Sprachkanal!')
         else:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+
+
+    client.command()
+    async def now_playing(ctx):
+        member_vc = ctx.message.author.voice.channel
+        client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if client_vc != None:
+            if client_vc.is_playing() or client_vc.is_paused():
+                g_coll = collection[f"{ctx.guild.id}"]
+                np_coll = g_coll["now_playing"]
+                np = np_coll.find_one({})
+                np_title = np["name"]
+                np_link = np["url"]
+                np_thumbnail = np["thumbnail"]
+                np_reqbyid = np["requested_by_id"]
+                np_duration = np["duration"]
+                song_embed = discord.Embed(name='Song', color=Color.dark_red())
+                author = client.get_member(np_reqbyid)
+                ty_res = time.gmtime(np_duration)
+                video_duration = time.strftime("%H:%M:%S", ty_res)
+                song_embed.set_author(name='Jetzt Spielen:', icon_url=author.avatar_url)
+                song_embed.set_thumbnail(url=np_thumbnail)
+                song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+                song_embed.add_field(name='Title:', value=f'[{np_title}]({np_link})', inline=True)
+                song_embed.add_field(name='Duration:', value=f'{video_duration}')
+            else:
+                await ctx.send(f'Keine Medienspiele')
+        else:
+            await ctx.send(f'Derzeit nicht in Sprachkanal!')    
 
 
 class Music(commands.Cog):
