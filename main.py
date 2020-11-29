@@ -653,7 +653,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
-    client.command()
+    client.command(aliases=['nowplaying', 'np', 'NP', 'Nowplaying'], description='Shows currently playing media', usage='/nowplaying')
     async def now_playing(ctx):
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if client_vc != None:
