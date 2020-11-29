@@ -754,6 +754,9 @@ class Music(commands.Cog):
             song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
             await ctx.send(embed=song_embed)
             Music.context = ctx
+            g_coll = collection[f"{ctx.guild.id}"]
+            np_coll = g_coll["now_playing"]
+            np_coll.insert_one(attributes)
             current_voice_client.play(source, after=Music._handle_queue)
 
 
