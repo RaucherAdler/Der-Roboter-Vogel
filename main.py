@@ -668,7 +668,7 @@ class Voice(commands.Cog):
                 np_reqbyid = np["requested_by_id"]
                 np_duration = np["duration"]
                 song_embed = discord.Embed(name='Song', color=Color.dark_red())
-                author = client.get_member(np_reqbyid)
+                author = ctx.guild.get_member(np_reqbyid)
                 ty_res = time.gmtime(np_duration)
                 video_duration = time.strftime("%H:%M:%S", ty_res)
                 song_embed.set_author(name='Jetzt Spielen:', icon_url=author.avatar_url)
