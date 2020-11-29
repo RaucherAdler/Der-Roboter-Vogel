@@ -40,7 +40,12 @@ def next_in_queue(guild_id):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"]
     entry = entries.find_one_and_delete({"_id" : 0})
-    return entry #issue seems to be here, returns None when it should return the entry, or at least that's how it seems
+    for entry in entries.find({}):
+        _id = entry["_id"]
+        if _id != 0:
+            new_id = _id - 1
+            entry["_id"] = new_id
+    return entry
 
 
 intents = discord.Intents.default()
