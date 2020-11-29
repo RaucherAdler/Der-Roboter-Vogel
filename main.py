@@ -42,7 +42,8 @@ def next_in_queue(guild_id):
     entry = entries.find_one_and_delete({"_id" : 0})
     np_doc = g_coll["now_playing"]
     np_doc.delete_many({})
-    np_doc.insert_one(dict(entry))
+    if entry != None:
+        np_doc.insert_one(dict(entry))
     for entry in entries.find({}):
         _id = entry["_id"]
         if _id != 0:
@@ -653,7 +654,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
-    client.command(aliases=['nowplaying', 'np', 'NP', 'Nowplaying'], description='Shows currently playing media', usage='/nowplaying')
+    @client.command(aliases=['nowplaying', 'np', 'NP', 'Nowplaying'], description='Shows currently playing media', usage='/nowplaying')
     async def now_playing(ctx):
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if client_vc != None:
