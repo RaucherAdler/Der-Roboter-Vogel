@@ -40,8 +40,6 @@ def next_in_queue(guild_id):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"]
     entry = entries.find_one_and_delete({"_id" : 0})
-    np_doc = g_coll["now_playing"]
-    np_doc.delete_many({})
     if entry != None:
         np_doc.insert_one(dict(entry))
     for entry in entries.find({}):
@@ -694,6 +692,9 @@ class Music(commands.Cog):
         ctx = Music.context
         loop = client.loop
         guild_id = ctx.guild.id
+        g_coll = collection[f"{guild_id}"]
+        np_coll = g_coll["now_playing"]
+        np_coll.delete_one({})
         voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
         entry = next_in_queue(guild_id)
         if entry != None:
