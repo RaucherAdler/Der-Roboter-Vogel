@@ -42,7 +42,7 @@ def next_in_queue(guild_id):
     entry = entries.find_one_and_delete({"_id" : 0})
     np_doc = g_coll["now_playing"]
     np_doc.delete_many({})
-    np_doc.insert_one(entry)
+    np_doc.insert_one(dict(entry))
     for entry in entries.find({}):
         _id = entry["_id"]
         if _id != 0:
