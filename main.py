@@ -655,7 +655,6 @@ class Voice(commands.Cog):
 
     client.command()
     async def now_playing(ctx):
-        member_vc = ctx.message.author.voice.channel
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if client_vc != None:
             if client_vc.is_playing() or client_vc.is_paused():
