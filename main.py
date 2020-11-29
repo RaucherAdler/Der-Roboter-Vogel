@@ -30,8 +30,7 @@ collection = db["queues"]
 def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries_doc = g_coll["entries"]
-    entries = g_coll.find()
-    position = len(entries[0]["entries"])
+    position = entries_doc.count_documents({})
     attributes["_id"] = position
     entries_doc.insert_one(attributes)
     return (position + 1)
