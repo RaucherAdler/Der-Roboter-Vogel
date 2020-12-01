@@ -702,7 +702,7 @@ class Music(commands.Cog):
             asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
 
-    @client.command(aliases=['Play', 'p', 'P'], description='Plays Music from youtube', usage='/music <video/title to search for>')
+    @client.command(aliases=['play', 'Play', 'p', 'P'], description='Plays Music from youtube', usage='/music <video/title to search for>')
     async def _play(ctx, *, song):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
