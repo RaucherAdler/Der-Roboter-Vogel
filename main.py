@@ -692,7 +692,8 @@ class Music(commands.Cog):
     def _handle_queue(self, error=None):
         ctx = Music.context
         loop = client.loop
-        asyncio.run_coroutine_threadsafe(ctx.send('Es ist ein Fehler aufgetreten!'), loop)
+        if error != None:
+            asyncio.run_coroutine_threadsafe(ctx.send('Es ist ein Fehler aufgetreten!'), loop)
         guild_id = ctx.guild.id
         g_coll = collection[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
