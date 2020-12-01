@@ -43,11 +43,11 @@ def next_in_queue(guild_id):
     np_coll = g_coll["now_playing"]
     if entry != None:
         np_coll.insert_one(dict(entry))
-    for entry in entries.find({}):
-        _id = entry["_id"]
+    for entryf in entries.find({}):
+        _id = entryf["_id"]
         if _id != 0:
             new_id = _id - 1
-            entry["_id"] = new_id
+            entryf["_id"] = new_id
     return entry
 
 
