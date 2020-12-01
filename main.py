@@ -703,7 +703,7 @@ class Music(commands.Cog):
 
 
     @client.command(aliases=['Play', 'p', 'P'], description='Plays Music from youtube', usage='/music <video/title to search for>')
-    async def play(ctx, *, song):
+    async def _play(ctx, *, song):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
