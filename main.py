@@ -781,11 +781,11 @@ class Music(commands.Cog):
                 np_rb = ctx.guild.get_member(np_rq_id)
                 queue_embed.add_field(name=f'Jetzt Spielen:\n', value=f'[{np["name"]}]({np["url"]})\n`von: {np_rb}`')
                 if entries.find_one({}) != None:
-                    queue_embed.add_field(name='Warteschlange:\n')
+                    queue_embed.add_field(name='Warteschlange:\n', value=u'\u200b')
                 for entriesf in entries.find({}):
                     np_rb = entriesf["requested_by_id"]
                     np_rb_mem = ctx.guild.get_member(np_rb)
-                    queue_embed.add_field(name=f'\n', value=f'{entriesf["id"] + 1}). [{entriesf["name"]}]({entriesf["url"]})\n`von: {np_rb_mem}`')
+                    queue_embed.add_field(name=u'\u200b\n', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]})\n`von: {np_rb_mem}`')
                 await ctx.send(embed=queue_embed)
             else:
                 await ctx.send(f'Keine Medienspiele')
