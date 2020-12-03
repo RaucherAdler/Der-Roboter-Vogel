@@ -43,6 +43,9 @@ def next_in_queue(guild_id):
     np_coll = g_coll["now_playing"]
     if entry != None:
         np_coll.insert_one(dict(entry))
+    else:
+        entry = entries.find_one_and_delete({})
+        np_coll.insert_one(dict(entry))
     for entryf in entries.find({}):
         _id = entryf["_id"]
         if _id != 0:
@@ -702,7 +705,7 @@ class Music(commands.Cog):
             asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
 
-    @client.command(aliases=['play', 'Play', 'p', 'P'], description='Plays Music from youtube', usage='/music <video/title to search for>')
+    @client.command(aliases=['play', 'Play', 'p', 'P'], description='Plays Music from youtube', usage='/music <video link/title to search for>')
     async def _play(ctx, *, song):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
