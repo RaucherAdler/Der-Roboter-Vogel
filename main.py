@@ -695,6 +695,8 @@ class Music(commands.Cog):
     def _handle_queue(self, error=None):
         ctx = Music.context
         loop = client.loop
+        if isinstance(error, TypeError):
+            asyncio.run_coroutine_threadsafe(ctx.send('Error!'), loop)
         guild_id = ctx.guild.id
         g_coll = collection[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
