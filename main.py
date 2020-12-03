@@ -777,7 +777,8 @@ class Music(commands.Cog):
                 queue_embed = discord.Embed(name='queue', color=Color.dark_red())
                 queue_embed.set_author(name='Warteschlange', icon_url=ctx.message.author.avatar_url)
                 queue_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-                np_rb = ctx.guild.get_member(np["requested_by_id"])
+                np_rq_id = np["requested_by_id"]
+                np_rb = ctx.guild.get_member(np_rq_id)
                 queue_embed.add_field(name='Jetzt Spielen:', value='\n', inline=True)
                 queue_embed.add_field(name=f'[{np["name"]}]({np["url"]})\n', value=f'`von: {np_rb}`', inline=True)
                 if entries.find_one({}) != None:
