@@ -779,13 +779,13 @@ class Music(commands.Cog):
                 queue_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
                 np_rq_id = np["requested_by_id"]
                 np_rb = ctx.guild.get_member(np_rq_id)
-                queue_embed.add_field(name=f'Jetzt Spielen:\n', value=f'[{np["name"]}]({np["url"]})\n`von: {np_rb}`', inline=True)
+                queue_embed.add_field(name=f'Jetzt Spielen:\n', value=f'[{np["name"]}]({np["url"]})\n`von: {np_rb}`')
                 if entries.find_one({}) != None:
-                    queue_embed.add_field(name='Warteschlange:\n', value='___', inline=True)
+                    queue_embed.add_field(name='Warteschlange:\n')
                 for entriesf in entries.find({}):
                     np_rb = entriesf["requested_by_id"]
-                    ctx.guild.get_member(np_rb)
-                    queue_embed.add_field(name=f'\n___', value=f'{entriesf["id"] + 1}). [{entriesf["name"]}]({entriesf["url"]})\n`von: {np_rb}`', inline=True)
+                    np_rb_mem = ctx.guild.get_member(np_rb)
+                    queue_embed.add_field(name=f'\n', value=f'{entriesf["id"] + 1}). [{entriesf["name"]}]({entriesf["url"]})\n`von: {np_rb_mem}`')
                 await ctx.send(embed=queue_embed)
             else:
                 await ctx.send(f'Keine Medienspiele')
