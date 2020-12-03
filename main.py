@@ -428,12 +428,13 @@ class Chat(commands.Cog):
             image = Image.new('RGB', size)
             np_image = np.array(image)
             x, y = (np_image > 2000).nonzero()
-            rvalue = str(randint(0, 255))
-            gvalue = str(randint(0, 255))
-            bvalue = str(randint(0, 255))
-            rgb = rvalue + gvalue + bvalue
-            rgb = int(rgb)
-            pil_array[x, y] = rgb
+            for X, Y as np.nditer([x,y])
+                rvalue = str(randint(0, 255))
+                gvalue = str(randint(0, 255))
+                bvalue = str(randint(0, 255))
+                rgb = rvalue + gvalue + bvalue
+                rgb = int(rgb)
+                pil_array[X, Y] = rgb
             pil_array = Image.fromarray(np_image)
             image = pil_array
             image.save('image.png')
