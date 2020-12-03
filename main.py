@@ -421,22 +421,25 @@ class Chat(commands.Cog):
     @client.command(aliases=['randpng', 'randimg', 'pic', 'image'], description='Generates a random image', usage='/randomimage <Width (Optional)> <Height (Optional)>')
     async def randomimage(ctx, size_width=128, size_height=128):
         size = (size_width, size_height)           
-        image = Image.new('RGB', size)
-        for x in range(0, size[0]-1):
-            for y in range(0, size[1]-1):
-                coordinate = (x, y)
-                rvalue = str(randint(0, 255))
-                gvalue = str(randint(0, 255))
-                bvalue = str(randint(0, 255))
-                rgb = rvalue + gvalue + bvalue
-                rgb = int(rgb)
-                image.putpixel(coordinate, rgb)
-        image.save('image.png')
-        if os.stat('image.png').st_size >= 8388119:
-            await ctx.send(f'Zu groß!')
-        elif os.stat('image.png').st_size < 8388119:
-            await ctx.send(file=discord.File('image.png'))
-            os.remove('image.png')
+        if size_width > 2000 and size_height > 2000:
+            await ctx.send('Zu groß!')
+        else:
+            image = Image.new('RGB', size)
+            async for x in range(0, size[0]-1):
+                async for y in range(0, size[1]-1):
+                    coordinate = (x, y)
+                    rvalue = str(randint(0, 255))
+                    gvalue = str(randint(0, 255))
+                    bvalue = str(randint(0, 255))
+                    rgb = rvalue + gvalue + bvalue
+                    rgb = int(rgb)
+                    image.putpixel(coordinate, rgb)
+            image.save('image.png')
+            if os.stat('image.png').st_size >= ctx.guild.filesize_limit:
+                await ctx.send(f'Zu groß!')
+            elif os.stat('image.png').st_size < ctx.guild.filesize_limit:
+                await ctx.send(file=discord.File('image.png'))
+                os.remove('image.png')
 
 
     @client.command(aliases=['zeit', 'Time', 'Zeit'], description='Tells the time', usage='/time')
