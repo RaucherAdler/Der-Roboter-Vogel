@@ -541,9 +541,25 @@ class Voice(commands.Cog):
         voice_channel = member.voice.channel
         vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if voice_channel != None and vc != None:
+            g_coll = collection[f"{ctx.guild.id}"]
+            entries = g_coll ["entries"]
+            entries.delete_many({})
             await vc.disconnect()
             await ctx.send(f'Auf Wiedersehen!')
-            db.collection.delete_many({f"{ctx.guild.id}" : "entries"})
+        else:
+            await ctx.send(f'Derzeit nicht in Sprachkanal!')
+
+
+    @client.command(description='Ends current audio, stops queue', usage='/stop')
+    async def stop(ctx):
+        member = ctx.message.author
+        voice_channel = member.voice.channel
+        vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if voice_channel != None and vc != None:
+            g_coll = collection[f"{ctx.guild.id}"]
+            entries = g_coll ["entries"]
+            entries.delete_many({})
+            await ctx.send(f'Auf Wiedersehen!')
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
@@ -640,7 +656,9 @@ class Voice(commands.Cog):
             if client_vc != None:
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
-                        db.collection.delete_many({f"{ctx.guild.id}" : "entries"})
+                        g_coll = collection[f"{ctx.guild.id}"]
+                        entries = g_coll["entries"]
+                        entries.delete_many({})
                         await ctx.send(f'Warteschlange gelöscht')
                     else:
                         await ctx.send(f'Keine Medienspiele')
