@@ -786,6 +786,7 @@ class Music(commands.Cog):
                 for entriesf in entries.find({}):
                     np_rb = entriesf["requested_by_url"]
                     queue_embed.add_field(name=f'[{entriesf["name"]}]({entriesf["url"]})\n', values=f'`von: {np_rb}`', inline=True)
+                await ctx.send(embed=queue_embed)
             else:
                 await ctx.send(f'Keine Medienspiele')
         else:
