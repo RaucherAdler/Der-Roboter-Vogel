@@ -765,7 +765,7 @@ class Music(commands.Cog):
             current_voice_client.play(source, after=Music._handle_queue)
 
 
-    @client.command()
+    @client.command(aliases=['Queue', 'q', 'Q'], description='Shows current queue', usage='/queue')
     async def queue(ctx):
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if client_vc != None:
