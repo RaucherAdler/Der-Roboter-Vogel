@@ -81,7 +81,7 @@ async def play_next(entry, vc):
     guild = client.get_guild(guild_id)
     requested_by = guild.get_member(requested_by_id)
     channel = guild.get_channel(channel_id)
-    ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True'}
+    ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True'}
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         attr_dict = ydl.extract_info(link, download=False)
     source = attr_dict["formats"][0]["url"]
@@ -735,7 +735,7 @@ class Music(commands.Cog):
                 link = 'https://www.youtube.com' + url_suffix
         before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         opts = '-vn'
-        ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True'}
+        ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True'}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             attr_dict = ydl.extract_info(link, download=False)
         video_title = attr_dict['title']
