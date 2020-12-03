@@ -19,6 +19,7 @@ import json
 import validators
 from urllib.parse import urlparse
 from functools import partial
+import numpy as np
 
 
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
@@ -425,15 +426,16 @@ class Chat(commands.Cog):
             await ctx.send('Zu groß!')
         else:
             image = Image.new('RGB', size)
-            for x in range(0, size[0]-1):
-                for y in range(0, size[1]-1):
-                    coordinate = (x, y)
-                    rvalue = str(randint(0, 255))
-                    gvalue = str(randint(0, 255))
-                    bvalue = str(randint(0, 255))
-                    rgb = rvalue + gvalue + bvalue
-                    rgb = int(rgb)
-                    image.putpixel(coordinate, rgb)
+            np_image = np.array(image)
+            x, y = (np_image > 2000).nonzero()
+            rvalue = str(randint(0, 255))
+            gvalue = str(randint(0, 255))
+            bvalue = str(randint(0, 255))
+            rgb = rvalue + gvalue + bvalue
+            rgb = int(rgb)
+            pil_array[x, y] = rgb
+            pil_array = Image.fromarray(np_image)
+            image = pil_array
             image.save('image.png')
             if os.stat('image.png').st_size >= ctx.guild.filesize_limit:
                 await ctx.send(f'Zu groß!')
