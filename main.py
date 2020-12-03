@@ -678,7 +678,7 @@ class Voice(commands.Cog):
             else:
                 await ctx.send(f'Keine Medienspiele')
         else:
-            await ctx.send(f'Derzeit nicht in Sprachkanal!')    
+            await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
 
 class Music(commands.Cog):
@@ -763,6 +763,32 @@ class Music(commands.Cog):
             np_coll = g_coll["now_playing"]
             np_coll.insert_one(attributes)
             current_voice_client.play(source, after=Music._handle_queue)
+
+
+    @client.command()
+    async def queue(ctx):
+        client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if client_vc != None:
+            if client_vc.is_playing() or client_vc.is_paused():
+                g_coll = collection[f"{ctx.guild.id}"]
+                entries = g_coll["entries"]
+                np_coll = g_coll["now_playing"]
+                np = np_coll.find_one({})
+                queue_embed = discord.Embed(name='queue', color=Color.dark_red())
+                queue_embed.author(name='Warteschlange', icon_url=ctx.message.author.avatar_url)
+                queue_embed.set_footer(name=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+                np_rb = ctx.guild.get_member(np["requested_by_id"])
+                queue_embed.add_field(name='Jetzt Spielen:', value='\n', inline=True)
+                queue_embed.add_field(name=f'[{np["name"]}]({np["url"]})\n', value=f'`von: {np_rb}`', inline=True)
+                if entries.find_one({}) != None:
+                    queue_embed.add_field(name='Warteschlange:', value='\n', inline=True)
+                for entriesf in entries.find({}):
+                    np_rb = entriesf["requested_by_url"]
+                    queue_embed.add_field(name=f'[{entriesf["name"]}]({entriesf["url"]})\n', values=f'`von: {np_rb}`', inline=True)
+            else:
+                await ctx.send(f'Keine Medienspiele')
+        else:
+            await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
 
 def setup(client):
