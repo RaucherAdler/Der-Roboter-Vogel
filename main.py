@@ -46,11 +46,7 @@ def next_in_queue(guild_id):
     else:
         entry = entries.find_one_and_delete({})
         np_coll.insert_one(dict(entry))
-    for entryf in entries.find({}):
-        _id = entryf["_id"]
-        if _id != 0:
-            new_id = _id - 1
-            entryf["_id"] = new_id
+    entries.update_many({}, {"$inc" : {"_id" : -1}})
     return entry
 
 
