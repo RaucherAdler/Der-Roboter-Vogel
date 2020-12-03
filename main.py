@@ -428,7 +428,7 @@ class Chat(commands.Cog):
             image = Image.new('RGB', size)
             np_image = np.array(image)
             x, y = (np_image > 2000).nonzero()
-            for X, Y as np.nditer([x,y])
+            for X, Y in np.nditer([x,y]):
                 rvalue = str(randint(0, 255))
                 gvalue = str(randint(0, 255))
                 bvalue = str(randint(0, 255))
