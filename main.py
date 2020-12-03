@@ -783,7 +783,8 @@ class Music(commands.Cog):
                 if entries.find_one({}) != None:
                     queue_embed.add_field(name='Warteschlange:\n', value='___', inline=True)
                 for entriesf in entries.find({}):
-                    np_rb = entriesf["requested_by_url"]
+                    np_rb = entriesf["requested_by_id"]
+                    ctx.guild.get_member(np_rb)
                     queue_embed.add_field(name=f'\n---', values=f'{entriesf["id"] + 1}). [{entriesf["name"]}]({entriesf["url"]})\n`von: {np_rb}`', inline=True)
                 await ctx.send(embed=queue_embed)
             else:
