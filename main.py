@@ -31,7 +31,7 @@ def add_to_queue(guild_id, attributes):
     g_coll = collection[f"{guild_id}"]
     entries_doc = g_coll["entries"]
     position = entries_doc.count_documents({})
-    attributes["_id"] = position
+    attributes["id"] = position
     entries_doc.insert_one(attributes)
     return (position + 1)
 
@@ -39,14 +39,14 @@ def add_to_queue(guild_id, attributes):
 def next_in_queue(guild_id):
     g_coll = collection[f"{guild_id}"]
     entries = g_coll["entries"]
-    entry = entries.find_one_and_delete({"_id" : 0})
+    entry = entries.find_one_and_delete({"id" : 0})
     np_coll = g_coll["now_playing"]
     if entry != None:
         np_coll.insert_one(dict(entry))
     else:
         entry = entries.find_one_and_delete({})
         np_coll.insert_one(dict(entry))
-    entries.update_many({}, {"$inc" : {"_id" : -1}})
+    entries.update_many({}, {"$inc" : {"id" : -1}})
     return entry
 
 
