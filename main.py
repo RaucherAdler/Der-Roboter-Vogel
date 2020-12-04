@@ -19,7 +19,6 @@ import json
 import validators
 from urllib.parse import urlparse
 from functools import partial
-import numpy as np
 
 
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
@@ -96,7 +95,7 @@ async def play_next(entry, vc):
     opts = '-vn'
     source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
     await channel.send(embed=song_embed)
-    vc.play(source=source, after=Music._handle_queue)
+    vc.play(source=source, after=Voice._handle_queue)
 
 
 @client.event
