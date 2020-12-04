@@ -610,17 +610,21 @@ class Voice(commands.Cog):
                 np = np_coll.find_one({})
                 queue_embed = discord.Embed(name='queue', color=Color.dark_red())
                 queue_embed.set_author(name='Warteschlange', icon_url=ctx.message.author.avatar_url)
-                queue_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
                 np_rq_id = np["requested_by_id"]
                 np_rb = ctx.guild.get_member(np_rq_id)
                 queue_embed.add_field(name=f'Jetzt Spielen:\n', value=f'[{np["name"]}]({np["url"]}) | `von: {np_rb}`\n', inline=False)
+                queue_length = 0
                 for entriesf in entries.find({}):
                     np_rb = entriesf["requested_by_id"]
                     np_rb_mem = ctx.guild.get_member(np_rb)
+                    queue_length += entriesf["duration"]
                     if entriesf["id"] == 0:
                         queue_embed.add_field(name=u'Warteschlange:\n', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]}) | `von: {np_rb_mem}`', inline=False)
                     else:
                         queue_embed.add_field(name=u'\u200b', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]}) | `von: {np_rb_mem}`', inline=False)
+                ty_res = time.gmtime(queue_length)
+                queue_duration = time.strftime("%H:%M:%S", ty_res)
+                queue_embed.set_footer(text=f'{ctx.message.author} | Duration: {queue_duration}', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=queue_embed)
             else:
                 await ctx.send(f'Keine Medienspiele')
