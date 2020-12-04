@@ -538,7 +538,7 @@ class Voice(commands.Cog):
             asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
 
-    @client.command(aliases=['play', 'Play', 'p', 'P'], description='Plays Music from youtube', usage='/music <video link/title to search for>')
+    @client.command(aliases=['play', 'Play', 'p', 'P'], description='Plays Music from youtube', usage='/play <video link/title to search for>')
     async def _play(ctx, *, song):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
@@ -593,7 +593,7 @@ class Voice(commands.Cog):
             source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
             song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
             await ctx.send(embed=song_embed)
-            Music.context = ctx
+            Voice.context = ctx
             g_coll = collection[f"{ctx.guild.id}"]
             np_coll = g_coll["now_playing"]
             np_coll.insert_one(attributes)
