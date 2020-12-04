@@ -426,17 +426,15 @@ class Chat(commands.Cog):
             await ctx.send('Zu groß!')
         else:
             image = Image.new('RGB', size)
-            np_image = np.array(image)
-            x, y = (np_image > 2000).nonzero()
-            for X, Y in np.nditer([x,y]):
-                rvalue = str(randint(0, 255))
-                gvalue = str(randint(0, 255))
-                bvalue = str(randint(0, 255))
-                rgb = rvalue + gvalue + bvalue
-                rgb = int(rgb)
-                pil_array[X, Y] = rgb
-            pil_array = Image.fromarray(np_image)
-            image = pil_array
+            for X in range(0, size_width+1):
+                for Y in range(0, size_width+1):
+                    rvalue = str(randint(0, 255))
+                    gvalue = str(randint(0, 255))
+                    bvalue = str(randint(0, 255))
+                    rgb = rvalue + gvalue + bvalue
+                    rgb = int(rgb)
+                    coord = (X,Y)
+                    image.putpixel(coord, rgb)
             image.save('image.png')
             if os.stat('image.png').st_size >= ctx.guild.filesize_limit:
                 await ctx.send(f'Zu groß!')
