@@ -15,7 +15,6 @@ from gtts import gTTS
 import youtube_dl
 from youtube_search import YoutubeSearch
 import pymongo
-import json
 import validators
 from urllib.parse import urlparse
 from functools import partial
