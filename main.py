@@ -424,8 +424,8 @@ class Chat(commands.Cog):
             await ctx.send('Zu groß!')
         else:
             image = Image.new('RGB', size)
-            for X in range(0, size_width+1):
-                for Y in range(0, size_width+1):
+            for X in range(0, size_width):
+                for Y in range(0, size_width):
                     rvalue = str(randint(0, 255))
                     gvalue = str(randint(0, 255))
                     bvalue = str(randint(0, 255))
