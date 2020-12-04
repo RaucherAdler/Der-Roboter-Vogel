@@ -40,11 +40,12 @@ def next_in_queue(guild_id):
     entries = g_coll["entries"]
     entry = entries.find_one_and_delete({"id" : 0})
     np_coll = g_coll["now_playing"]
+    np_coll.delete_one({})
     if entry != None:
-        np_coll.insert_one(dict(entry))
+        np_coll.insert_one(entry)
     else:
         entry = entries.find_one_and_delete({})
-        np_coll.insert_one(dict(entry))
+        np_coll.insert_one(entry)
     entries.update_many({}, {"$inc" : {"id" : -1}})
     return entry
 
@@ -530,8 +531,6 @@ class Voice(commands.Cog):
             asyncio.run_coroutine_threadsafe(ctx.send('Error!'), loop)
         guild_id = ctx.guild.id
         g_coll = collection[f"{guild_id}"]
-        np_coll = g_coll["now_playing"]
-        np_coll.delete_one({})
         voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
         entry = next_in_queue(guild_id)
         if entry != None:
