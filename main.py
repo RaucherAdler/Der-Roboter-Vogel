@@ -671,7 +671,8 @@ class Voice(commands.Cog):
             g_coll = collection[f"{ctx.guild.id}"]
             entries = g_coll ["entries"]
             entries.delete_many({})
-            await ctx.send(f'Auf Wiedersehen!')
+            vc.stop()
+            await ctx.send('Medien gestoppt!')
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
@@ -686,7 +687,7 @@ class Voice(commands.Cog):
             if client_voice_channels != None:
                 client_voice_channel = client_voice_channels.channel
                 if member_voice_channel != client_voice_channel:
-                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal!')
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
@@ -709,11 +710,11 @@ class Voice(commands.Cog):
                 if client_vc.channel == member_vc:
                     if client_vc.is_paused():
                         client_vc.resume()
-                        await ctx.send(f'Medien nicht angehalten')
+                        await ctx.send(f'Medien nicht angehalten!')
                     else:
-                        await ctx.send(f'Keine Medienspiele')
+                        await ctx.send(f'Keine Medienspiele!')
                 else:
-                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal!')
             else:
                 await ctx.send(f'Derzeit nicht in Sprachkanal!')
         else:
@@ -729,11 +730,11 @@ class Voice(commands.Cog):
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing():
                         client_vc.pause()
-                        await ctx.send(f'Medien in Pause')
+                        await ctx.send(f'Medien in Pause!')
                     else:
-                        await ctx.send(f'Keine Medienspiele')
+                        await ctx.send(f'Keine Medienspiele!')
                 else:
-                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal!')
             else:
                 await ctx.send(f'Derzeit nicht in Sprachkanal!')
         else:
@@ -749,11 +750,11 @@ class Voice(commands.Cog):
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
                         client_vc.stop()
-                        await ctx.send(f'Übersprungene Medien')
+                        await ctx.send(f'Übersprungene Medien!')
                     else:
-                        await ctx.send(f'Keine Medienspiele')
+                        await ctx.send(f'Keine Medienspiele!')
                 else:
-                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal!')
             else:
                 await ctx.send(f'Derzeit nicht in Sprachkanal!')
         else:
@@ -771,11 +772,11 @@ class Voice(commands.Cog):
                         g_coll = collection[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
                         entries.delete_many({})
-                        await ctx.send(f'Warteschlange gelöscht')
+                        await ctx.send(f'Warteschlange gelöscht!')
                     else:
-                        await ctx.send(f'Keine Medienspiele')
+                        await ctx.send(f'Keine Medienspiele!')
                 else:
-                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal!')
             else:
                 await ctx.send(f'Derzeit nicht in Sprachkanal!')
         else:
@@ -806,7 +807,7 @@ class Voice(commands.Cog):
                 song_embed.add_field(name='Duration:', value=f'{video_duration}')
                 await ctx.send(embed=song_embed)
             else:
-                await ctx.send(f'Keine Medienspiele')
+                await ctx.send(f'Keine Medienspiele!')
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
