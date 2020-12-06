@@ -360,7 +360,7 @@ class Moderation(commands.Cog):
     @client.command()
     async def bot_servers():
         for guild in client.guilds:
-            print(guild.name)
+            print(f"{guild.name}\n")
 
 
 class Chat(commands.Cog):
