@@ -263,12 +263,11 @@ class Moderation(commands.Cog):
                 await ctx.send(f'Neue Standardrolle ist {role}!')
 
 
-    @client.command(name='help', description='Lists all commands & their usages', usage='/help')
+    client.command(name='help', aliases=['Help', 'h', 'H'], description='Shows all available commands', usage='/help <Command (Optional)>')
     async def _help(ctx, commandarg=None):
+        help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
+        help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         if commandarg == None:
-            help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
-            help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-
             for command in client.commands:
                 if command.name[0] == '_':
                     aliases = list(set(command.aliases))
@@ -280,8 +279,6 @@ class Moderation(commands.Cog):
         else:
             command = discord.utils.get(client.commands, name=commandarg)
             if command != None:
-                help_embed = discord.Embed(title=command.name, color=Color.dark_red())
-                help_embed.set_footer(text=ctx.message.author, icon_url=ctx.author.avatar_url)
                 aliases = list(set(command.aliases))
                 if len(aliases) != 0:
                     aliases = ', '.join(aliases)
@@ -289,10 +286,7 @@ class Moderation(commands.Cog):
                 else:
                     help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
                 help_embed.add_field(name=command.name, value=help_text, inline=True)
-            else:
-                help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
-                help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-                    
+            else:       
                 for command in client.commands:
                     if command.name[0] == '_':
                         aliases = list(set(command.aliases))
@@ -302,6 +296,7 @@ class Moderation(commands.Cog):
                     text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
                     help_embed.add_field(name=name, value=text, inline=True)
         await ctx.send(embed=help_embed)
+
 
 
     @client.command(description='Info on RoboterVogel', usage='/info')
@@ -547,7 +542,7 @@ class Voice(commands.Cog):
             asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
 
-    @client.command(aliases=['play', 'Play', 'p', 'P'], description='Plays Music from youtube', usage='/play <video link/title to search for>')
+    @client.command(name='play', aliases=['Play', 'p', 'P'], description='Plays Music from youtube', usage='/play <video link/title to search for>')
     async def _play(ctx, *, song):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
@@ -822,7 +817,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
     
-    @client.command(aliases=['loop', 'l', 'L', 'Loop'], description='Loops currently playing media', usage='/loop')
+    @client.command(name='loop', aliases=['l', 'L', 'Loop'], description='Loops currently playing media', usage='/loop')
     async def _loop(ctx):
         member_vc = ctx.message.author.voice.channel
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
