@@ -527,8 +527,9 @@ class Voice(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        context = commands.Context
-        Loop = False
+    
+    context = commands.Context
+    Loop = False
 
 
     def _handle_queue(self, error=None):
@@ -829,8 +830,9 @@ class Voice(commands.Cog):
             if client_vc != None:
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
+                        loop = Voice.Loop
                         print('Loop command begins')
-                        Voice.Loop = not Voice.Loop
+                        Voice.Loop = not loop
                         print(f'Loop after command: {Voice.Loop}')
                         if Voice.Loop == True:
                             await ctx.send('Medien wird geloopt!')
