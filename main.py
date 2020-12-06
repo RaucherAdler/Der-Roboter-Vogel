@@ -275,7 +275,7 @@ class Moderation(commands.Cog):
                 else:
                     name = command.name
                 text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                help_embed.add_field(name=name, value=text, inline=True)
+                help_embed.add_field(name=name, value=text, inline=False)
         else:
             command = discord.utils.get(client.commands, name=commandarg)
             if command != None:
@@ -285,7 +285,7 @@ class Moderation(commands.Cog):
                     help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: `{aliases}`'
                 else:
                     help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                help_embed.add_field(name=command.name, value=help_text, inline=True)
+                help_embed.add_field(name=command.name, value=help_text, inline=False)
             else:       
                 for command in client.commands:
                     if command.name[0] == '_':
@@ -294,7 +294,7 @@ class Moderation(commands.Cog):
                     else:
                         name = command.name
                     text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                    help_embed.add_field(name=name, value=text, inline=True)
+                    help_embed.add_field(name=name, value=text, inline=False)
         await ctx.send(embed=help_embed)
 
 
