@@ -357,13 +357,6 @@ class Moderation(commands.Cog):
             await ctx.send('Error')
 
 
-    @client.command()
-    async def servers(ctx):
-        await ctx.send('Client is in:')
-        for guild in client.guilds:
-            await ctx.send(f'{guild.name}\n')
-
-
 class Chat(commands.Cog):
 
     def __init__(self, client):
