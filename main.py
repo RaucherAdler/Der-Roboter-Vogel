@@ -356,6 +356,13 @@ class Moderation(commands.Cog):
         except:
             await ctx.send('Error')
 
+
+    @client.command()
+    async def bot_servers():
+        for guild in client.guilds:
+            print(guild.name)
+
+
 class Chat(commands.Cog):
 
     def __init__(self, client):
