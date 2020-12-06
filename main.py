@@ -358,9 +358,10 @@ class Moderation(commands.Cog):
 
 
     @client.command()
-    async def bot_servers(ctx):
+    async def servers(ctx):
+        await ctx.send('Client is in:')
         for guild in client.guilds:
-            print(f"{guild.name}\n")
+            await ctx.send(f'{guild.name}\n')
 
 
 class Chat(commands.Cog):
