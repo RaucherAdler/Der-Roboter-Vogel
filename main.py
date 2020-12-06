@@ -829,7 +829,9 @@ class Voice(commands.Cog):
             if client_vc != None:
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
+                        print('Loop command begins')
                         Voice.Loop = not Voice.Loop
+                        print(f'Loop after command: {Voice.Loop}')
                         if Voice.Loop == True:
                             await ctx.send('Medien wird geloopt!')
                         else:
