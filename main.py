@@ -821,7 +821,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
     
-    @client.command(aliases=['loop, l', 'L', 'Loop'], description='Loops currently playing media', usage='/loop')
+    @client.command(aliases=['loop', 'l', 'L', 'Loop'], description='Loops currently playing media', usage='/loop')
     async def _loop(ctx):
         member_vc = ctx.message.author.voice.channel
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
