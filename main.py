@@ -155,7 +155,7 @@ async def on_guild_remove(guild):
 
 @client.event
 async def on_command_error(ctx, error):
-    if isinstance(error, discord.CommandNotFound):
+    if isinstance(error, commands.CommandNotFound):
         return
     raise error
 
