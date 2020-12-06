@@ -263,7 +263,7 @@ class Moderation(commands.Cog):
                 await ctx.send(f'Neue Standardrolle ist {role}!')
 
 
-    client.command(name='help', aliases=['Help', 'h', 'H'], description='Shows all available commands', usage='/help <Command (Optional)>')
+    client.command(aliases=['help', 'Help', 'h', 'H'], description='Shows all available commands', usage='/help <Command (Optional)>')
     async def _help(ctx, commandarg=None):
         help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
         help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
