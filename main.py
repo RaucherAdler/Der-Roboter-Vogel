@@ -522,7 +522,7 @@ class Voice(commands.Cog):
     def __init__(self, client):
         self.client = client
         context = commands.Context
-        loop = False
+        Loop = False
 
 
     def _handle_queue(self, error=None):
@@ -815,7 +815,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
 
     
-    @client.command(aliases=['loop, l', 'L','Loop'], description='Loops currently playing media', usage='/loop')
+    @client.command(aliases=['loop, l', 'L', 'Loop'], description='Loops currently playing media', usage='/loop')
     async def _loop(ctx):
         member_vc = ctx.message.author.voice.channel
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
@@ -823,7 +823,7 @@ class Voice(commands.Cog):
             if client_vc != None:
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
-                        Voice.loop = not Voice.loop
+                        Voice.loop = not Voice.Loop
                         if Voice.loop == True:
                             await ctx.send('Medien wird geloopt!')
                         else:
