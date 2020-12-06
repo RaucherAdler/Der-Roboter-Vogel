@@ -263,7 +263,7 @@ class Moderation(commands.Cog):
                 await ctx.send(f'Neue Standardrolle ist {role}!')
 
 
-    client.command(aliases=['help', 'Help', 'h', 'H'], description='Shows all available commands', usage='/help <Command (Optional)>')
+    @client.command(name='help', aliases=['Help', 'h', 'H'], description='Shows all available commands', usage='/help <Command (Optional)>')
     async def _help(ctx, commandarg=None):
         help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
         help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
@@ -275,7 +275,7 @@ class Moderation(commands.Cog):
                 else:
                     name = command.name
                 text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                help_embed.add_field(name=name, value=text, inline=False)
+                help_embed.add_field(name=name, value=text, inline=True)
         else:
             command = discord.utils.get(client.commands, name=commandarg)
             if command != None:
@@ -285,7 +285,7 @@ class Moderation(commands.Cog):
                     help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: `{aliases}`'
                 else:
                     help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                help_embed.add_field(name=command.name, value=help_text, inline=False)
+                help_embed.add_field(name=command.name, value=help_text, inline=True)
             else:       
                 for command in client.commands:
                     if command.name[0] == '_':
@@ -294,7 +294,7 @@ class Moderation(commands.Cog):
                     else:
                         name = command.name
                     text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                    help_embed.add_field(name=name, value=text, inline=False)
+                    help_embed.add_field(name=name, value=text, inline=True)
         await ctx.send(embed=help_embed)
 
 
