@@ -242,7 +242,7 @@ class Moderation(commands.Cog):
             await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
 
-    @client.command(description='Setup Command for automatic role assignment', usage='/autorole <Default Role Name> <Main Channel Name>')
+    @client.command(description='Setup command for automatic role assignment', usage='/autorole <Default Role Name> <Main Channel Name>')
     @commands.has_permissions(manage_roles=True)
     async def autorole(ctx, role, channel):
         drole = discord.utils.get(ctx.guild.roles, name=role)
@@ -258,7 +258,7 @@ class Moderation(commands.Cog):
         sendchannel = discord.utils.get(ctx.guild.channels, name=channel)
         if sendchannel == None:
                 await ctx.send('Diese Kanal existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
-        else:
+        elif sendchannel and drole != None:
                 await newchannel.send(f'{channel}')
                 await ctx.send(f'Neue Standardrolle ist {role}!')
 
