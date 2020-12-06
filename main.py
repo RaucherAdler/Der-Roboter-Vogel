@@ -522,17 +522,20 @@ class Voice(commands.Cog):
     def __init__(self, client):
         self.client = client
         context = commands.Context
+        loop = False
 
 
     def _handle_queue(self, error=None):
         ctx = Voice.context
         loop = client.loop
-        if isinstance(error, TypeError):
-            asyncio.run_coroutine_threadsafe(ctx.send('Error!'), loop)
         guild_id = ctx.guild.id
         g_coll = collection[f"{guild_id}"]
         voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
-        entry = next_in_queue(guild_id)
+        if Voice.loop == False:
+            entry = next_in_queue(guild_id)
+        else:
+            np_coll = g_coll["now_playing"]
+            entry = np_coll.find_one({})
         if entry != None:
             asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
 
@@ -810,6 +813,29 @@ class Voice(commands.Cog):
                 await ctx.send(f'Keine Medienspiele!')
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
+
+    
+    @client.command(aliases=['loop, l', 'L','Loop'], description='Loops currently playing media', usage='/loop')
+    async def _loop(ctx):
+        member_vc = ctx.message.author.voice.channel
+        client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if member_vc != None:
+            if client_vc != None:
+                if client_vc.channel == member_vc:
+                    if client_vc.is_playing() or client_vc.is_paused():
+                        Voice.loop = not Voice.loop
+                        if Voice.loop == True:
+                            await ctx.send('Medien wurden geloopt!')
+                        else:
+                            await ctx.send('medien wird nicht mehr geloopt')
+                    else:
+                        await ctx.send(f'Keine Medienspiele!')
+                else:
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal!')
+            else:
+                await ctx.send(f'Derzeit nicht in Sprachkanal!')
+        else:
+            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
 def setup(client):
