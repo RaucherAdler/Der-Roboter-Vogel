@@ -268,8 +268,7 @@ class Moderation(commands.Cog):
         help_embed = discord.Embed(title='Help — Here is a list of available commands:', color=Color.dark_red())
         help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         if commandarg == None:
-            client_commands = sorted(client.commands, reverse=True)
-            for command in client_commands:
+            for command in client.commands:
                 if command.name[0] == '_':
                     aliases = list(set(command.aliases))
                     name = aliases[0]
