@@ -358,7 +358,7 @@ class Moderation(commands.Cog):
 
 
     @client.command()
-    async def bot_servers():
+    async def bot_servers(ctx):
         for guild in client.guilds:
             print(f"{guild.name}\n")
 
