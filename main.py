@@ -537,7 +537,7 @@ class Voice(commands.Cog):
         guild_id = ctx.guild.id
         g_coll = collection[f"{guild_id}"]
         voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
-        if Voice.loop == False:
+        if Voice.Loop == False:
             entry = next_in_queue(guild_id)
         else:
             np_coll = g_coll["now_playing"]
@@ -829,8 +829,8 @@ class Voice(commands.Cog):
             if client_vc != None:
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
-                        Voice.loop = not Voice.Loop
-                        if Voice.loop == True:
+                        Voice.Loop = not Voice.Loop
+                        if Voice.Loop == True:
                             await ctx.send('Medien wird geloopt!')
                         else:
                             await ctx.send('Medien wird nicht mehr geloopt!')
