@@ -825,9 +825,9 @@ class Voice(commands.Cog):
                     if client_vc.is_playing() or client_vc.is_paused():
                         Voice.loop = not Voice.loop
                         if Voice.loop == True:
-                            await ctx.send('Medien wurden geloopt!')
+                            await ctx.send('Medien wird geloopt!')
                         else:
-                            await ctx.send('medien wird nicht mehr geloopt')
+                            await ctx.send('Medien wird nicht mehr geloopt!')
                     else:
                         await ctx.send(f'Keine Medienspiele!')
                 else:
