@@ -858,7 +858,7 @@ class Voice(commands.Cog):
                         g_coll = collection[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
                         entry_num = int(entry_num) - 1
-                        rm_entry = entries.find_and_delete_one({"id" : entry_num})
+                        rm_entry = entries.find_one_and_delete({"id" : entry_num})
                         for entry in entries:
                             entry_id = entry["id"]
                             if entry_id > entry_num:
