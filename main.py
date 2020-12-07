@@ -841,6 +841,34 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
+    @client.command(aliases=['rm', 'RM', 'Remove', 'r', 'R'], description='Removes a given song from queue', usage='/remove <Number of entry in queue>')
+    async def remove(ctx , entry_num):
+        member_vc = ctx.message.author.voice.channel
+        client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
+        if member_vc != None:
+            if client_vc != None:
+                if client_vc.channel == member_vc:
+                    if client_vc.is_playing() or client_vc.is_paused():
+                        g_coll = collection[f"{ctx.guild.id}"]
+                        entries = g_coll["entries"]
+                        entry_num -= 1
+                        rm_entry = entries.find_and_delete_one({"id" : entry_num})
+                        for entry in entries:
+                            entry_id = entry["id"]
+                            if entry_id > entry_num:
+                                entry_id -= 1
+                        rm_name = rm_entry["name"]
+                        await ctx.send(f'Entfernt: {rm_name}!')
+                    else:
+                        await ctx.send(f'Keine Medienspiele!')
+                else:
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal!')
+            else:
+                await ctx.send(f'Derzeit nicht in Sprachkanal!')
+        else:
+            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
+
+
 def setup(client):
     client.add_cog(Moderation(client))
     client.add_cog(Chat(client))
