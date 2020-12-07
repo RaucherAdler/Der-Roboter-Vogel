@@ -842,7 +842,7 @@ class Voice(commands.Cog):
 
 
     @client.command(aliases=['rm', 'RM', 'Remove', 'r', 'R'], description='Removes a given song from queue', usage='/remove <Number of entry in queue>')
-    async def remove(ctx , entry_num : int):
+    async def remove(ctx , *, entry_num):
         member_vc = ctx.message.author.voice.channel
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if member_vc != None:
@@ -851,7 +851,7 @@ class Voice(commands.Cog):
                     if client_vc.is_playing() or client_vc.is_paused():
                         g_coll = collection[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
-                        entry_num -= 1
+                        entry_num = int(entry_num) - 1
                         rm_entry = entries.find_and_delete_one({"id" : entry_num})
                         for entry in entries:
                             entry_id = entry["id"]
