@@ -618,16 +618,22 @@ class Voice(commands.Cog):
                 queue_embed.set_author(name='Warteschlange', icon_url=ctx.message.author.avatar_url)
                 np_rq_id = np["requested_by_id"]
                 np_rb = ctx.guild.get_member(np_rq_id)
-                queue_embed.add_field(name=f'Jetzt Spielen:\n', value=f'[{np["name"]}]({np["url"]}) | `von: {np_rb}`\n', inline=False)
-                queue_length = 0
+                f_dur = np["duration"]
+                ty_res = time.gmtime(f_dur)
+                fv_duration = time.strftime("%H:%M:%S", ty_res)
+                queue_embed.add_field(name=f'Jetzt Spielen:\n', value=f'[{np["name"]}]({np["url"]}) | `{fv_duration} von: {np_rb}`\n', inline=False)
+                queue_length = f_dur
                 for entriesf in entries.find({}):
                     np_rb = entriesf["requested_by_id"]
                     np_rb_mem = ctx.guild.get_member(np_rb)
                     queue_length += entriesf["duration"]
+                    duration = entriesf["duration"]
+                    ty_res = time.gmtime(duration)
+                    video_duration = time.strftime("%H:%M:%S", ty_res)
                     if entriesf["id"] == 0:
-                        queue_embed.add_field(name=u'Warteschlange:\n', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]}) | `von: {np_rb_mem}`', inline=False)
+                        queue_embed.add_field(name=u'Warteschlange:\n', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
                     else:
-                        queue_embed.add_field(name=u'\u200b', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]}) | `von: {np_rb_mem}`', inline=False)
+                        queue_embed.add_field(name=u'\u200b', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
                 ty_res = time.gmtime(queue_length)
                 queue_duration = time.strftime("%H:%M:%S", ty_res)
                 queue_embed.set_footer(text=f'{ctx.message.author} | Duration: {queue_duration}', icon_url=ctx.message.author.avatar_url)
