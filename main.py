@@ -40,7 +40,7 @@ def next_in_queue(guild_id):
     entries = g_coll["entries"]
     entry = entries.find_one_and_delete({"id" : 0})
     np_coll = g_coll["now_playing"]
-    np_coll.delete_one({})
+    np_coll.delete_many({})
     if entry != None:
         np_coll.insert_one(entry)
     else:
@@ -631,7 +631,7 @@ class Voice(commands.Cog):
                     ty_res = time.gmtime(duration)
                     video_duration = time.strftime("%H:%M:%S", ty_res)
                     if entriesf["id"] == 0:
-                        queue_embed.add_field(name=u'Warteschlange:\n', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
+                        queue_embed.add_field(name=u'\nWarteschlange:\n', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
                     else:
                         queue_embed.add_field(name=u'\u200b', value=f'`{entriesf["id"] + 1}).` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
                 ty_res = time.gmtime(queue_length)
@@ -669,6 +669,7 @@ class Voice(commands.Cog):
             entries = g_coll ["entries"]
             entries.delete_many({})
             await vc.disconnect()
+            Voice.Loop = False
             await ctx.send(f'Auf Wiedersehen!')
         else:
             await ctx.send(f'Derzeit nicht in Sprachkanal!')
@@ -862,8 +863,7 @@ class Voice(commands.Cog):
                         for entry in entries:
                             entry_id = entry["id"]
                             if entry_id > entry_num:
-                                entry_id -= 1
-                                entry["id"] = entry_id
+                                entries.update_one({"id" : entry_id}, {"$inc" : {"id" : -1}})
                         rm_name = rm_entry["name"]
                         await ctx.send(f'Entfernt: {rm_name}!')
                     else:
