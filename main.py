@@ -873,8 +873,12 @@ class Voice(commands.Cog):
     @client.command()
     async def test(ctx, *, gn):
         guild = discord.utils.get(client.guilds, name=gn)
-        for member in guild.members:
-            await ctx.send(f'{member}')
+        it = 0
+        for tc in guild.text_channel:
+            if it == 0:
+                invite = await tc.create_invite()
+            await ctx.send(f'Invite:\n{invite}')
+            it += 1
 
 
 def setup(client):
