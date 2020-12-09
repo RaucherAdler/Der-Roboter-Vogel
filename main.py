@@ -115,13 +115,12 @@ async def on_member_join(member):
 
 @client.event
 async def on_member_remove(member):
-    channel = discord.utils.get(member.guild.channels, name='def-role')
-    async for message in channel.history(limit=1):
-        channel_name = message.content
+    g_coll = db[f"{member.guild.id}"]
+    role_config = g_coll["role_config"]
+    rc_doc = role_config.find_one({})
+    channel_name = rc_doc["channel"]
     channelname = discord.utils.get(member.guild.channels, name=channel_name)
-    if channelname == None:
-        pass
-    else:
+    if channelname != None:
         async for entry in member.guild.audit_logs(limit=1):
             if entry.action == 'kick' or entry.action == 'ban':
                 if entry.user.id != member.id:
