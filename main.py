@@ -870,6 +870,14 @@ class Voice(commands.Cog):
         else:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
+    
+    @client.command()
+    async def rmdrc():
+        for guild in client.guilds:
+            def_role_channel = discord.utils.get(guild.roles, name='def-role')
+            if def_role_channel != None:
+                await def_role_channel.delete()
+
 
 def setup(client):
     client.add_cog(Moderation(client))
