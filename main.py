@@ -102,12 +102,13 @@ async def on_member_join(member):
     g_coll = db[f"{member.guild.id}"]
     role_config = g_coll["role_config"]
     if role_config.find_one({}) != None:
-        channel_name = role_config["channel"]
+        rc_doc = role_config.find_one({})
+        channel_name = rc_doc["channel"]
         channelname = discord.utils.get(member.guild.channels, id=channel_name)
         await channelname.send(f'{member} ist {member.guild.name} beigetretten!')
         if member.bot == False:
             await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
-        role_id = role_config["role"]
+        role_id = rc_doc["role"]
         role = member.guild.get_role(role_id)
         await member.add_roles(role)
         await channelname.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
@@ -118,8 +119,8 @@ async def on_member_remove(member):
     g_coll = db[f"{member.guild.id}"]
     role_config = g_coll["role_config"]
     rc_doc = role_config.find_one({})
-    channel_name = rc_doc["channel"]
-    channelname = discord.utils.get(member.guild.channels, name=channel_name)
+    channel_id = rc_doc["channel"]
+    channelname = discord.utils.get(member.guild.channels, id=channel_id)
     if channelname != None:
         async for entry in member.guild.audit_logs(limit=1):
             if entry.action == 'kick' or entry.action == 'ban':
