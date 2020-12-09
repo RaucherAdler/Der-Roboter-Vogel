@@ -869,14 +869,6 @@ class Voice(commands.Cog):
         else:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
-    
-    @client.command()
-    async def test(ctx, *, g_name):
-        for guild in client.guilds:
-            if g_name == guild.name:
-                await ctx.send(guild.owner)
-
-
 
 def setup(client):
     client.add_cog(Moderation(client))
