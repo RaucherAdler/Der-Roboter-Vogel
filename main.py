@@ -23,11 +23,10 @@ from functools import partial
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
 client = pymongo.MongoClient(f"mongodb+srv://RaucherAdler:{mongo_pswrd}@cluster0.klsio.mongodb.net/RoboterVogel?retryWrites=true&w=majority")
 db = client["RoboterVogel"]
-collection = db["queues"]
 
 
 def add_to_queue(guild_id, attributes):
-    g_coll = collection[f"{guild_id}"]
+    g_coll = db[f"{guild_id}"]
     entries_doc = g_coll["entries"]
     position = entries_doc.count_documents({})
     attributes["id"] = position
@@ -36,7 +35,7 @@ def add_to_queue(guild_id, attributes):
 
 
 def next_in_queue(guild_id):
-    g_coll = collection[f"{guild_id}"]
+    g_coll = db[f"{guild_id}"]
     entries = g_coll["entries"]
     entry = entries.find_one_and_delete({"id" : 0})
     np_coll = g_coll["now_playing"]
@@ -532,7 +531,7 @@ class Voice(commands.Cog):
         ctx = Voice.context
         loop = client.loop
         guild_id = ctx.guild.id
-        g_coll = collection[f"{guild_id}"]
+        g_coll = db[f"{guild_id}"]
         voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if Voice.Loop == False:
             entry = next_in_queue(guild_id)
@@ -599,7 +598,7 @@ class Voice(commands.Cog):
             song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
             await ctx.send(embed=song_embed)
             Voice.context = ctx
-            g_coll = collection[f"{ctx.guild.id}"]
+            g_coll = db[f"{ctx.guild.id}"]
             np_coll = g_coll["now_playing"]
             np_coll.insert_one(attributes)
             current_voice_client.play(source, after=Voice._handle_queue)
@@ -610,7 +609,7 @@ class Voice(commands.Cog):
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if client_vc != None:
             if client_vc.is_playing() or client_vc.is_paused():
-                g_coll = collection[f"{ctx.guild.id}"]
+                g_coll = db[f"{ctx.guild.id}"]
                 entries = g_coll["entries"]
                 np_coll = g_coll["now_playing"]
                 np = np_coll.find_one({})
@@ -665,7 +664,7 @@ class Voice(commands.Cog):
         voice_channel = member.voice.channel
         vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if voice_channel != None and vc != None:
-            g_coll = collection[f"{ctx.guild.id}"]
+            g_coll = db[f"{ctx.guild.id}"]
             entries = g_coll ["entries"]
             entries.delete_many({})
             await vc.disconnect()
@@ -681,7 +680,7 @@ class Voice(commands.Cog):
         voice_channel = member.voice.channel
         vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if voice_channel != None and vc != None:
-            g_coll = collection[f"{ctx.guild.id}"]
+            g_coll = db[f"{ctx.guild.id}"]
             entries = g_coll ["entries"]
             entries.delete_many({})
             vc.stop()
@@ -782,7 +781,7 @@ class Voice(commands.Cog):
             if client_vc != None:
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
-                        g_coll = collection[f"{ctx.guild.id}"]
+                        g_coll = db[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
                         entries.delete_many({})
                         await ctx.send(f'Warteschlange gelöscht!')
@@ -801,7 +800,7 @@ class Voice(commands.Cog):
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if client_vc != None:
             if client_vc.is_playing() or client_vc.is_paused():
-                g_coll = collection[f"{ctx.guild.id}"]
+                g_coll = db[f"{ctx.guild.id}"]
                 np_coll = g_coll["now_playing"]
                 np = np_coll.find_one({})
                 np_title = np["name"]
@@ -856,7 +855,7 @@ class Voice(commands.Cog):
             if client_vc != None:
                 if client_vc.channel == member_vc:
                     if client_vc.is_playing() or client_vc.is_paused():
-                        g_coll = collection[f"{ctx.guild.id}"]
+                        g_coll = db[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
                         entry_num = int(entry_num) - 1
                         rm_entry = entries.find_one_and_delete({"id" : entry_num})
