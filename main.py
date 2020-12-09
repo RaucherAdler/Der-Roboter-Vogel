@@ -251,9 +251,8 @@ class Moderation(commands.Cog):
                 def_role = {'role' : drole.id, 'channel' : sendchannel.id}
                 g_coll = db[f"{ctx.guild.id}"]
                 role_config = g_coll["role_config"]
-                for doc in role_config.find_one({}):
-                    if doc == None:
-                        role_config.delete_many({})
+                if role_config.find_one({}) != None:
+                    role_config.delete_many({})
                 role_config.insert_one(def_role)
                 await ctx.send(f'Neue Standardrolle ist {role}!')
 
