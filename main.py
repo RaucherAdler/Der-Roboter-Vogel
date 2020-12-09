@@ -99,18 +99,15 @@ async def play_next(entry, vc):
 
 @client.event
 async def on_member_join(member):
-    channel = discord.utils.get(member.guild.channels, name='def-role')
-    async for message in channel.history(limit=1, oldest_first=True):
-        role_id =  int(message.content)
-    async for message in channel.history(limit=1):
-        channel_name = message.content
-    channelname = discord.utils.get(member.guild.channels, name=channel_name)
-    await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
-    if member.bot != True:
-        await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
-    if channel == None:
-        pass
-    else:
+    g_coll = db[f"{member.guild.id}"]
+    role_config = g_coll["role_config"]
+    if role_config.find_one({}) != None:
+        channel_name = role_config["channel"]
+        channelname = discord.utils.get(member.guild.channels, id=channel_name)
+        await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
+        if member.bot == False:
+            await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
+        role_id = role_config["role"]
         role = member.guild.get_role(role_id)
         await member.add_roles(role)
         await channelname.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
