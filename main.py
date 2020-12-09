@@ -241,24 +241,23 @@ class Moderation(commands.Cog):
             await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
 
 
-    @client.command(description='Setup command for automatic role assignment', usage='/autorole <Default Role Name> <Main Channel Name>')
+    @client.command(description='Setup command for automatic role assignment', usage="/autorole <Default Role Name> <Main Channel Name> (Don't mention Role/Channel)")
     @commands.has_permissions(manage_roles=True)
     async def autorole(ctx, role, channel):
         drole = discord.utils.get(ctx.guild.roles, name=role)
         if drole == None:
             await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
-        else:  
-            defchannel = discord.utils.get(ctx.guild.channels, name='def-role')
-            if defchannel != None:
-                await defchannel.delete()      
-            overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False),ctx.guild.me: discord.PermissionOverwrite(read_messages=True)}
-            newchannel = await ctx.guild.create_text_channel('def-role', overwrites=overwrites, topic='Auto generated channel by RoboterVogel, DO NOT delete or make any messages here.')   
-            await newchannel.send(f'{int(drole.id)}')
         sendchannel = discord.utils.get(ctx.guild.channels, name=channel)
         if sendchannel == None:
                 await ctx.send('Diese Kanal existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
-        elif sendchannel and drole != None:
-                await newchannel.send(f'{channel}')
+        elif sendchannel != None and drole != None:
+                def_role = {'role' : drole.id, 'channel' : sendchannel.id}
+                g_coll = db[f"{ctx.guild.id}"]
+                role_config = g_coll["role_config"]
+                for doc in role_config.find_one({}):
+                    if doc == None:
+                        role_config.delete_many({})
+                role_config.insert_one(def_role)
                 await ctx.send(f'Neue Standardrolle ist {role}!')
 
 
