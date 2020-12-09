@@ -874,7 +874,7 @@ class Voice(commands.Cog):
     async def test(ctx, *, g_name):
         for guild in client.guilds:
             if g_name == guild.name:
-                await ctx.send(guild)
+                await ctx.send(guild.owner)
 
 
 
