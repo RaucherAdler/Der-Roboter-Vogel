@@ -870,17 +870,6 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
-    @client.command()
-    async def test(ctx, *, gn):
-        guild = discord.utils.get(client.guilds, name=gn)
-        it = 0
-        for tc in guild.text_channels:
-            if it == 0:
-                invite = await tc.create_invite()
-            await ctx.send(f'Invite:\n{invite}')
-            it += 1
-
-
 def setup(client):
     client.add_cog(Moderation(client))
     client.add_cog(Chat(client))
