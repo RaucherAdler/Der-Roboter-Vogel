@@ -104,7 +104,7 @@ async def on_member_join(member):
     if role_config.find_one({}) != None:
         channel_name = role_config["channel"]
         channelname = discord.utils.get(member.guild.channels, id=channel_name)
-        await channelname.send(f'{member.mention} ist {member.guild.name} beigetretten!')
+        await channelname.send(f'{member} ist {member.guild.name} beigetretten!')
         if member.bot == False:
             await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
         role_id = role_config["role"]
@@ -872,7 +872,7 @@ class Voice(commands.Cog):
 
     
     @client.command()
-    async def rmdrc():
+    async def rmdrc(ctx):
         for guild in client.guilds:
             def_role_channel = discord.utils.get(guild.roles, name='def-role')
             if def_role_channel != None:
