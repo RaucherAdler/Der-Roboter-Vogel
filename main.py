@@ -871,14 +871,12 @@ class Voice(commands.Cog):
 
     
     @client.command()
-    async def rmdrc(ctx):
+    async def test(ctx, *, g_name):
         for guild in client.guilds:
-            def_role_channel = discord.utils.get(guild.text_channels, name='def-role')
-            if def_role_channel != None:
-                await def_role_channel.delete()
-                await ctx.send(f'Removed def-role from: {guild.name}')
-            else:
-                await ctx.send(f"Didn't remove from {guild.name}")
+            if g_name == guild.name:
+                guild_dict = guild.to_dict()
+                await ctx.send(guild_dict)
+
 
 
 def setup(client):
