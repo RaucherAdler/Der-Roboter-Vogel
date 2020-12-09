@@ -877,6 +877,7 @@ class Voice(commands.Cog):
             def_role_channel = discord.utils.get(guild.roles, name='def-role')
             if def_role_channel != None:
                 await def_role_channel.delete()
+                await ctx.send(f'Removed def-role from: {guild.name}')
 
 
 def setup(client):
