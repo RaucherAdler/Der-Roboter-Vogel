@@ -92,7 +92,7 @@ async def play_next(entry, vc):
     song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
     before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
     opts = '-vn'
-    source = discord.FFmpegOpusAudio(source=source, executable='vendor/ffmeg', before_options=before_opts, options=opts)
+    source = discord.FFmpegOpusAudio(source=source, executable='/vendor/ffmeg', before_options=before_opts, options=opts)
     await channel.send(embed=song_embed)
     vc.play(source=source, after=Voice._handle_queue)
 
@@ -589,7 +589,7 @@ class Voice(commands.Cog):
             song_embed.set_author(name='Zur Warteschlange hinzugefügt:', icon_url=ctx.message.author.avatar_url)
             await ctx.send(embed=song_embed)
         else:
-            source = discord.FFmpegOpusAudio(source=source, executable='vendor/ffmeg', before_options=before_opts, options=opts)
+            source = discord.FFmpegOpusAudio(source=source, executable='/vendor/ffmeg', before_options=before_opts, options=opts)
             song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
             await ctx.send(embed=song_embed)
             Voice.context = ctx
@@ -703,7 +703,7 @@ class Voice(commands.Cog):
             except ValueError:
                 tts = gTTS(text=message, lang='en')
             tts.save('message.mp3')
-            source = discord.FFmpegOpusAudio(source='message.mp3', executable='vendor/ffmeg')
+            source = discord.FFmpegOpusAudio(source='message.mp3', executable='/vendor/ffmeg')
             current_VoiceClient = discord.utils.get(client.voice_clients, guild=ctx.guild)
             current_VoiceClient.play(source=source, after=os.remove('message.mp3'))
 
