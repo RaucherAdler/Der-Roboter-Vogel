@@ -90,7 +90,7 @@ async def play_next(entry, vc):
     song_embed.set_thumbnail(url=thumbnail)
     song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
     song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
-    before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
+    before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -loglevel quiet'
     opts = '-vn'
     source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
     await channel.send(embed=song_embed)
@@ -567,7 +567,7 @@ class Voice(commands.Cog):
                 thumbnails = v['thumbnails']
                 thumbnail = thumbnails[0]
                 link = 'https://www.youtube.com' + url_suffix
-        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
+        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -loglevel quiet'
         opts = '-vn'
         ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True'}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
