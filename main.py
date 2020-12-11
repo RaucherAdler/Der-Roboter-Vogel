@@ -504,7 +504,7 @@ class Voice(commands.Cog):
             np_coll = g_coll["now_playing"]
             entry = np_coll.find_one({})
         if entry != None:
-            asyncio.run_coroutine_threadsafe(play_next(entry, voice_client), loop)
+            asyncio.run_coroutine_threadsafe(Voice.play_next(entry, voice_client), loop)
 
 
     @client.command(name='play', aliases=['Play', 'p', 'P'], description='Plays Music from youtube', usage='/play <video link/title to search for>')
