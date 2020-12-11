@@ -67,36 +67,6 @@ async def on_ready():
    print('Bot ist bereit!')
 
 
-async def play_next(entry, vc):
-    name = entry["name"]
-    duration = entry["duration"]
-    thumbnail = entry["thumbnail"]
-    requested_by_id = entry["requested_by_id"]
-    link = entry["url"]
-    channel_id = entry["channel_id"]
-    guild_id = entry["guildid"]
-    ty_res = time.gmtime(duration)
-    video_duration = time.strftime("%H:%M:%S", ty_res)
-    guild = client.get_guild(guild_id)
-    requested_by = guild.get_member(requested_by_id)
-    channel = guild.get_channel(channel_id)
-    ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True'}
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        attr_dict = ydl.extract_info(link, download=False)
-    source = attr_dict["formats"][0]["url"]
-    song_embed = discord.Embed(name='Song', color=Color.dark_red())
-    song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
-    song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
-    song_embed.set_thumbnail(url=thumbnail)
-    song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
-    song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
-    before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -loglevel quiet'
-    opts = '-vn'
-    source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
-    await channel.send(embed=song_embed)
-    vc.play(source=source, after=Voice._handle_queue)
-
-
 @client.event
 async def on_member_join(member):
     g_coll = db[f"{member.guild.id}"]
@@ -597,6 +567,37 @@ class Voice(commands.Cog):
             np_coll = g_coll["now_playing"]
             np_coll.insert_one(attributes)
             current_voice_client.play(source, after=Voice._handle_queue)
+
+
+    async def play_next(entry, vc):
+        name = entry["name"]
+        duration = entry["duration"]
+        thumbnail = entry["thumbnail"]
+        requested_by_id = entry["requested_by_id"]
+        link = entry["url"]
+        channel_id = entry["channel_id"]
+        guild_id = entry["guildid"]
+        ty_res = time.gmtime(duration)
+        video_duration = time.strftime("%H:%M:%S", ty_res)
+        guild = client.get_guild(guild_id)
+        requested_by = guild.get_member(requested_by_id)
+        channel = guild.get_channel(channel_id)
+        ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True'}
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            attr_dict = ydl.extract_info(link, download=False)
+        source = attr_dict["formats"][0]["url"]
+        song_embed = discord.Embed(name='Song', color=Color.dark_red())
+        song_embed.add_field(name='Title:', value=f'[{name}]({link})', inline=True)
+        song_embed.add_field(name='Duration:', value=f'{video_duration}', inline=True)
+        song_embed.set_thumbnail(url=thumbnail)
+        song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
+        song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
+        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -loglevel quiet'
+        opts = '-vn'
+        source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
+        if Voice.Loop == False:
+            await channel.send(embed=song_embed)
+        vc.play(source=source, after=Voice._handle_queue)
 
 
     @client.command(aliases=['Queue', 'q', 'Q'], description='Shows current queue', usage='/queue')
