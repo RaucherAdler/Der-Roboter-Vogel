@@ -42,7 +42,8 @@ def next_in_queue(guild_id):
     np_coll.delete_many({})
     if entry == None:    
         entry = entries.find_one_and_delete({})
-    np_coll.insert_one(entry)
+    if entry != None:
+        np_coll.insert_one(entry)
     entries.update_many({}, {"$inc" : {"id" : -1}})
     return entry
 
