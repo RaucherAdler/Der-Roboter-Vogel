@@ -530,11 +530,11 @@ class Voice(commands.Cog):
                     for entry in attr_dict['entries']:
                         playlist_name = entry['playlist_title']
                         playlist_uploader = entry['playlist_uploader']
-                        entry_link = entry["url"]
+                        entry_link = entry['url']
                         result = YoutubeSearch(entry_link, max_results=1).to_dict()
                         for v in result:
                             thumbnails = v['thumbnails']
-                        thumbnail = thumbnails[0]
+                            thumbnail = thumbnails[0]
                         video_title = entry['title']
                         duration = entry['duration']
                         if it == 0:
