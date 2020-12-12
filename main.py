@@ -522,7 +522,7 @@ class Voice(commands.Cog):
             if validators.url(song) == True:
                 link = song
                 parsed_link = urlparse(link)
-                if parsed_link.path[0:14] == '/playlist?list=':
+                if parsed_link.path[0:11] == '/playlist':
                     ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True'}
                     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                         attr_dict = ydl.extract_info(link, download=False)
