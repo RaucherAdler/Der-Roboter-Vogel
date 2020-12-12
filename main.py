@@ -534,7 +534,7 @@ class Voice(commands.Cog):
                         result = YoutubeSearch(entry_link, max_results=1).to_dict()
                         for v in result:
                             thumbnails = v['thumbnails']
-                            thumbnail = thumbnails[0]
+                        thumbnail = thumbnails[0]
                         video_title = entry['title']
                         duration = entry['duration']
                         if it == 0:
