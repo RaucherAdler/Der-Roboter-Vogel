@@ -509,8 +509,9 @@ class Voice(commands.Cog):
 
     @client.command(name='play', aliases=['Play', 'p', 'P'], description='Plays Music from youtube', usage='/play <video link/title to search for>')
     async def _play(ctx, *, song):
-        member_voice_channel = ctx.message.author.voice.channel
-        if member_voice_channel != None:
+        member_voice = ctx.message.author.voice
+        if member_voice != None:
+            member_voice_channel = member_voice.channel
             client_voice_channels = discord.utils.get(client.voice_clients, guild=ctx.guild)
             if client_voice_channels != None:
                 client_voice_channel = client_voice_channels.channel
@@ -641,13 +642,16 @@ class Voice(commands.Cog):
     @client.command(description='Join Voice Channel', usage='/join')
     async def join(ctx):
         member = ctx.message.author
-        voice_channel = member.voice.channel
-        if voice_channel != None:
+        member_voice = member.voice
+        if member_voice != None:
+            voice_channel = member_voice.channel
             bot_voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
             if bot_voice_client == None:
                 await ctx.send(f'Jetzt `{voice_channel}` eingeben!')
                 await voice_channel.connect()
-            else:
+            elif bot_voice_client.channel == voice_channel:
+                await ctx.send('Bereits im Sprachkanal!')
+            else:    
                 await ctx.send(f'Derzeit in einem anderen Sprachkanal')
         else:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
@@ -656,17 +660,24 @@ class Voice(commands.Cog):
     @client.command(description='Leave Voice Channel', usage='/leave')
     async def leave(ctx):
         member = ctx.message.author
-        voice_channel = member.voice.channel
-        vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
-        if voice_channel != None and vc != None:
-            g_coll = db[f"{ctx.guild.id}"]
-            entries = g_coll ["entries"]
-            entries.delete_many({})
-            await vc.disconnect()
-            Voice.Loop = False
-            await ctx.send(f'Auf Wiedersehen!')
+        member_voice = member.voice
+        if member_voice != None:
+            voice_channel = member_voice.channel
+            client_voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
+            if client_voice_client != None:
+                if client_voice_client.channel == voice_channel:
+                    g_coll = db[f"{ctx.guild.id}"]
+                    entries = g_coll ["entries"]
+                    entries.delete_many({})
+                    await client_voice_client.disconnect()
+                    Voice.Loop = False
+                    await ctx.send(f'Auf Wiedersehen!')
+                else:
+                    await ctx.send(f'Derzeit in einem anderen Sprachkanal')
+            else:
+                await ctx.send('Derzeit nicht in Sprachkanal!')
         else:
-            await ctx.send(f'Derzeit nicht in Sprachkanal!')
+            await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
     @client.command(description='Ends current audio, stops queue', usage='/stop')
@@ -710,11 +721,11 @@ class Voice(commands.Cog):
 
     @client.command(description='Resumes current song', usage='/resume')
     async def resume(ctx):
-        member_vc = ctx.message.author.voice.channel
+        member_vc = ctx.message.author.voice
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if member_vc != None:
             if client_vc != None:
-                if client_vc.channel == member_vc:
+                if client_vc.channel == member_vc.channel:
                     if client_vc.is_paused():
                         client_vc.resume()
                         await ctx.send(f'Medien nicht angehalten!')
@@ -730,11 +741,11 @@ class Voice(commands.Cog):
 
     @client.command(description='Pauses current song', usage='/pause')
     async def pause(ctx):
-        member_vc = ctx.message.author.voice.channel
+        member_vc = ctx.message.author.voice
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if member_vc != None:
             if client_vc != None:
-                if client_vc.channel == member_vc:
+                if client_vc.channel == member_vc.channel:
                     if client_vc.is_playing():
                         client_vc.pause()
                         await ctx.send(f'Medien in Pause!')
@@ -750,11 +761,11 @@ class Voice(commands.Cog):
 
     @client.command(aliases=['s', 'S', 'Skip'], description='Skips current song', usage='/skip')
     async def skip(ctx):
-        member_vc = ctx.message.author.voice.channel
+        member_vc = ctx.message.author.voice
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if member_vc != None:
             if client_vc != None:
-                if client_vc.channel == member_vc:
+                if client_vc.channel == member_vc.channel:
                     if client_vc.is_playing() or client_vc.is_paused():
                         client_vc.stop()
                         await ctx.send(f'Übersprungene Medien!')
@@ -770,11 +781,11 @@ class Voice(commands.Cog):
 
     @client.command(aliases=['clearqueue', 'cq', 'CQ'], description='Clears all entries in queue', usage='/clear_queue')
     async def clear_queue(ctx):
-        member_vc = ctx.message.author.voice.channel
+        member_vc = ctx.message.author.voice
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if member_vc != None:
             if client_vc != None:
-                if client_vc.channel == member_vc:
+                if client_vc.channel == member_vc.channel:
                     if client_vc.is_playing() or client_vc.is_paused():
                         g_coll = db[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
@@ -821,11 +832,11 @@ class Voice(commands.Cog):
     
     @client.command(name='loop', aliases=['l', 'L', 'Loop'], description='Loops currently playing media', usage='/loop')
     async def _loop(ctx):
-        member_vc = ctx.message.author.voice.channel
+        member_vc = ctx.message.author.voice
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if member_vc != None:
             if client_vc != None:
-                if client_vc.channel == member_vc:
+                if client_vc.channel == member_vc.channel:
                     if client_vc.is_playing() or client_vc.is_paused():
                         Voice.Loop = not Voice.Loop
                         if Voice.Loop == True:
@@ -844,11 +855,11 @@ class Voice(commands.Cog):
 
     @client.command(aliases=['rm', 'RM', 'Remove', 'r', 'R'], description='Removes a given song from queue', usage='/remove <Number of entry in queue>')
     async def remove(ctx , *, entry_num):
-        member_vc = ctx.message.author.voice.channel
+        member_vc = ctx.message.author.voice
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if member_vc != None:
             if client_vc != None:
-                if client_vc.channel == member_vc:
+                if client_vc.channel == member_vc.channel:
                     if client_vc.is_playing() or client_vc.is_paused():
                         g_coll = db[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
