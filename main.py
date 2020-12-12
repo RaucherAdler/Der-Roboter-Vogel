@@ -535,8 +535,8 @@ class Voice(commands.Cog):
                         for v in result:
                             thumbnails = v['thumbnails']
                             thumbnail = thumbnails[0]
-                        video_title = attr_dict['title']
-                        duration = attr_dict['duration']
+                        video_title = entry['title']
+                        duration = entry['duration']
                         if it == 0:
                             ty_res = time.gmtime(duration)
                             video_duration = time.strftime("%H:%M:%S", ty_res)
