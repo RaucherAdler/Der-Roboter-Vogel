@@ -513,12 +513,12 @@ class Voice(commands.Cog):
         if member_voice_channel != None:
             client_voice_channels = discord.utils.get(client.voice_clients, guild=ctx.guild)
             if client_voice_channels != None:
-                if member_voice_channel != client_voice_channels:
+                if member_voice_channel != client_voice_channels.channel:
                     await ctx.send('Derzeit in einem anderen Sprachkanal')
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
-            current_voice_client = member_voice_channel
+            current_voice_client = client_voice_channels
             if validators.url(song) == True:
                 link = song
                 parsed_link = urlparse(link)
