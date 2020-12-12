@@ -1,6 +1,6 @@
 # On RoboterVogel:
 RoboterVogel is a general purpose discord bot by me.
-It has many features one may need such as moderation commands, music commands, some fun commands, as well as just some other junk.
+It has many features one may need such as moderation commands, music commands, and miscellaneous other commands.
 
 # On Development:
 The bot is still in development and is an on-going project of mine.
