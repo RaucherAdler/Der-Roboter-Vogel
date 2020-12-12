@@ -518,6 +518,7 @@ class Voice(commands.Cog):
             else:
                 await ctx.send(f'Jetzt `{member_voice_channel}` eingeben!')
                 await member_voice_channel.connect()
+            client_voice_channels = discord.utils.get(client.voice_clients, guild=ctx.guild)
             current_voice_client = client_voice_channels
             if validators.url(song) == True:
                 link = song
