@@ -536,7 +536,7 @@ class Voice(commands.Cog):
                     thumbnails = v['thumbnails']
                     thumbnail = thumbnails[0]
                     link = 'https://www.youtube.com' + url_suffix
-            before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -loglevel quiet'
+            before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -v -8'
             opts = '-vn'
             ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True', 'simulate' : 'True'}
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -552,12 +552,15 @@ class Voice(commands.Cog):
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
             attributes : dict = {"name" : video_title, "duration" : duration, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
-            if current_voice_client.is_playing():
+            g_coll = db[f"{ctx.guild.id}"]
+            np_coll = g_coll["now_playing"]
+            if np_coll.find_one({}) != None:
                 pos = add_to_queue(ctx.guild.id, attributes)
                 song_embed.add_field(name='Position in queue:', value=pos, inline=True)
                 song_embed.set_author(name='Zur Warteschlange hinzugefügt:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
             else:
+                np_coll.delete_many({})
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
@@ -592,7 +595,7 @@ class Voice(commands.Cog):
         song_embed.set_thumbnail(url=thumbnail)
         song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
         song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
-        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -loglevel quiet'
+        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -v -8'
         opts = '-vn'
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
         if Voice.Loop == False:
