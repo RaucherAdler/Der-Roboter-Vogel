@@ -866,7 +866,7 @@ class Voice(commands.Cog):
                         entry_num = int(entry_num) - 1
                         rm_entry = entries.find_one_and_delete({"id" : entry_num})
                         rm_name = rm_entry["name"]
-                        await ctx.send(f'Entfernt: {rm_name}!')
+                        await ctx.send(f'Entfernt: `{rm_name}`!')
                         for entry in entries:
                             entry_id = entry["id"]
                             if entry_id > entry_num:
