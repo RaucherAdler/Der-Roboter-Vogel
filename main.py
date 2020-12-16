@@ -313,7 +313,7 @@ class Moderation(commands.Cog):
 
     @client.command(aliases=['Profile', 'whois', 'Whois'], description='Fetches user info such as account age, name, etc.', usage='/profile <Mention Member (Optional)>')
     async def profile(ctx, member=None):
-        if type(member) is not discord.Member:
+        if isinstance(member, discord.Member) == False:
             member = ctx.message.author
         profile_embed = discord.Embed(title=f'User — {member}', color=Color.dark_red())
         profile_embed.set_thumbnail(url=member.avatar_url)
