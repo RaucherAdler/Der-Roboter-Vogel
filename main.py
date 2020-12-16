@@ -325,13 +325,7 @@ class Moderation(commands.Cog):
         profile_embed.add_field(name='Status:', value=f'`{member.raw_status}`', inline=True)
         profile_embed.add_field(name='Bot:', value=f'`{member.bot}`', inline=True)
         profile_embed.add_field(name=f'Joined {ctx.guild.name} at:', value=f'`{member.joined_at} (UTC)`', inline=True)
-        usracc_tsep = member.created_at
-        current_tsep = dt.datetime.now()
-        accage_delta = (current_tsep - usracc_tsep)
-        accage_sec = accage_delta.total_seconds()
-        ty_res = time.gmtime(accage_sec)
-        accage = time.strftime("%H:%M:%S", ty_res)
-        profile_embed.add_field(name='Account Age:', value=f'`{accage}`', inline=True)
+        profile_embed.add_field(name='Account Age:', value=f'`{member.created_at} (UTC)`', inline=True)
         await ctx.send(embed=profile_embed)
 
 
