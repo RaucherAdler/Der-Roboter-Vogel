@@ -312,7 +312,9 @@ class Moderation(commands.Cog):
 
 
     @client.command(aliases=['Profile', 'whois', 'Whois'], description='Fetches user info such as account age, name, etc.', usage='/profile <Mention Member (Optional)>')
-    async def profile(ctx, member : discord.Member = ctx.message.author):
+    async def profile(ctx, member):
+        if type(member) is not discord.Member:
+            member = ctx.message.author
         profile_embed = discord.Embed(title=f'User — {member}', color=Color.dark_red())
         profile_embed.set_thumbnail(url=member.avatar_url)
         profile_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
@@ -328,6 +330,7 @@ class Moderation(commands.Cog):
         accage = (current_tsep - usracc_tsep).strftime('%H:%M:%S')
         profile_embed.aff_field(name='Account Age:', value=f'`{accage}`', inline=True)
         await ctx.send(embed=profile_embed)
+
 
 class Chat(commands.Cog):
 
