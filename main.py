@@ -325,7 +325,7 @@ class Moderation(commands.Cog):
         profile_embed.add_field(name='Status:', value=f'`{member.raw_status}`', inline=True)
         profile_embed.add_field(name='Bot:', value=f'`{member.bot}`', inline=True)
         profile_embed.add_field(name=f'Joined {ctx.guild.name} at:', value=f'`{member.joined_at} (UTC)`', inline=True)
-        profile_embed.add_field(name='Account Age:', value=f'`{member.created_at} (UTC)`', inline=True)
+        profile_embed.add_field(name='Account creation time:', value=f'`{member.created_at} (UTC)`', inline=True)
         await ctx.send(embed=profile_embed)
 
 
