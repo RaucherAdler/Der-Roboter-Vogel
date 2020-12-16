@@ -329,7 +329,8 @@ class Moderation(commands.Cog):
         current_tsep = dt.datetime.now()
         accage_delta = (current_tsep - usracc_tsep)
         accage_sec = accage_delta.total_seconds()
-        accage = accage_sec.strftime('%H:%M:%S')
+        ty_res = time.gmtime(accage_sec)
+        accage = time.strftime("%H:%M:%S", ty_res)
         profile_embed.aff_field(name='Account Age:', value=f'`{accage}`', inline=True)
         await ctx.send(embed=profile_embed)
 
