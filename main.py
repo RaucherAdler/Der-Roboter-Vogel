@@ -311,15 +311,23 @@ class Moderation(commands.Cog):
         await member.edit(nick=nickname)
 
 
-    @client.command(description='Transfers ownership of current guild (Note: In order for this command to work, you must first manually transfer ownership to the bot (which to my knowledge is not possible) so it is best to just manually transfer ownership.)', usage='/transfer_ownership <Mention Member>')
-    @commands.has_permissions(manage_guild=True)
-    async def transfer_ownership(ctx, member : discord.Member):
-        try:
-            await ctx.guild.edit(owner=member)
-            await ctx.send(f'Das Eigentum an {ctx.guild.name} wurde auf {member} übertragen.')
-        except:
-            await ctx.send('Error')
-
+    @client.command(aliases=['Profile', 'whois', 'Whois'], description='Fetches user info such as account age, name, etc.', usage='/profile <Mention Member (Optional)>')
+    async def profile(ctx, member : discord.Member = ctx.message.author):
+        profile_embed = discord.Embed(title=f'User — {member}', color=Color.dark_red())
+        profile_embed.set_thumbnail(url=member.avatar_url)
+        profile_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+        profile_embed.add_field(name='Name:', value=f'`{member}`', inline=True)
+        profile_embed.add_field(name='Nickname:', value=f'`{member.nick}`', inline=True)
+        profile_embed.add_field(name='User ID:', value=f'`{member.id}`', inline=True)
+        profile_embed.add_field(name='Avatar URL:', value=f"[{member}'s Avatar]({member.avatar_url})", inline=True)
+        profile_embed.add_field(name='Status:', value=f'`{member.raw_status}`', inline=True)
+        profile_embed.add_field(name='Bot:', value=f'`{member.bot}`', inline=True)
+        profile_embed.add_field(name=f'Joined {ctx.guild.name} at:', value=f'`{member.joined_at} (UTC)`', inline=True)
+        usracc_tsep = int(member.created_at.strftime('%s'))
+        current_tsep = time.time()
+        accage = (current_tsep - usracc_tsep).strftime('%H:%M:%S')
+        profile_embed.aff_field(name='Account Age:', value=f'`{accage}`', inline=True)
+        await ctx.send(embed=profile_embed)
 
 class Chat(commands.Cog):
 
