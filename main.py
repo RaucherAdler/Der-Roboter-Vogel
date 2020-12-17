@@ -148,6 +148,8 @@ class Moderation(commands.Cog):
                 await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} getretten!')
                 if reason!= None:
                     await user.send(f'Grund: {reason}')
+            except:
+                pass
 
 
     @client.command(description='Bans a given user', usage='/ban <Mention User>')
@@ -161,6 +163,8 @@ class Moderation(commands.Cog):
                 await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} gesperrt!')
                 if reason != None:
                     await user.send(f'Grund: {reason}')
+            except:
+                pass
 
 
     @client.command(description='Unbans a given user', usage='/unban <Username (i.e. Raucher Adler#1220)>')
