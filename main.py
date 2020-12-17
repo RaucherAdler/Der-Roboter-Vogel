@@ -143,9 +143,12 @@ class Moderation(commands.Cog):
         await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
         await ctx.send(f"{user} wurde getretten!")
         if user.bot != True:
-            await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} getretten!')
-            if reason!= None:
-                await user.send(f'Grund: {reason}')    
+            try:
+                await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} getretten!')
+                if reason!= None:
+                    await user.send(f'Grund: {reason}')
+            except:
+                pass
         await user.kick(reason=reason)
 
 
@@ -155,9 +158,11 @@ class Moderation(commands.Cog):
         await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
         await ctx.send(f"{user} wurde verboten!")
         if user.bot != True:
-            await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} gesperrt!')
-            if reason != None:
-                await user.send(f'Grund: {reason}')
+            try:
+                await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} gesperrt!')
+                if reason != None:
+                    await user.send(f'Grund: {reason}')
+            except:
         await user.ban(reason=reason, delete_message_days=0)
 
 
