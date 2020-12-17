@@ -142,14 +142,12 @@ class Moderation(commands.Cog):
     async def kick(ctx, user: discord.Member, *, reason=None):
         await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
         await ctx.send(f"{user} wurde getretten!")
+        await user.kick(reason=reason)
         if user.bot != True:
             try:
                 await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} getretten!')
                 if reason!= None:
                     await user.send(f'Grund: {reason}')
-            except:
-                pass
-        await user.kick(reason=reason)
 
 
     @client.command(description='Bans a given user', usage='/ban <Mention User>')
@@ -157,13 +155,12 @@ class Moderation(commands.Cog):
     async def ban(ctx, user: discord.Member, *, reason=None):
         await ctx.send('https://tenor.com/view/deathstar-gif-10649959')
         await ctx.send(f"{user} wurde verboten!")
+        await user.ban(reason=reason, delete_message_days=0)
         if user.bot != True:
             try:
                 await user.send(f'Sie wurden vom {ctx.message.author} vom {ctx.guild.name} gesperrt!')
                 if reason != None:
                     await user.send(f'Grund: {reason}')
-            except:
-        await user.ban(reason=reason, delete_message_days=0)
 
 
     @client.command(description='Unbans a given user', usage='/unban <Username (i.e. Raucher Adler#1220)>')
