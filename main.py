@@ -39,12 +39,12 @@ def next_in_queue(guild_id):
     entries = g_coll["entries"]
     entry = entries.find_one_and_delete({"id" : 0})
     np_coll = g_coll["now_playing"]
-    np_coll.delete_many({})
     if entry != None:
         np_coll.insert_one(entry)
     else:
         entry = entries.find_one_and_delete({})
-        np_coll.insert_one(entry)
+        if entry != None:
+            np_coll.insert_one(entry)
     entries.update_many({}, {"$inc" : {"id" : -1}})
     return entry
 
@@ -511,6 +511,8 @@ class Voice(commands.Cog):
         loop = client.loop
         guild_id = ctx.guild.id
         g_coll = db[f"{guild_id}"]
+        np_coll = g_coll["now_playing"]
+        np_coll.delete_many({})
         voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if Voice.Loop == False:
             entry = next_in_queue(guild_id)
@@ -574,7 +576,6 @@ class Voice(commands.Cog):
                 song_embed.set_author(name='Zur Warteschlange hinzugefügt:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
             else:
-                np_coll.delete_many({})
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
