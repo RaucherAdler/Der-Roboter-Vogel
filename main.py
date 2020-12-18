@@ -675,7 +675,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
-    @client.command(description='Leave Voice Channel', usage='/leave')
+    @client.command(aliases=['Leave', 'disconnect', 'Disconnect', 'dc', 'DC'],description='Leave Voice Channel', usage='/leave')
     async def leave(ctx):
         member = ctx.message.author
         member_voice = member.voice
