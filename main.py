@@ -881,12 +881,13 @@ class Voice(commands.Cog):
                     if client_vc.is_playing() or client_vc.is_paused():
                         g_coll = db[f"{ctx.guild.id}"]
                         entries = g_coll["entries"]
-                        entry_num = int(entry_num) - 1
+                        entry_num -= 1
                         rm_entry = entries.find_one_and_delete({"id" : entry_num})
                         rm_name = rm_entry["name"]
                         await ctx.send(f'Entfernt: `{rm_name}`!')
                         for entry in entries:
                             entry_id = entry["id"]
+                            entry_id = int(entry_id)
                             if entry_id > entry_num:
                                 entries.update_one({"id" : entry_id}, {"$inc" : {"id" : -1}})
                     else:
