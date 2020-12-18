@@ -552,7 +552,8 @@ class Voice(commands.Cog):
                     thumbnails = v['thumbnails']
                     thumbnail = thumbnails[0]
                     link = 'https://www.youtube.com' + url_suffix
-            before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -v repeat+quiet'
+            before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
+            logfile = open('ffmpeg.log', 'a+')
             opts = '-vn'
             ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True', 'simulate' : 'True'}
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -576,7 +577,7 @@ class Voice(commands.Cog):
                 song_embed.set_author(name='Zur Warteschlange hinzugefügt:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
             else:
-                source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
+                source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts, stderr=logfile)
                 song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
                 Voice.context = ctx
@@ -610,9 +611,10 @@ class Voice(commands.Cog):
         song_embed.set_thumbnail(url=thumbnail)
         song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
         song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
-        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -v repeat+quiet'
+        before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         opts = '-vn'
-        source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
+        logfile = open('ffmpeg.log', 'a+')
+        source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts, stderr=logfile)
         if Voice.Loop == False:
             await channel.send(embed=song_embed)
         vc.play(source=source, after=Voice._handle_queue)
