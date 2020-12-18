@@ -798,7 +798,7 @@ class Voice(commands.Cog):
 
 
     @client.command(aliases=['clearqueue', 'cq', 'CQ'], description='Clears all entries in queue', usage='/clear_queue')
-    async def clear_queue(ctx):
+    async def clearqueue(ctx):
         member_vc = ctx.message.author.voice
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if member_vc != None:
@@ -819,8 +819,8 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
-    @client.command(aliases=['nowplaying', 'np', 'NP', 'Nowplaying'], description='Shows currently playing media', usage='/nowplaying')
-    async def now_playing(ctx):
+    @client.command(aliases=['now_playing', 'np', 'NP', 'Nowplaying'], description='Shows currently playing media', usage='/nowplaying')
+    async def nowplaying(ctx):
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if client_vc != None:
             if client_vc.is_playing() or client_vc.is_paused():
