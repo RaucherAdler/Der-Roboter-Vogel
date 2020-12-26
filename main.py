@@ -934,8 +934,11 @@ class OP(commands.Cog):
             f = open('members.txt', 'a+')
             guild = await client.fetch_guild(guild_id)
             for member in guild.members:
-                f.write(f'{member} / {member.nick} : {member.id}\n')
-            f.write(f'Owner: {guild.owner}')
+                if guild.owner == member:
+                    isown = True
+                else:
+                    isown = False
+                f.write(f'{member} : {member.id} | Owner: {isown}\n')
             f.close()
             await ctx.send(file=discord.File('members.txt'))
             os.remove('members.txt')
