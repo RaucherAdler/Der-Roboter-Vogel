@@ -49,7 +49,7 @@ def next_in_queue(guild_id):
     return entry
 
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members = True
 intents.guilds = True
 intents.presences = True
