@@ -930,7 +930,7 @@ class OP(commands.Cog):
     
     @client.command(hidden=True, aliases=['lm', 'LM'])
     async def listmembers(ctx, guild_id):
-        if client.is_owner(ctx.message.owner):
+        if client.is_owner(ctx.message.author):
             f = open('members.txt', 'a+')
             guild = await client.fetch_guild(guild_id)
             for member in guild.members:
