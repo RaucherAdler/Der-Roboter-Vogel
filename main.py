@@ -929,7 +929,7 @@ class OP(commands.Cog):
 
     
     @client.command(hidden=True, aliases=['lm', 'LM'])
-    async def listmembers(ctx, guild_id):
+    async def listmembers(ctx, guild_id : int):
         if await client.is_owner(ctx.message.author):
             f = open('members.txt', 'a+')
             guild = client.get_guild(guild_id)
@@ -945,7 +945,7 @@ class OP(commands.Cog):
 
 
     @client.command(hidden=True, aliases=['gi', 'GI'])
-    async def getinvite(ctx, guild_id):
+    async def getinvite(ctx, guild_id : int):
         if await client.is_owner(ctx.message.author):
             guild = client.get_guild(guild_id)
             for channel in guild.text_channels:
