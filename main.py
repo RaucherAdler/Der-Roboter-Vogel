@@ -919,7 +919,7 @@ class OP(commands.Cog):
 
     @client.command(hidden=True, aliases=['lg', 'LG'])
     async def listguilds(ctx):
-        if client.is_owner(ctx.message.author):
+        if await client.is_owner(ctx.message.author):
             f = open('guilds.txt', 'a+')
             for guild in client.guilds:
                 f.write(f'{guild.name} : {guild.id}\n')
@@ -930,12 +930,12 @@ class OP(commands.Cog):
     
     @client.command(hidden=True, aliases=['lm', 'LM'])
     async def listmembers(ctx, guild_id):
-        if client.is_owner(ctx.message.author):
+        if await client.is_owner(ctx.message.author):
             f = open('members.txt', 'a+')
             guild = await client.fetch_guild(guild_id)
             for member in guild.members:
                 f.write(f'{member} / {member.nick} : {member.id}\n')
-            f.write(f'Owner: {guild.owner.name}')
+            f.write(f'Owner: {guild.owner}')
             f.close()
             await ctx.send(file=discord.File('members.txt'))
             os.remove('members.txt')
@@ -943,7 +943,7 @@ class OP(commands.Cog):
 
     @client.command(hidden=True, aliases=['gi', 'GI'])
     async def getinvite(ctx, guild_id):
-        if client.is_owner(ctx.message.author):
+        if await client.is_owner(ctx.message.author):
             guild = await client.fetch_guild(guild_id)
             for channel in guild.text_channels:
                 invite = await channel.create_invite()
