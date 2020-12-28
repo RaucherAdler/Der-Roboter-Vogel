@@ -655,6 +655,8 @@ class Voice(commands.Cog):
                 fv_duration = time.strftime("%H:%M:%S", ty_res)
                 queue_embed.add_field(name=f'Jetzt Spielen:\n', value=f'[{np["name"]}]({np["url"]}) | `{fv_duration} von: {np_rb}`\n', inline=False)
                 queue_length = f_dur
+                if queue_page < 1:
+                    queue_page = 1
                 q_min = -10 + (10 * queue_page)
                 q_max = 1 + (10 * queue_page)
                 if entries.find_one({'id' : q_min}) == None:
@@ -664,7 +666,7 @@ class Voice(commands.Cog):
                 for x in range(q_min, q_max):
                     entriesf = entries.find_one({'id' : x})
                     np_rb = entriesf["requested_by_id"]
-                    np_rb_mem = ctx.guild.get_member(np_rb)                    
+                    np_rb_mem = ctx.guild.get_member(np_rb)
                     duration = entriesf["duration"]
                     ty_res = time.gmtime(duration)
                     video_duration = time.strftime("%H:%M:%S", ty_res)
