@@ -49,6 +49,10 @@ def next_in_queue(guild_id):
     return entry
 
 
+def ceil(a, b):
+    return -(-a//b)
+
+
 intents = discord.Intents.all()
 intents.members = True
 intents.guilds = True
@@ -628,8 +632,8 @@ class Voice(commands.Cog):
         vc.play(source=source, after=Voice._handle_queue)
 
 
-    @client.command(aliases=['Queue', 'q', 'Q'], description='Shows current queue', usage='/queue')
-    async def queue(ctx):
+    @client.command(aliases=['Queue', 'q', 'Q'], description='Shows current queue', usage='/queue <Page Number>')
+    async def queue(ctx, queue_page=1):
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
         if client_vc != None:
             if client_vc.is_playing() or client_vc.is_paused():
@@ -646,10 +650,16 @@ class Voice(commands.Cog):
                 fv_duration = time.strftime("%H:%M:%S", ty_res)
                 queue_embed.add_field(name=f'Jetzt Spielen:\n', value=f'[{np["name"]}]({np["url"]}) | `{fv_duration} von: {np_rb}`\n', inline=False)
                 queue_length = f_dur
-                for entriesf in entries.find({}):
+                q_min = -10 + (10 * queue_page)
+                q_max = 1 + (10 * queue_page)
+                if entries.find_one({'id' : q_min}) == None:
+                    q_min = q_min - (10 * queue_page)
+                    q_max = q_max - (10 * queue_page)
+                    queue_page = 1
+                for x in range(q_min, q_max):
+                    entriesf = entries.find_one({'id' : x})
                     np_rb = entriesf["requested_by_id"]
-                    np_rb_mem = ctx.guild.get_member(np_rb)
-                    queue_length += entriesf["duration"]
+                    np_rb_mem = ctx.guild.get_member(np_rb)                    
                     duration = entriesf["duration"]
                     ty_res = time.gmtime(duration)
                     video_duration = time.strftime("%H:%M:%S", ty_res)
@@ -657,9 +667,13 @@ class Voice(commands.Cog):
                         queue_embed.add_field(name='\n\nWarteschlange:\n', value=f'`{entriesf["id"] + 1})` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
                     else:
                         queue_embed.add_field(name=u'\u200b', value=f'`{entriesf["id"] + 1})` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
+                for entn in entries.find({}):
+                    queue_length += entn['duration']
                 ty_res = time.gmtime(queue_length)
                 queue_duration = time.strftime("%H:%M:%S", ty_res)
-                queue_embed.set_footer(text=f'{ctx.message.author} | Duration: {queue_duration}', icon_url=ctx.message.author.avatar_url)
+                doc_count = entries.count_documents({})
+                pg_total = ceil(doc_count, 10)
+                queue_embed.set_footer(text=f'{ctx.message.author} | Duration: {queue_duration} Page: {queue_page}/{pg_total}', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=queue_embed)
             else:
                 await ctx.send(f'Keine Medienspiele')
