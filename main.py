@@ -124,7 +124,12 @@ async def on_guild_join(guild):
 async def on_guild_remove(guild):
     await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
     g_coll = db[guild.id]
-    g_coll.drop()
+    np = g_coll['now_playing']
+    entries = g_coll['entries']
+    rc = g_coll['role_config']
+    np.drop()
+    entries.drop()
+    rc.drop()
 
 
 @client.event
