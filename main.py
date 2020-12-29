@@ -663,17 +663,18 @@ class Voice(commands.Cog):
                     q_min = q_min - (10 * queue_page)
                     q_max = q_max - (10 * queue_page)
                     queue_page = 1
-                for x in range(q_min, q_max):
+                for x in range(q_min, q_max):        
                     entriesf = entries.find_one({'id' : x})
-                    np_rb = entriesf["requested_by_id"]
-                    np_rb_mem = ctx.guild.get_member(np_rb)
-                    duration = entriesf["duration"]
-                    ty_res = time.gmtime(duration)
-                    video_duration = time.strftime("%H:%M:%S", ty_res)
-                    if entriesf["id"] == 0:
-                        queue_embed.add_field(name='\n\nWarteschlange:\n', value=f'`{entriesf["id"] + 1})` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
-                    else:
-                        queue_embed.add_field(name=u'\u200b', value=f'`{entriesf["id"] + 1})` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
+                    if entriesf != None:
+                        np_rb = entriesf["requested_by_id"]
+                        np_rb_mem = ctx.guild.get_member(np_rb)
+                        duration = entriesf["duration"]
+                        ty_res = time.gmtime(duration)
+                        video_duration = time.strftime("%H:%M:%S", ty_res)
+                        if entriesf["id"] == 0:
+                            queue_embed.add_field(name='\n\nWarteschlange:\n', value=f'`{entriesf["id"] + 1})` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
+                        else:
+                            queue_embed.add_field(name=u'\u200b', value=f'`{entriesf["id"] + 1})` [{entriesf["name"]}]({entriesf["url"]}) | `{video_duration} von: {np_rb_mem}`', inline=False)
                 for entn in entries.find({}):
                     queue_length += entn['duration']
                 ty_res = time.gmtime(queue_length)
