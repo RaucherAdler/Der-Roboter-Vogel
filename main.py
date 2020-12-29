@@ -658,7 +658,7 @@ class Voice(commands.Cog):
                 if queue_page < 1:
                     queue_page = 1
                 q_min = -10 + (10 * queue_page)
-                q_max = 1 + (10 * queue_page)
+                q_max = 0 + (10 * queue_page)
                 if entries.find_one({'id' : q_min}) == None:
                     q_min = q_min - (10 * queue_page)
                     q_max = q_max - (10 * queue_page)
