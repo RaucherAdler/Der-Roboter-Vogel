@@ -975,7 +975,7 @@ class OP(commands.Cog):
                 if i == 0:
                     invite = await channel.create_invite()
                     await ctx.send(invite)
-                i++
+                ++i
 
 
 
