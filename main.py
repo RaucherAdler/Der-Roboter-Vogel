@@ -970,9 +970,12 @@ class OP(commands.Cog):
     async def getinvite(ctx, guild_id : int):
         if await client.is_owner(ctx.message.author):
             guild = client.get_guild(guild_id)
+            i = 0
             for channel in guild.text_channels:
-                invite = await channel.create_invite()
-                await ctx.send(invite)
+                if i == 0:
+                    invite = await channel.create_invite()
+                    await ctx.send(invite)
+                i++
 
 
 
