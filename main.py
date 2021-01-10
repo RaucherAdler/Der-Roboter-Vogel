@@ -99,7 +99,7 @@ async def on_member_join(member):
     if role.is_default() == False:
         await member.add_roles(role)
         if rolechannel != None:
-            await rolechannel.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
+            await rolechannel.send(f'{member.mention} wurde die Rolle gegeben: `{role}`')
 
 
 @client.event
@@ -236,13 +236,16 @@ class Moderation(commands.Cog):
             await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
         else:        
             await member.remove_roles(role)
-            await ctx.send(f'Rolle: {role} wurde vom {member.mention} entfernt!')
+            await ctx.send(f'Rolle: `{role}` wurde vom {member.mention} entfernt!')
 
 
-    @client.command(description='Setup command for automatic role assignment', usage="/autorole <Default Role Name> <Main Channel Name> (Don't mention Role/Channel)")
+    @client.command(description='Setup command for automatic role assignment', usage="/autorole <Main Channel Name (include dashes, if any)> <Default Role (Optional, will default to no role)> (Don't mention Role/Channel)")
     @commands.has_permissions(manage_roles=True)
-    async def autorole(ctx, role, channel):
-        drole = discord.utils.get(ctx.guild.roles, name=role)
+    async def autorole(ctx, channel, *, role=None):
+        if role == None:
+            drole = ctx.guild.default_role
+        else:
+            drole = discord.utils.get(ctx.guild.roles, name=role)
         if drole == None:
             await ctx.send('Diese Rolle existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
         sendchannel = discord.utils.get(ctx.guild.channels, name=channel)
@@ -255,7 +258,7 @@ class Moderation(commands.Cog):
                 if role_config.find_one({}) != None:
                     role_config.delete_many({})
                 role_config.insert_one(def_role)
-                await ctx.send(f'Neue Standardrolle ist {role}!')
+                await ctx.send(f'Neue Standardrolle ist `{role}`')
 
 
     @client.command(name='help', aliases=['Help', 'h', 'H'], description='Shows all available commands', usage='/help <Command (Optional)>')
@@ -362,6 +365,9 @@ class Moderation(commands.Cog):
         profile_embed.add_field(name=f'Joined {ctx.guild.name} at:', value=f'`{member.joined_at} (UTC)`', inline=True)
         profile_embed.add_field(name='Account creation time:', value=f'`{member.created_at} (UTC)`', inline=True)
         await ctx.send(embed=profile_embed)
+
+
+    @client.command(description='Announce when a member joins the server, like autorole without the role')
 
 
 class Chat(commands.Cog):
@@ -928,7 +934,7 @@ class Voice(commands.Cog):
                         entry_num -= 1
                         rm_entry = entries.find_one_and_delete({"id" : entry_num})
                         rm_name = rm_entry["name"]
-                        await ctx.send(f'Entfernt: `{rm_name}`!')
+                        await ctx.send(f'Entfernt: `{rm_name}`')
                         for entry in entries:
                             entry_id = entry["id"]
                             entry_id = int(entry_id)
