@@ -77,17 +77,29 @@ async def on_member_join(member):
     role_config = g_coll["role_config"]
     if role_config.find_one({}) != None:
         rc_doc = role_config.find_one({})
-        channel_name = rc_doc["channel"]
-        channelname = discord.utils.get(member.guild.channels, id=channel_name)
-        await channelname.send(f'{member} ist {member.guild.name} beigetretten!')
-        try:
-            await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
-        except:
-            pass
         role_id = rc_doc["role"]
         role = member.guild.get_role(role_id)
+    else:
+        rc_doc = None
+        role = member.guild.default_role
+    if rc_doc != None:
+        channel_id = rc_doc["channel"]
+        rolechannel = member.guild.get_channel(channel_id)
+    else:
+        if discord.utils.get(member.guild.channels, name='general') != None:
+            rolechannel = discord.utils.get(member.guild.channels, name='general')
+        else:
+            rolechannel = None
+    if rolechannel != None:
+        await rolechannel.send(f'{member} ist {member.guild.name} beigetretten!')
+    try:
+        await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
+    except:
+        pass
+    if role.is_default() == False:
         await member.add_roles(role)
-        await channelname.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
+        if rolechannel != None:
+            await rolechannel.send(f'{member.mention} wurde die Rolle gegeben: {role}!')
 
 
 @client.event
