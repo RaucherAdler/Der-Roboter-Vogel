@@ -258,7 +258,10 @@ class Moderation(commands.Cog):
                 if role_config.find_one({}) != None:
                     role_config.delete_many({})
                 role_config.insert_one(def_role)
-                await ctx.send(f'Neue Standardrolle ist `{role}`')
+                if drole.is_default != True:
+                    await ctx.send(f'Neue Standardrolle ist `{role}`')
+                else:
+                    await ctx.send(f'Keine Standardrolle, wird ohne Zuweisung der Rolle angekündigt')
 
 
     @client.command(name='help', aliases=['Help', 'h', 'H'], description='Shows all available commands', usage='/help <Command (Optional)>')
