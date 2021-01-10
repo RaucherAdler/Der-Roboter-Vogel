@@ -252,16 +252,16 @@ class Moderation(commands.Cog):
         if sendchannel == None:
                 await ctx.send('Diese Kanal existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
         elif sendchannel != None and drole != None:
-                def_role = {'role' : drole.id, 'channel' : sendchannel.id}
-                g_coll = db[f"{ctx.guild.id}"]
-                role_config = g_coll["role_config"]
-                if role_config.find_one({}) != None:
-                    role_config.delete_many({})
-                role_config.insert_one(def_role)
-                if drole.is_default != True:
-                    await ctx.send(f'Neue Standardrolle ist `{role}`')
-                else:
-                    await ctx.send(f'Keine Standardrolle, wird ohne Zuweisung der Rolle angekündigt')
+            def_role = {'role' : drole.id, 'channel' : sendchannel.id}
+            g_coll = db[f"{ctx.guild.id}"]
+            role_config = g_coll["role_config"]
+            if role_config.find_one({}) != None:
+                role_config.delete_many({})
+            role_config.insert_one(def_role)
+            if drole.is_default != True:
+                await ctx.send(f'Neue Standardrolle ist `{role}`')
+            else:                   
+                await ctx.send(f'Keine Standardrolle, wird ohne Zuweisung der Rolle angekündigt')
 
 
     @client.command(name='help', aliases=['Help', 'h', 'H'], description='Shows all available commands', usage='/help <Command (Optional)>')
@@ -369,8 +369,6 @@ class Moderation(commands.Cog):
         profile_embed.add_field(name='Account creation time:', value=f'`{member.created_at} (UTC)`', inline=True)
         await ctx.send(embed=profile_embed)
 
-
-    @client.command(description='Announce when a member joins the server, like autorole without the role')
 
 
 class Chat(commands.Cog):
