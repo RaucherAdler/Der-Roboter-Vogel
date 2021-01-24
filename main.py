@@ -848,7 +848,7 @@ class Voice(commands.Cog):
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
 
-    @client.command(aliases=['Clearqueue', 'cq', 'CQ'], description='Clears all entries in queue', usage='/clear_queue')
+    @client.command(aliases=['Clearqueue', 'cq', 'CQ'], description='Clears all entries in queue', usage='/clearqueue')
     async def clearqueue(ctx):
         member_vc = ctx.message.author.voice
         client_vc = discord.utils.get(client.voice_clients, guild=ctx.guild)
