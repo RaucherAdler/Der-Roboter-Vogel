@@ -8,6 +8,6 @@ git+https://github.com/python-pillow/Pillow.git
 git+https://github.com/pndurette/gTTS.git
 ffmpeg
 git+https://github.com/joetats/youtube_search.git
-youtube_dl==2020.1.16
+youtube_dl==2021.1.16
 git+https://github.com/mongodb/mongo-python-driver.git
 git+https://github.com/kvesteri/validators.git
