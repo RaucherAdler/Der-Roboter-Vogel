@@ -589,7 +589,7 @@ class Voice(commands.Cog):
                     thumbnail = thumbnails[0]
                     link = 'https://www.youtube.com' + url_suffix
             before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
-            logfile = open('ffmpeg.log', 'a+')
+            #logfile = open('ffmpeg.log', 'a+') add back stderr=logfile in source below
             opts = '-vn'
             ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True', 'simulate' : 'True'}
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -613,7 +613,7 @@ class Voice(commands.Cog):
                 song_embed.set_author(name='Zur Warteschlange hinzugefügt:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
             else:
-                source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts, stderr=logfile)
+                source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
                 Voice.context = ctx
@@ -649,8 +649,8 @@ class Voice(commands.Cog):
         song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
         before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
         opts = '-vn'
-        logfile = open('ffmpeg.log', 'a+')
-        source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts, stderr=logfile)
+        #logfile = ("ffmpeg.log", "a+") + add stderr=logfile arg to source below.
+        source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
         if Voice.Loop == False:
             await channel.send(embed=song_embed)
         vc.play(source=source, after=Voice._handle_queue)
