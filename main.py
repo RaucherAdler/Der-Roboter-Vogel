@@ -548,11 +548,6 @@ class Voice(commands.Cog):
         guild_id = ctx.guild.id
         g_coll = db[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
-        if error != None:
-            print(f'Error: {error}')
-            np_coll.delete_many({})
-            entries.delete_many({})
-            Voice.Loop = False
         if Voice.Loop == False:
             np_coll.delete_many({})
             entry = next_in_queue(guild_id)
@@ -560,8 +555,8 @@ class Voice(commands.Cog):
             voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
             np_coll = g_coll["now_playing"]
             entry = np_coll.find_one({})
-            if entry != None:
-                asyncio.run_coroutine_threadsafe(Voice.play_next(entry, voice_client), loop)
+        if entry != None:    
+            asyncio.run_coroutine_threadsafe(Voice.play_next(entry, voice_client), loop)
 
 
     @client.command(name='play', aliases=['Play', 'p', 'P'], description='Plays Music from youtube', usage='/play <video link/title to search for>')
