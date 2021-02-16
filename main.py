@@ -549,6 +549,7 @@ class Voice(commands.Cog):
         g_coll = db[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
         if error:
+            print(error)
             entries = g_coll["entries"]
             np_coll.delete_many({})
             entries.delete_many({})
