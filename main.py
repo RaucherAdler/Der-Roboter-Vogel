@@ -552,10 +552,10 @@ class Voice(commands.Cog):
             np_coll.delete_many({})
             entry = next_in_queue(guild_id)
         else:
-            voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
             np_coll = g_coll["now_playing"]
             entry = np_coll.find_one({})
         if entry != None:    
+            voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
             asyncio.run_coroutine_threadsafe(Voice.play_next(entry, voice_client), loop)
 
 
