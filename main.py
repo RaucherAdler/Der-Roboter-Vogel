@@ -548,9 +548,8 @@ class Voice(commands.Cog):
         guild_id = ctx.guild.id
         g_coll = db[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
-        if error:
-            print(error)
-            entries = g_coll["entries"]
+        if error != None:
+            print(f'Error: {error}')
             np_coll.delete_many({})
             entries.delete_many({})
             Voice.Loop = False
