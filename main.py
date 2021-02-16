@@ -736,8 +736,10 @@ class Voice(commands.Cog):
             if client_voice_client != None:
                 if client_voice_client.channel == voice_channel:
                     g_coll = db[f"{ctx.guild.id}"]
-                    entries = g_coll ["entries"]
+                    entries = g_coll["entries"]
+                    np_coll = g_coll["now_playing"]
                     entries.delete_many({})
+                    np_coll.delete_many({})
                     await client_voice_client.disconnect()
                     Voice.Loop = False
                     await ctx.send(f'Auf Wiedersehen!')
@@ -757,7 +759,9 @@ class Voice(commands.Cog):
         if voice_channel != None and vc != None:
             g_coll = db[f"{ctx.guild.id}"]
             entries = g_coll ["entries"]
+            np_coll = g_coll["now_playing"]
             entries.delete_many({})
+            np_coll.delete_many({})
             vc.stop()
             await ctx.send('Medien gestoppt!')
         else:
@@ -765,7 +769,7 @@ class Voice(commands.Cog):
 
 
     @client.command(aliases=['TTS', 'texttospeech'], description='Sends a Text-to-Speech message into current VC', usage='/TTS <Message> <Language (Optional)>')
-    async def tts(ctx, message, language='en'):
+    async def tts(ctx, *, message, language='en'):
         member_voice_channel = ctx.message.author.voice.channel
         if member_voice_channel == None:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
@@ -835,6 +839,9 @@ class Voice(commands.Cog):
         if member_vc != None:
             if client_vc != None:
                 if client_vc.channel == member_vc.channel:
+                    g_coll = db[ctx.guild]
+                    np_coll = g_coll["now_playing"]
+                    np_coll.delete_many({})
                     if client_vc.is_playing() or client_vc.is_paused():
                         client_vc.stop()
                         await ctx.send(f'Übersprungene Medien!')
