@@ -539,22 +539,23 @@ class Voice(commands.Cog):
         self.client = client
     
     context = commands.Context
-    Loop = False
 
 
     def _handle_queue(self, error=None):
         ctx = Voice.context
-        loop = client.loop
         guild_id = ctx.guild.id
         g_coll = db[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
-        if Voice.Loop == False:
+        np_doc = np_coll.find_one({})
+        looped = np_doc["loop"]
+        if looped == False:
             np_coll.delete_many({})
             entry = next_in_queue(guild_id)
         else:
             np_coll = g_coll["now_playing"]
             entry = np_coll.find_one({})
-        if entry != None:    
+        if entry != None:
+            loop = client.loop
             voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
             asyncio.run_coroutine_threadsafe(Voice.play_next(entry, voice_client), loop)
 
@@ -604,7 +605,7 @@ class Voice(commands.Cog):
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
-            attributes : dict = {"name" : video_title, "duration" : duration, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id}
+            attributes : dict = {"name" : video_title, "duration" : duration, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id, "loop" : False}
             g_coll = db[f"{ctx.guild.id}"]
             np_coll = g_coll["now_playing"]
             if np_coll.find_one({}) != None:
@@ -651,7 +652,10 @@ class Voice(commands.Cog):
         opts = '-vn'
         #logfile = ("ffmpeg.log", "a+") + add stderr=logfile arg to source below.
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
-        if Voice.Loop == False:
+        g_coll = db[guild_id]
+        np_coll = g_coll["now_playing"]
+        np_doc = np_coll.find_one({})
+        if np_doc["loop"] == False:
             await channel.send(embed=song_embed)
         vc.play(source=source, after=Voice._handle_queue)
 
@@ -741,7 +745,6 @@ class Voice(commands.Cog):
                     entries.delete_many({})
                     np_coll.delete_many({})
                     await client_voice_client.disconnect()
-                    Voice.Loop = False
                     await ctx.send(f'Auf Wiedersehen!')
                 else:
                     await ctx.send(f'Derzeit in einem anderen Sprachkanal')
@@ -914,8 +917,13 @@ class Voice(commands.Cog):
             if client_vc != None:
                 if client_vc.channel == member_vc.channel:
                     if client_vc.is_playing() or client_vc.is_paused():
-                        Voice.Loop = not Voice.Loop
-                        if Voice.Loop == True:
+                        g_coll = db[ctx.guild.id]
+                        np_coll = g_coll["now_playing"]
+                        np_doc = np_coll.find_one({})
+                        boolval = np_doc["loop"]
+                        not_bool = not boolval
+                        np_doc.update_one({}, {"$set" : {"loop" : not_bool}})
+                        if np_doc["loop"] == True:
                             await ctx.send('Medien wird geloopt!')
                         else:
                             await ctx.send('Medien wird nicht mehr geloopt!')
