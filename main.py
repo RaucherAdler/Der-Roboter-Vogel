@@ -839,7 +839,7 @@ class Voice(commands.Cog):
         if member_vc != None:
             if client_vc != None:
                 if client_vc.channel == member_vc.channel:
-                    g_coll = db[ctx.guild]
+                    g_coll = db[ctx.guild.id]
                     np_coll = g_coll["now_playing"]
                     np_coll.delete_many({})
                     if client_vc.is_playing() or client_vc.is_paused():
