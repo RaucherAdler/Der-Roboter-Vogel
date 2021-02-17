@@ -547,7 +547,10 @@ class Voice(commands.Cog):
         g_coll = db[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
         np_doc = np_coll.find_one({})
-        looped = np_doc["loop"]
+        if np_doc:
+            looped = np_doc["loop"]
+        else:
+            looped = False
         if looped == False:
             np_coll.delete_many({})
             entry = next_in_queue(guild_id)
@@ -652,7 +655,7 @@ class Voice(commands.Cog):
         opts = '-vn'
         #logfile = ("ffmpeg.log", "a+") + add stderr=logfile arg to source below.
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
-        g_coll = db[guild_id]
+        g_coll = db[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
         np_doc = np_coll.find_one({})
         if np_doc["loop"] == False:
@@ -842,7 +845,7 @@ class Voice(commands.Cog):
         if member_vc != None:
             if client_vc != None:
                 if client_vc.channel == member_vc.channel:
-                    g_coll = db[ctx.guild.id]
+                    g_coll = db[f"{ctx.guild.id}"]
                     np_coll = g_coll["now_playing"]
                     np_coll.delete_many({})
                     if client_vc.is_playing() or client_vc.is_paused():
@@ -917,7 +920,7 @@ class Voice(commands.Cog):
             if client_vc != None:
                 if client_vc.channel == member_vc.channel:
                     if client_vc.is_playing() or client_vc.is_paused():
-                        g_coll = db[ctx.guild.id]
+                        g_coll = db[f"{ctx.guild.id}"]
                         np_coll = g_coll["now_playing"]
                         np_doc = np_coll.find_one({})
                         boolval = np_doc["loop"]
