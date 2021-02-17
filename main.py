@@ -927,9 +927,9 @@ class Voice(commands.Cog):
                         not_bool = not boolval
                         np_coll.update_one({"loop" : boolval}, {"$set" : {"loop" : not_bool}})
                         if np_doc["loop"] == True:
-                            await ctx.send('Medien wird geloopt!')
-                        else:
                             await ctx.send('Medien wird nicht mehr geloopt!')
+                        else:
+                            await ctx.send('Medien wird geloopt!')
                     else:
                         await ctx.send(f'Keine Medienspiele!')
                 else:
