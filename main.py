@@ -925,7 +925,7 @@ class Voice(commands.Cog):
                         np_doc = np_coll.find_one({})
                         boolval = np_doc["loop"]
                         not_bool = not boolval
-                        np_doc.update_one({"loop" : boolval}, {"$set" : {"loop" : not_bool}})
+                        np_coll.update_one({"loop" : boolval}, {"$set" : {"loop" : not_bool}})
                         if np_doc["loop"] == True:
                             await ctx.send('Medien wird geloopt!')
                         else:
