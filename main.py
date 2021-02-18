@@ -1004,11 +1004,14 @@ class OP(commands.Cog):
 
 
     @client.command(hidden=True, aliases=['gi', 'GI'])
-    async def getinvite(ctx, guild_id : int):
+    async def getinvite(ctx, guild_id : int, existing=True):
         if await client.is_owner(ctx.message.author):
             guild = client.get_guild(guild_id)
             tc = guild.text_channels[0]
-            inv = await tc.create_invite()
+            if existing != True:
+                inv = await tc.create_invite(unique=False, max_uses=1)
+            else:
+                inv = await guild.invites()
             await ctx.send(inv)
 
 
