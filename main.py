@@ -1079,4 +1079,4 @@ client.run(DISCORD_S3)
 if sys.argv[1] == "handle_signal":
     signal.signal(signal.SIGTERM, handle_sigterm)
 
-await after_reboot()
+after_reboot()
