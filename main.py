@@ -19,6 +19,7 @@ import validators
 from urllib.parse import urlparse
 from functools import partial
 import signal
+import sys
 
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
 mongo_client = pymongo.MongoClient(f"mongodb+srv://RaucherAdler:{mongo_pswrd}@cluster0.klsio.mongodb.net/RoboterVogel?retryWrites=true&w=majority")
