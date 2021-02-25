@@ -65,7 +65,7 @@ client.remove_command('help')
 
 sigterm = False
 
-async def handle_sig()
+async def handle_sig():
     await client.change_presence(activity=discord.Activity(status=discord.Status.offline))
     sigterm = True
     id_list = []
