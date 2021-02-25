@@ -18,11 +18,12 @@ import pymongo
 import validators
 from urllib.parse import urlparse
 from functools import partial
-
+import signal
 
 mongo_pswrd = os.environ["MONGODB_PASSWORD"]
-client = pymongo.MongoClient(f"mongodb+srv://RaucherAdler:{mongo_pswrd}@cluster0.klsio.mongodb.net/RoboterVogel?retryWrites=true&w=majority")
-db = client["RoboterVogel"]
+mongo_client = pymongo.MongoClient(f"mongodb+srv://RaucherAdler:{mongo_pswrd}@cluster0.klsio.mongodb.net/RoboterVogel?retryWrites=true&w=majority")
+db = mongo_client["RoboterVogel"]
+
 
 
 def add_to_queue(guild_id, attributes):
@@ -60,9 +61,53 @@ intents.presences = True
 
 
 client = commands.AutoShardedBot(command_prefix = '/', intents=intents)
-
-
 client.remove_command('help')
+
+sigterm = False
+
+async def handle_sig()
+    await client.change_presence(activity=discord.Activity(status=discord.Status.offline))
+    sigterm = True
+    id_list = []
+    for v_client in client.voice_clients:
+        guild = v_client.guild
+        guild_id = v_client.guild.id
+        g_coll = db[f"{guild_id}"]
+        np_coll = g_coll["now_playing"]
+        np_doc = np_coll.find_one({})
+        channel_id = np_doc["channel_id"]
+        channel = guild.get_channel(channel_id)
+        await channel.send("RoboterVogel is restarting. Music will resume shortly.")
+        v_client.stop()
+        await v_client.disconnect()
+        id_list.append(guild_id)
+    sig_dict = {"guild_ids" : id_list}
+    sig_coll = db["sigterm"]
+    sig_coll.insert_one(sig_dict)
+    mongo_client.close()
+    for cog_name, cog in client.cogs:
+        cog.remove_cog(cog_name)
+    await client.close()
+    os._exit(0)
+
+def handle_sigterm(_signo, _stack_frame):
+    asyncio.run_coroutine_threadsafe(handle_sig)
+
+async def after_reboot():
+    sig_coll = db["sigterm"]
+    sig_doc = sig_coll.find_one_and_delete({})
+    sig_guilds = sig_doc["guild_ids"]
+    for guild_id in sig_guilds:
+        g_coll = db[f"{guild_id}"]
+        np_coll = g_coll["now_playing"]
+        entry = np_coll.find_one({})
+        guild = client.get_guild(guild_id)
+        voice_channel_id = entry["voice_channel_id"]
+        voice_channel = guild.get_channel(voice_channel_id)
+        await voice_channel.connect()
+        voice_client = discord.utils.get(client.voice_clients, guild=guild)
+        Voice.play_next(entry, voice_client)
+
 
 
 @client.event
@@ -538,29 +583,31 @@ class Voice(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    context = commands.Context
+    guild = None
 
 
     def _handle_queue(self, error=None):
-        ctx = Voice.context
-        guild_id = ctx.guild.id
-        g_coll = db[f"{guild_id}"]
-        np_coll = g_coll["now_playing"]
-        np_doc = np_coll.find_one({})
-        if np_doc:
-            looped = np_doc["loop"]
+        if sigterm == True:
+            pass
         else:
-            looped = False
-        if looped == False:
-            np_coll.delete_many({})
-            entry = next_in_queue(guild_id)
-        else:
+            guild = Voice.guild
+            g_coll = db[f"{guild.id}"]
             np_coll = g_coll["now_playing"]
-            entry = np_coll.find_one({})
-        if entry != None:
-            loop = client.loop
-            voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
-            asyncio.run_coroutine_threadsafe(Voice.play_next(entry, voice_client), loop)
+            np_doc = np_coll.find_one({})
+            if np_doc:
+                looped = np_doc["loop"]
+            else:
+                looped = False
+            if looped == False:
+                np_coll.delete_many({})
+                entry = next_in_queue(guild_id)
+            else:
+                np_coll = g_coll["now_playing"]
+                entry = np_coll.find_one({})
+            if entry != None:
+                loop = client.loop
+                voice_client = discord.utils.get(client.voice_clients, guild=guild)
+                asyncio.run_coroutine_threadsafe(Voice.play_next(entry, voice_client), loop)
 
 
     @client.command(name='play', aliases=['Play', 'p', 'P'], description='Plays Music from youtube', usage='/play <video link/title to search for>')
@@ -608,7 +655,7 @@ class Voice(commands.Cog):
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
-            attributes : dict = {"name" : video_title, "duration" : duration, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id, "loop" : False}
+            attributes : dict = {"name" : video_title, "duration" : duration, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id, "loop" : False, "voicechannel_id" : current_voice_client.channel.id}
             g_coll = db[f"{ctx.guild.id}"]
             np_coll = g_coll["now_playing"]
             if np_coll.find_one({}) != None:
@@ -620,7 +667,7 @@ class Voice(commands.Cog):
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
-                Voice.context = ctx
+                Voice.guild = ctx.guild
                 g_coll = db[f"{ctx.guild.id}"]
                 np_coll = g_coll["now_playing"]
                 np_coll.insert_one(attributes)
@@ -660,6 +707,7 @@ class Voice(commands.Cog):
         np_doc = np_coll.find_one({})
         if np_doc["loop"] == False:
             await channel.send(embed=song_embed)
+        Voice.guild = guild
         vc.play(source=source, after=Voice._handle_queue)
 
 
@@ -1027,3 +1075,8 @@ def setup(client):
 
 DISCORD_S3 = os.environ['DISCORD_TOKEN']     
 client.run(DISCORD_S3)
+
+if sys.argv[1] == "handle_signal":
+    signal.signal(signal.SIGTERM, handle_sigterm)
+
+await after_reboot()
