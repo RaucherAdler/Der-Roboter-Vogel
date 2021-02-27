@@ -115,6 +115,7 @@ async def after_reboot():
 async def on_ready():
    await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
    print('Bot ist bereit!')
+   await after_reboot()
 
 
 @client.event
@@ -1069,10 +1070,13 @@ def setup(client):
     client.add_cog(Voice(client))
     client.add_cog(OP(client))
 
+
 DISCORD_S3 = os.environ['DISCORD_TOKEN']     
 client.run(DISCORD_S3)
 
-if sys.argv[1] == "handle_signal":
+
+if __name__ == "__main__":
     signal.signal(signal.SIGTERM, handle_sigterm)
 
-after_reboot()
+while True:
+    pass
