@@ -1073,7 +1073,6 @@ def setup(client):
 
 
 DISCORD_S3 = os.environ['DISCORD_TOKEN']     
-client.run(DISCORD_S3)
-
-while True:
-    signal.signal(signal.SIGTERM, handle_sigterm)
+loop = asyncio.get_event_loop()
+loop.add_signal_handler(signal.SIGTERM, handle_sigterm)
+loop.run_until_complete(client.run(DISCORD_S3))
