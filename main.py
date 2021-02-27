@@ -89,6 +89,8 @@ async def handle_sig():
     for cog_name, cog in client.cogs:
         cog.remove_cog(cog_name)
     await client.close()
+    global loop
+    loop.close()
     os._exit(0)
 
 def handle_sigterm(_signo, _stack_frame):
