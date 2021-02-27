@@ -93,7 +93,7 @@ async def handle_sig():
     loop.close()
     os._exit(0)
 
-def handle_sigterm(_signo, _stack_frame):
+def handle_sigterm():
     asyncio.run_coroutine_threadsafe(handle_sig)
 
 async def after_reboot():
