@@ -1075,9 +1075,5 @@ def setup(client):
 DISCORD_S3 = os.environ['DISCORD_TOKEN']     
 client.run(DISCORD_S3)
 
-
-if __name__ == "__main__":
-    signal.signal(signal.SIGTERM, handle_sigterm)
-
 while True:
-    pass
+    signal.signal(signal.SIGTERM, handle_sigterm)
