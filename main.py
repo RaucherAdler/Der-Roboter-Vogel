@@ -111,7 +111,7 @@ async def after_reboot():
             voice_channel = guild.get_channel(voice_channel_id)
             await voice_channel.connect()
             voice_client = discord.utils.get(client.voice_clients, guild=guild)
-            Voice.play_next(entry, voice_client)
+            await Voice.play_next(entry, voice_client)
 
 
 
