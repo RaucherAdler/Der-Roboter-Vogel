@@ -686,7 +686,8 @@ class Voice(commands.Cog):
         requested_by_id = entry["requested_by_id"]
         link = entry["url"]
         channel_id = entry["channel_id"]
-        guild_id = entry["guildid"]
+        guildid = entry["guildid"]
+        guild = client.get_guild(guildid)
         ty_res = time.gmtime(duration)
         video_duration = time.strftime("%H:%M:%S", ty_res)
         requested_by = guild.get_member(requested_by_id)
@@ -705,12 +706,12 @@ class Voice(commands.Cog):
         opts = '-vn'
         #logfile = ("ffmpeg.log", "a+") + add stderr=logfile arg to source below.
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
-        g_coll = db[f"{guild_id}"]
+        g_coll = db[f"{guildid}"]
         np_coll = g_coll["now_playing"]
         np_doc = np_coll.find_one({})
         if np_doc["loop"] == False:
             await channel.send(embed=song_embed)
-        vc.play(source=source, after=partial(Voice._handle_queue, guild_id=guild_id))
+        vc.play(source=source, after=partial(Voice._handle_queue, guild_id=guildid))
 
 
     @client.command(aliases=['Queue', 'q', 'Q'], description='Shows current queue', usage='/queue <Page Number>')
