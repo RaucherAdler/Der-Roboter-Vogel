@@ -107,7 +107,7 @@ async def after_reboot():
             np_coll = g_coll["now_playing"]
             entry = np_coll.find_one({})
             guild = client.get_guild(guild_id)
-            voice_channel_id = entry["voice_channel_id"]
+            voice_channel_id = entry["voicechannel_id"]
             voice_channel = guild.get_channel(voice_channel_id)
             await voice_channel.connect()
             voice_client = discord.utils.get(client.voice_clients, guild=guild)
@@ -590,7 +590,7 @@ class Voice(commands.Cog):
         self.client = client
 
 
-    def _handle_queue(self, guild_id, error):
+    def _handle_queue(self, guild_id, error=None):
         if sigterm == True:
             pass
         else:
