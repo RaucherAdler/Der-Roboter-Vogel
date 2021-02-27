@@ -585,7 +585,7 @@ class Voice(commands.Cog):
         self.client = client
 
 
-    def _handle_queue(self, guild_id, error=None):
+    def _handle_queue(self, guild_id, error):
         if sigterm == True:
             pass
         else:
@@ -603,6 +603,7 @@ class Voice(commands.Cog):
                 entry = np_coll.find_one({})
             if entry != None:
                 loop = client.loop
+                guild = client.get_guild(guild_id)
                 voice_client = discord.utils.get(client.voice_clients, guild=guild)
                 asyncio.run_coroutine_threadsafe(Voice.play_next(entry, voice_client), loop)
 
