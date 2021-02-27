@@ -97,17 +97,18 @@ def handle_sigterm(_signo, _stack_frame):
 async def after_reboot():
     sig_coll = db["sigterm"]
     sig_doc = sig_coll.find_one_and_delete({})
-    sig_guilds = sig_doc["guild_ids"]
-    for guild_id in sig_guilds:
-        g_coll = db[f"{guild_id}"]
-        np_coll = g_coll["now_playing"]
-        entry = np_coll.find_one({})
-        guild = client.get_guild(guild_id)
-        voice_channel_id = entry["voice_channel_id"]
-        voice_channel = guild.get_channel(voice_channel_id)
-        await voice_channel.connect()
-        voice_client = discord.utils.get(client.voice_clients, guild=guild)
-        Voice.play_next(entry, voice_client)
+    if sig_doc != None:
+        sig_guilds = sig_doc["guild_ids"]
+        for guild_id in sig_guilds:
+            g_coll = db[f"{guild_id}"]
+            np_coll = g_coll["now_playing"]
+            entry = np_coll.find_one({})
+            guild = client.get_guild(guild_id)
+            voice_channel_id = entry["voice_channel_id"]
+            voice_channel = guild.get_channel(voice_channel_id)
+            await voice_channel.connect()
+            voice_client = discord.utils.get(client.voice_clients, guild=guild)
+            Voice.play_next(entry, voice_client)
 
 
 
