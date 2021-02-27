@@ -94,7 +94,8 @@ async def handle_sig():
     os._exit(0)
 
 def handle_sigterm():
-    asyncio.run_coroutine_threadsafe(handle_sig)
+    global loop
+    asyncio.run_coroutine_threadsafe(handle_sig, loop)
 
 async def after_reboot():
     sig_coll = db["sigterm"]
