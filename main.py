@@ -68,6 +68,7 @@ sigterm = False
 
 async def handle_sig():
     await client.change_presence(activity=discord.Activity(status=discord.Status.offline))
+    global sigterm
     sigterm = True
     id_list = []
     for v_client in client.voice_clients:
@@ -591,7 +592,8 @@ class Voice(commands.Cog):
 
 
     def _handle_queue(self, guild_id, error=None):
-        if sigterm == True:
+        global sigterm
+        if sigterm != False:
             pass
         else:
             g_coll = db[f"{guild_id}"]
