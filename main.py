@@ -687,7 +687,6 @@ class Voice(commands.Cog):
         guild_id = entry["guildid"]
         ty_res = time.gmtime(duration)
         video_duration = time.strftime("%H:%M:%S", ty_res)
-        guild = client.get_guild(guild_id)
         requested_by = guild.get_member(requested_by_id)
         channel = guild.get_channel(channel_id)
         ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True', 'simulate' : 'True'}
@@ -709,7 +708,7 @@ class Voice(commands.Cog):
         np_doc = np_coll.find_one({})
         if np_doc["loop"] == False:
             await channel.send(embed=song_embed)
-        vc.play(source=source, after=Voice._handle_queue)
+        vc.play(source=source, after=partial(Voice._handle_queue, guild_id=guild_id))
 
 
     @client.command(aliases=['Queue', 'q', 'Q'], description='Shows current queue', usage='/queue <Page Number>')
