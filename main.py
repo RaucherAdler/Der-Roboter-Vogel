@@ -585,7 +585,7 @@ class Voice(commands.Cog):
         self.client = client
 
 
-    def _handle_queue(self, error=None, guild_id):
+    def _handle_queue(self, guild_id, error=None):
         if sigterm == True:
             pass
         else:
