@@ -583,16 +583,13 @@ class Voice(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-    
-    guild = None
 
 
-    def _handle_queue(self, error=None):
+    def _handle_queue(self, error=None, guild_id):
         if sigterm == True:
             pass
         else:
-            guild = Voice.guild
-            g_coll = db[f"{guild.id}"]
+            g_coll = db[f"{guild_id}"]
             np_coll = g_coll["now_playing"]
             np_doc = np_coll.find_one({})
             if np_doc:
@@ -603,7 +600,6 @@ class Voice(commands.Cog):
                 np_coll.delete_many({})
                 entry = next_in_queue(guild_id)
             else:
-                np_coll = g_coll["now_playing"]
                 entry = np_coll.find_one({})
             if entry != None:
                 loop = client.loop
@@ -668,11 +664,10 @@ class Voice(commands.Cog):
                 source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
                 song_embed.set_author(name='Jetzt Spielen:', icon_url=ctx.message.author.avatar_url)
                 await ctx.send(embed=song_embed)
-                Voice.guild = ctx.guild
                 g_coll = db[f"{ctx.guild.id}"]
                 np_coll = g_coll["now_playing"]
                 np_coll.insert_one(attributes)
-                current_voice_client.play(source, after=Voice._handle_queue)
+                current_voice_client.play(source, after=partial(Voice._handle_queue, guild_id=ctx.guild.id))
         else:
             await ctx.send(f'Sie befinden sich nicht in einem Sprachkanal!')
 
@@ -708,7 +703,6 @@ class Voice(commands.Cog):
         np_doc = np_coll.find_one({})
         if np_doc["loop"] == False:
             await channel.send(embed=song_embed)
-        Voice.guild = guild
         vc.play(source=source, after=Voice._handle_queue)
 
 
