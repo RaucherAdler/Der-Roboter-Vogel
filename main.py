@@ -76,13 +76,10 @@ async def handle_sig():
         guild_id = v_client.guild.id
         g_coll = db[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
-        np_doc = np_coll.find_one({})
-        np_doc["dc_time"] = time.time()
-        np_coll.update_one({}, np_doc)
+        np_doc = np_coll.find_one_and_update({}, {"$set" : {"dc_time" : time.time()}})
         channel_id = np_doc["channel_id"]
         channel = guild.get_channel(channel_id)
         await channel.send("RoboterVogel is restarting. Music will resume shortly.")
-        v_client.stop()
         await v_client.disconnect()
         id_list.append(guild_id)
     sig_dict = {"guild_ids" : id_list}
