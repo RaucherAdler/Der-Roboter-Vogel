@@ -105,7 +105,7 @@ async def after_reboot():
     sig_doc = sig_coll.find_one_and_delete({})
     if sig_doc != None:
         sig_guilds = sig_doc["guild_ids"]
-        async for guild_id in sig_guilds:
+        for guild_id in sig_guilds:
             g_coll = db[f"{guild_id}"]
             np_coll = g_coll["now_playing"]
             np_doc = np_coll.find_one({})
