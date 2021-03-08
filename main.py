@@ -77,6 +77,8 @@ async def handle_sig():
         g_coll = db[f"{guild_id}"]
         np_coll = g_coll["now_playing"]
         np_doc = np_coll.find_one({})
+        np_doc["dc_time"] = time.time()
+        np_coll.update_one({}, np_doc)
         channel_id = np_doc["channel_id"]
         channel = guild.get_channel(channel_id)
         await channel.send("RoboterVogel is restarting. Music will resume shortly.")
@@ -103,10 +105,17 @@ async def after_reboot():
     sig_doc = sig_coll.find_one_and_delete({})
     if sig_doc != None:
         sig_guilds = sig_doc["guild_ids"]
-        for guild_id in sig_guilds:
+        async for guild_id in sig_guilds:
             g_coll = db[f"{guild_id}"]
             np_coll = g_coll["now_playing"]
-            entry = np_coll.find_one({})
+            np_doc = np_coll.find_one({})
+            current_time = time.time()
+            dc_time = np_doc["dc_time"]
+            del np_doc["dc_time"]
+            disconnected_time = current_time - dc_time
+            pause_duration = np_doc["pause_duration"]
+            np_doc["pause_duration"] = pause_duration + disconnected_time
+            entry = np_coll.find_one_and_update({}, np_doc)
             guild = client.get_guild(guild_id)
             voice_channel_id = entry["voicechannel_id"]
             voice_channel = guild.get_channel(voice_channel_id)
@@ -693,6 +702,14 @@ class Voice(commands.Cog):
         video_duration = time.strftime("%H:%M:%S", ty_res)
         requested_by = guild.get_member(requested_by_id)
         channel = guild.get_channel(channel_id)
+        pause_duration = entry["pause_duration"]
+        if pause_duration > 0:
+            resuming = True
+            start_time = entry["start_time"]
+            current_time = time.time()
+            position = (current_time - start_time) - pause_duration
+        else:
+            resuming = False
         ydl_opts = {'format' : 'bestaudio', 'noplaylist' : 'True', 'quiet' : 'True', 'simulate' : 'True'}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             attr_dict = ydl.extract_info(link, download=False)
@@ -704,6 +721,8 @@ class Voice(commands.Cog):
         song_embed.set_footer(text=requested_by, icon_url=requested_by.avatar_url)
         song_embed.set_author(name='Jetzt Spielen:', icon_url=requested_by.avatar_url)
         before_opts = '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
+        if resuming == True:
+            before_opts = before_opts + f' -ss {position}'
         opts = '-vn'
         #logfile = ("ffmpeg.log", "a+") + add stderr=logfile arg to source below.
         source = discord.FFmpegOpusAudio(source=source, executable='ffmpeg', before_options=before_opts, options=opts)
@@ -712,8 +731,9 @@ class Voice(commands.Cog):
         np_doc = np_coll.find_one({})
         if np_doc["loop"] == False:
             await channel.send(embed=song_embed)
-        np_doc["start_time"] = time.time()
-        np_coll.replace_one({}, np_doc)
+        if resuming == False:
+            np_doc["start_time"] = time.time()
+            np_coll.replace_one({}, np_doc)
         vc.play(source=source, after=partial(Voice._handle_queue, guild_id=guildid))
 
 
