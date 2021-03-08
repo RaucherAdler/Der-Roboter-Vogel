@@ -660,7 +660,7 @@ class Voice(commands.Cog):
             song_embed.set_thumbnail(url=thumbnail)
             song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
             source = attr_dict['formats'][0]['url']
-            attributes : dict = {"name" : video_title, "duration" : duration, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id, "loop" : False, "voicechannel_id" : current_voice_client.channel.id}
+            attributes : dict = {"name" : video_title, "duration" : duration, "thumbnail" : thumbnail, "requested_by_id" : ctx.message.author.id, "url" : link, "channel_id" : ctx.channel.id, "guildid" : ctx.guild.id, "loop" : False, "voicechannel_id" : current_voice_client.channel.id, "pause_duration" : 0}
             g_coll = db[f"{ctx.guild.id}"]
             np_coll = g_coll["now_playing"]
             if np_coll.find_one({}) != None:
@@ -674,6 +674,7 @@ class Voice(commands.Cog):
                 await ctx.send(embed=song_embed)
                 g_coll = db[f"{ctx.guild.id}"]
                 np_coll = g_coll["now_playing"]
+                attributes["start_time"] = time.time()
                 np_coll.insert_one(attributes)
                 current_voice_client.play(source, after=partial(Voice._handle_queue, guild_id=ctx.guild.id))
         else:
@@ -711,6 +712,8 @@ class Voice(commands.Cog):
         np_doc = np_coll.find_one({})
         if np_doc["loop"] == False:
             await channel.send(embed=song_embed)
+        np_doc["start_time"] = time.time()
+        np_coll.replace_one({}, np_doc)
         vc.play(source=source, after=partial(Voice._handle_queue, guild_id=guildid))
 
 
@@ -859,6 +862,16 @@ class Voice(commands.Cog):
                     if client_vc.is_paused():
                         client_vc.resume()
                         await ctx.send(f'Medien nicht angehalten!')
+                        g_coll = db[f"{ctx.guild.id}"]
+                        np_coll = g_coll["now_playing"]
+                        np_doc = np_coll.find_one({})
+                        resume_time = time.time()
+                        pause_start = np_doc["pause_start"]
+                        pause_duration = resume_time - pause_start
+                        full_pd = np_doc["pause_duration"]
+                        np_doc["pause_duration"] = pause_duration + full_pd
+                        del np_doc["pause_start"]
+                        np_coll.update_one({}, np_doc)
                     else:
                         await ctx.send(f'Keine Medienspiele!')
                 else:
@@ -879,6 +892,11 @@ class Voice(commands.Cog):
                     if client_vc.is_playing():
                         client_vc.pause()
                         await ctx.send(f'Medien in Pause!')
+                        g_coll = db[f"{ctx.guild.id}"]
+                        np_coll = g_coll["now_playing"]
+                        np_doc = np_coll.find_one({})
+                        np_doc["pause_start"] = time.time()
+                        np_coll.update_one({}, np_doc)
                     else:
                         await ctx.send(f'Keine Medienspiele!')
                 else:
@@ -941,12 +959,18 @@ class Voice(commands.Cog):
             if client_vc.is_playing() or client_vc.is_paused():
                 g_coll = db[f"{ctx.guild.id}"]
                 np_coll = g_coll["now_playing"]
-                np = np_coll.find_one({})
-                np_title = np["name"]
-                np_link = np["url"]
-                np_thumbnail = np["thumbnail"]
-                np_reqbyid = np["requested_by_id"]
-                np_duration = np["duration"]
+                np_doc = np_coll.find_one({})
+                np_title = np_doc["name"]
+                np_link = np_doc["url"]
+                np_thumbnail = np_doc["thumbnail"]
+                np_reqbyid = np_doc["requested_by_id"]
+                np_duration = np_doc["duration"]
+                start_time = np_doc["start_time"]
+                pause_duration = np_doc["pause_duration"]
+                current_time = time.time()
+                total_play_time = (current_time - start_time) - pause_duration
+                tpt = time.gmtime(total_play_time)
+                position = time.strftime("%H:%M:%S", tpt)
                 song_embed = discord.Embed(name='Song', color=Color.dark_red())
                 author = ctx.guild.get_member(np_reqbyid)
                 ty_res = time.gmtime(np_duration)
@@ -955,7 +979,7 @@ class Voice(commands.Cog):
                 song_embed.set_thumbnail(url=np_thumbnail)
                 song_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
                 song_embed.add_field(name='Title:', value=f'[{np_title}]({np_link})', inline=True)
-                song_embed.add_field(name='Duration:', value=f'{video_duration}')
+                song_embed.add_field(name='Duration:', value=f'{position} / {video_duration}')
                 await ctx.send(embed=song_embed)
             else:
                 await ctx.send(f'Keine Medienspiele!')
