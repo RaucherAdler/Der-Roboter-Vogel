@@ -112,7 +112,7 @@ async def after_reboot():
             disconnected_time = current_time - dc_time
             pause_duration = np_doc["pause_duration"]
             np_doc["pause_duration"] = pause_duration + disconnected_time
-            entry = np_coll.find_one_and_update({}, np_doc)
+            entry = np_coll.find_one_and_replace({}, np_doc)
             guild = client.get_guild(guild_id)
             voice_channel_id = entry["voicechannel_id"]
             voice_channel = guild.get_channel(voice_channel_id)
@@ -888,7 +888,7 @@ class Voice(commands.Cog):
                         full_pd = np_doc["pause_duration"]
                         np_doc["pause_duration"] = pause_duration + full_pd
                         del np_doc["pause_start"]
-                        np_coll.update_one({}, np_doc)
+                        np_coll.replace_one({}, np_doc)
                     else:
                         await ctx.send(f'Keine Medienspiele!')
                 else:
@@ -913,7 +913,7 @@ class Voice(commands.Cog):
                         np_coll = g_coll["now_playing"]
                         np_doc = np_coll.find_one({})
                         np_doc["pause_start"] = time.time()
-                        np_coll.update_one({}, np_doc)
+                        np_coll.replace_one({}, np_doc)
                     else:
                         await ctx.send(f'Keine Medienspiele!')
                 else:
