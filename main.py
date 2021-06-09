@@ -423,7 +423,7 @@ class Moderation(commands.Cog):
         stats_embed.add_field(name='Server erstellt am:', value=f'{ctx.guild.created_at} (UTC)', inline=True)
         stats_embed.add_field(name='Shard ID:', value=f'{ctx.guild.shard_id}', inline=True)
         stats_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
-        stats_embed.set_thumbnail(url=ctx.guild.avatar_url)
+        stats_embed.set_thumbnail(url=ctx.guild.icon_url)
         await ctx.send(embed=stats_embed)
 
 
