@@ -136,28 +136,31 @@ async def on_member_join(member):
     if role_config.find_one({}) != None:
         rc_doc = role_config.find_one({})
         role_id = rc_doc["role"]
+        toggled = rc_doc["on"]
         role = member.guild.get_role(role_id)
     else:
         rc_doc = None
+        toggled = False
         role = member.guild.default_role
-    if rc_doc != None:
-        channel_id = rc_doc["channel"]
-        rolechannel = member.guild.get_channel(channel_id)
-    else:
-        if discord.utils.get(member.guild.channels, name='general') != None:
-            rolechannel = discord.utils.get(member.guild.channels, name='general')
+    if toggled == True:
+        if rc_doc != None:
+            channel_id = rc_doc["channel"]
+            rolechannel = member.guild.get_channel(channel_id)
         else:
-            rolechannel = None
-    if rolechannel != None:
-        await rolechannel.send(f'{member} ist {member.guild.name} beigetretten!')
-    try:
-        await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
-    except:
-        pass
-    if role.is_default() == False:
-        await member.add_roles(role)
+            if discord.utils.get(member.guild.channels, name='general') != None:
+                rolechannel = discord.utils.get(member.guild.channels, name='general')
+            else:
+                rolechannel = None
         if rolechannel != None:
-            await rolechannel.send(f'{member.mention} wurde die Rolle gegeben: `{role}`')
+            await rolechannel.send(f'{member} ist {member.guild.name} beigetretten!')
+        try:
+            await member.send(f'Willkommen bei {member.guild.name}, {member.mention}!')
+        except:
+            pass
+        if role.is_default() == False:
+            await member.add_roles(role)
+            if rolechannel != None:
+                await rolechannel.send(f'{member.mention} wurde die Rolle gegeben: `{role}`')
 
 
 @client.event
@@ -180,20 +183,21 @@ async def on_member_remove(member):
 async def on_guild_join(guild):
     owner = guild.owner
     info_embed = discord.Embed(color=Color.dark_red())
-    info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#1521 gemacht!', inline=True)
+    info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#2085 gemacht!', inline=True)
     info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler', inline=True)
+    info_embed.add_field(name='Support Server:', value='https://discord.gg/6GFQcFHjSK', inline=True)
     info_embed.set_footer(text=owner, icon_url=owner.avatar_url)
     if owner.bot == True:
         pass
     else:    
-        await owner.send(f'Hallo, Ich bin RoboterVogel, dein neuer Bot!\nhttps://discord.gg/6GFQcFHjSK', embed=info_embed)
+        await owner.send(f'Hallo, Ich bin RoboterVogel, dein neuer Bot!', embed=info_embed)
     await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
     
 
 @client.event
 async def on_guild_remove(guild):
     await client.change_presence(activity=discord.Activity(status=discord.Status.online, type=discord.ActivityType.playing, name=f'Your Mother in {len(client.guilds)} Servers'))
-    g_coll = db[guild.id]
+    g_coll = db[f'{guild.id}']
     np = g_coll['now_playing']
     entries = g_coll['entries']
     rc = g_coll['role_config']
@@ -297,7 +301,7 @@ class Moderation(commands.Cog):
             await ctx.send(f'Rolle: `{role}` wurde vom {member.mention} entfernt!')
 
 
-    @client.command(description='Setup command for automatic role assignment', usage="/autorole <Main Channel Name (include dashes, if any)> <Default Role (Optional, will default to no role)> (Don't mention Role/Channel)")
+    @client.command(description='Setup command for automatic role assignment', usage="/autorole <Main Channel Name (include dashes, if any)> <Default Role (Optional, will default to no role)> (Don't mention Role/Channel)", aliases=['announce'])
     @commands.has_permissions(manage_roles=True)
     async def autorole(ctx, channel, *, role=None):
         if role == None:
@@ -310,7 +314,7 @@ class Moderation(commands.Cog):
         if sendchannel == None:
                 await ctx.send('Diese Kanal existiert nicht! Bitte überprüfen Sie auf Tippfehler!')
         elif sendchannel != None and drole != None:
-            def_role = {'role' : drole.id, 'channel' : sendchannel.id}
+            def_role = {'role' : drole.id, 'channel' : sendchannel.id, 'on' : True}
             g_coll = db[f"{ctx.guild.id}"]
             role_config = g_coll["role_config"]
             if role_config.find_one({}) != None:
@@ -320,6 +324,24 @@ class Moderation(commands.Cog):
                 await ctx.send(f'Neue Standardrolle ist `{role}`')
             else:                   
                 await ctx.send(f'Keine Standardrolle, wird ohne Zuweisung der Rolle angekündigt')
+
+
+    @client.command(description='Enable/Disable the autorole announcements')
+    @commands.has_permissions(manage_roles=True)
+    async def toggleannounce(ctx):
+        g_coll = db[f'{ctx.guild.id}']
+        r_conf = g_coll["role_config"]
+        conf_doc = r_conf.find_one({})
+        if conf_doc == None:
+            await ctx.send('No current role/channel set, set one via `autorole`')
+        else:
+            conf_doc["on"] = not conf_doc["on"]
+            r_conf.update_one({}, conf_doc)
+            if conf_doc['on'] == True:
+                evd = 'enabled'
+            else:
+                evd = 'disabled'
+            await ctx.send(f'Autorole has been {evd}')
 
 
     @client.command(name='help', aliases=['Help', 'h', 'H'], description='Shows all available commands', usage='/help <Command (Optional)>')
@@ -365,14 +387,14 @@ class Moderation(commands.Cog):
     @client.command(description='Info on RoboterVogel', usage='/info')
     async def info(ctx):
         info_embed = discord.Embed(name='Info', color=Color.dark_red())
-        info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#1521 gemacht!', inline=True)
+        info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#2085 gemacht!', inline=True)
         info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler', inline=True)
+        info_embed.add_field(name='Support Server:', value='https://discord.gg/6GFQcFHjSK', inline=True)
         info_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed=info_embed)
-        await ctx.send('https://discord.gg/6GFQcFHjSK')
 
 
-    @client.command(description='Gets guild stats such as number of users, etc.', usage='/stats')
+    @client.command(description='Gets guild stats such as number of users, etc.', usage='/stats', aliases=['server'])
     async def stats(ctx):
         stats_embed = discord.Embed(name='Guild Stats', color=Color.dark_red())
         members = ctx.guild.members
@@ -401,6 +423,7 @@ class Moderation(commands.Cog):
         stats_embed.add_field(name='Server erstellt am:', value=f'{ctx.guild.created_at} (UTC)', inline=True)
         stats_embed.add_field(name='Shard ID:', value=f'{ctx.guild.shard_id}', inline=True)
         stats_embed.set_footer(text=ctx.message.author, icon_url=ctx.message.author.avatar_url)
+        stats_embed.set_thumbnail(url=ctx.guild.avatar_url)
         await ctx.send(embed=stats_embed)
 
 
@@ -468,14 +491,6 @@ class Chat(commands.Cog):
 
     @client.command(aliases=['geburtstag'], description='Sends birthday message for a user', usage='/birthday <Mention User>')
     async def birthday(ctx, member : discord.Member):
-        bday_role = discord.utils.get(ctx.guild.roles, name='Geburtstagskind')
-        if bday_role == None:
-            bday_role = await ctx.guild.create_role(name='Geburtstagskind', reason='Es ist Geburtstagszeit.')
-        has_role = discord.utils.get(member.roles, name='Geburtstagskind')
-        if has_role == None:
-            await member.add_roles(bday_role)
-        else:
-            pass
         await ctx.send(f'Alles gute zum geburtstag, {member.mention}!  :tada:\nJetzt singen wir alle das Geburtstagslied:')
         embed_name = 'Geburtstagslied :birthday:'
         embed_text = 'Zum Geburtstag viel Glück!\nZum Geburtstag viel Glück!\nZum Geburtstag liebe {name}!\nZum Geburtstag viel Glück!'.format(name=member.name)
@@ -483,8 +498,6 @@ class Chat(commands.Cog):
         lyric_embed.add_field(name=embed_name, value=embed_text)
         lyric_embed.set_footer(text=member, icon_url=member.avatar_url)
         await ctx.send(embed=lyric_embed)
-        await asyncio.sleep(86400)
-        await member.remove_roles(bday_role)
 
 
     @client.command(description='Pings bots latency', usage='/ping')
