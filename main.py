@@ -21,8 +21,7 @@ from functools import partial
 import signal
 import sys
 
-mongo_pswrd = os.environ["MONGODB_PASSWORD"]
-mongo_client = pymongo.MongoClient(f"mongodb+srv://RaucherAdler:{mongo_pswrd}@cluster0.klsio.mongodb.net/RoboterVogel?retryWrites=true&w=majority")
+mongo_client = pymongo.MongoClient(os.environ["MONGODB_URI"])
 db = mongo_client["RoboterVogel"]
 
 
@@ -529,8 +528,8 @@ class Chat(commands.Cog):
                 os.remove('image.png')
 
 
-    @client.command(aliases=['zeit', 'Time', 'Zeit'], description='Tells the time', usage='/time')
-    async def time(ctx):
+    @client.command(aliases=['time', 'zeit', 'Time', 'Zeit'], description='Tells the time', usage='/time')
+    async def _time(ctx):
         time_embed = discord.Embed(name='time', color=Color.dark_red())
         date = dt.date.today()
         formatted_date = date.strftime('%d/%m/%Y')
