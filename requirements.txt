@@ -11,3 +11,4 @@ git+https://github.com/joetats/youtube_search.git
 youtube_dl==2021.1.16
 git+https://github.com/mongodb/mongo-python-driver.git
 git+https://github.com/kvesteri/validators.git
+cryptography
