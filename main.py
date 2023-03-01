@@ -20,10 +20,7 @@ from urllib.parse import urlparse
 from functools import partial
 import signal
 import sys
-
-mongo_client = pymongo.MongoClient(os.environ["MONGODB_URI"])
-db = mongo_client["RoboterVogel"]
-
+from cryptography.fernet import Fernet
 
 
 def add_to_queue(guild_id, attributes):
@@ -1129,8 +1126,28 @@ def setup(client):
     client.add_cog(Voice(client))
     client.add_cog(OP(client))
 
+if __name__ == "__main__":
+    if not (os.path.exists(".secrets") and os.path.exists(".fernkey")):
+        print("No '.secrets' found in working directory, run configure.py.")
+        exit(1)
 
-DISCORD_S3 = os.environ['DISCORD_TOKEN']     
-loop = asyncio.get_event_loop()
-loop.add_signal_handler(signal.SIGTERM, handle_sigterm)
-loop.run_until_complete(client.start(DISCORD_S3))
+    i = 0
+    fp = open(".fernkey", 'r')
+    pkey = fp.read()
+    fp.close()
+    fp = open(".secrets", 'r')
+    for ln in fp:
+        if i == 0:
+            DISCORD_S3 = Fernet(pkey.encode()).decrypt(ln).decode()
+            i = 1
+        else:
+            mongo_client = pymongo.MongoClient(Fernet(pkey.encode()).decrypt(ln).decode())
+    fp.close()
+    del pkey
+    del ln
+
+    db = mongo_client["RoboterVogel"]
+
+    loop = asyncio.get_event_loop()
+    loop.add_signal_handler(signal.SIGTERM, handle_sigterm)
+    loop.run_until_complete(client.start(DISCORD_S3))
