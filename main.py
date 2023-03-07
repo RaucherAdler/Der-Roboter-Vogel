@@ -181,7 +181,6 @@ async def on_guild_join(guild):
     info_embed = discord.Embed(color=Color.dark_red())
     info_embed.add_field(name='Über Roboter Vogel:',value='\nRoboterVogel wurde von Raucher Adler#2085 gemacht!', inline=True)
     info_embed.add_field(name='Für mehr Information:', value='\nUse `/help` for a list of available commands or message me direcly.\n- Adler', inline=True)
-    info_embed.add_field(name='Support Server:', value='https://discord.gg/6GFQcFHjSK', inline=True)
     info_embed.set_footer(text=owner, icon_url=owner.avatar_url)
     if owner.bot == True:
         pass

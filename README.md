@@ -15,4 +15,4 @@ To run your own instance of this bot, ensure you have the required dependencies 
 ## More Info:
 [Add RoboterVogel to your server](https://discord.com/api/oauth2/authorize?client_id=762768118212067328&permissions=8&scope=bot)
 
-If you wish to reach me, you can shoot me a DM on [Discord](https://discord.gg/6GFQcFHjSK) (Raucher Adler#2085), on [Github](https://github.com/RaucherAdler/Der-Roboter-Vogel/) or by (raucheradler@gmail.com), or if you find me anywhere else, that works too.
+If you wish to reach me, you can shoot me a DM on Discord (Raucher Adler#2085), on [Github](https://github.com/RaucherAdler/Der-Roboter-Vogel/) or by (raucheradler@gmail.com), or if you find me anywhere else, that works too.
