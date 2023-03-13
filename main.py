@@ -454,8 +454,8 @@ class Chat(commands.Cog):
 
 
     @client.command(description='Pings bots latency', usage='/ping')
-        async def ping(ctx):
-            await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
+    async def ping(ctx):
+        await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
 
 
     @client.command(aliases=['time', 'zeit', 'Time', 'Zeit'], description='Tells the time', usage='/time')
