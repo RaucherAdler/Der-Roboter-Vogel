@@ -452,6 +452,12 @@ class Chat(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+
+    @client.command(description='Pings bots latency', usage='/ping')
+        async def ping(ctx):
+            await ctx.send(f'Pong! `{round(client.latency * 1000)}ms`')
+
+
     @client.command(aliases=['time', 'zeit', 'Time', 'Zeit'], description='Tells the time', usage='/time')
     async def _time(ctx):
         time_embed = discord.Embed(name='time', color=Color.dark_red())
